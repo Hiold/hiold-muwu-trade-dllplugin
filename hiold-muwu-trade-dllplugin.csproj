@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>hiold-muwu-trade-dllplugin</AssemblyName>
+    <RootNamespace>HioldMod</RootNamespace>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Mods\hiold-muwu-trade-dllplugin_funcs\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="LiteDB, Version=5.0.11.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\LiteDB.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>..\7dtd-binaries\mscorlib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>..\7dtd-binaries\System.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>H:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Mods\hiold-muwu-trade-dllplugin\System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="UnityEngine">
+      <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="LogLibrary">
+      <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\LogLibrary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\AssemblyInfo.cs" />
+    <Compile Include="src\API.cs" />
+    <Compile Include="src\HioldTestConsole.cs" />
+    <Compile Include="src\HttpServer\action\LoginAction.cs" />
+    <Compile Include="src\HttpServer\action\RegisterAction.cs" />
+    <Compile Include="src\HttpServer\bean\UserInfo.cs" />
+    <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
+    <Compile Include="src\HttpServer\common\ServerUtils.cs" />
+    <Compile Include="src\HttpServer\database\DataBase.cs" />
+    <Compile Include="src\HttpServer\router\MainRouter.cs" />
+    <Compile Include="src\HttpServer\Server.cs" />
+    <Compile Include="src\HttpServer\service\UserService.cs" />
+    <Compile Include="src\HttpTools.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Content Include="bin-lib\Assembly-CSharp-firstpass.dll" />
+    <Content Include="bin-lib\Assembly-CSharp.dll" />
+    <Content Include="bin-lib\LiteDB.dll" />
+    <Content Include="bin-lib\LogLibrary.dll" />
+    <Content Include="bin-lib\System.Web.dll" />
+    <Content Include="bin-lib\UnityEngine.CoreModule.dll" />
+    <Content Include="bin-lib\UnityEngine.dll" />
+    <Content Include="bin-lib\UnityEngine.ImageConversionModule.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ModInfo.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+</Project>

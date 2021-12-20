@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hiold-muwu-trade-dllplugin", "hiold-muwu-trade-dllplugin.csproj", "{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {57209900-F54F-4478-973E-02D7277EB7E1}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = hiold-muwu-trade-dllplugin.csproj
+	EndGlobalSection
+EndGlobal
