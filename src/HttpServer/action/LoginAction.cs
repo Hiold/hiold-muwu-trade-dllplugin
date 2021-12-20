@@ -24,8 +24,8 @@ namespace HioldMod.src.HttpServer.action
             try
             {
                 Dictionary<string, string> param = ServerUtils.GetParam(request);
-                Console.WriteLine(param["username"]);
-                Console.WriteLine(param["password"]);
+                //Console.WriteLine(param["username"]);
+                //Console.WriteLine(param["password"]);
                 //查询用户信息
                 List<UserInfo> resultList = UserService.userLogin(param["username"], param["password"]);
                 if (resultList != null && resultList.Count > 0)

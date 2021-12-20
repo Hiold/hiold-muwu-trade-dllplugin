@@ -12,6 +12,7 @@ namespace HioldMod
         //当前dll运行路径
         public static string AssemblyPath = string.Format("{0}\\", getModDir());
         public static bool isOnServer = false;
+        public static bool isDebug = true;
 
         /// <summary>
         /// 初始化mod

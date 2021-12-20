@@ -37,7 +37,7 @@ namespace HioldMod.src.HttpServer.database
                 {
                     Directory.CreateDirectory(modDBDir);
                 }
-                dbFilePath = string.Format("database.db", modDBDir);
+                dbFilePath = string.Format("{0}database.db", modDBDir);
 
             }
             else
