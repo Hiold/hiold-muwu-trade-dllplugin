@@ -69,6 +69,8 @@
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />
     <Compile Include="src\HttpServer\action\RegisterAction.cs" />
+    <Compile Include="src\HttpServer\bean\Item.cs" />
+    <Compile Include="src\HttpServer\bean\SpecialItem.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
     <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
     <Compile Include="src\HttpServer\common\ServerUtils.cs" />
