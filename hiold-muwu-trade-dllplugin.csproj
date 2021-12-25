@@ -37,10 +37,6 @@
       <HintPath>..\7dtd-binaries\System.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>H:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Mods\hiold-muwu-trade-dllplugin\System.Web.dll</HintPath>
-    </Reference>
     <Reference Include="System.XML" />
     <Reference Include="UnityEngine">
       <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\UnityEngine.dll</HintPath>
@@ -67,6 +63,7 @@
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\API.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
+    <Compile Include="src\HttpServer\action\GameItemAction.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />
     <Compile Include="src\HttpServer\action\RegisterAction.cs" />
     <Compile Include="src\HttpServer\bean\Item.cs" />
