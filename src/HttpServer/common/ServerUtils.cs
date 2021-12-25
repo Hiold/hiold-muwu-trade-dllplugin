@@ -97,10 +97,8 @@ namespace HioldMod.HttpServer.common
                     {
                         var s = p.Split(new char[] { '=' }, 2);
                         data.Add(UrlDecode(s[0]), UrlDecode(s[1]));
-                        if (API.isDebug)
-                        {
-                            Log.Out(UrlDecode(s[0] + "===>" + UrlDecode(s[1])));
-                        }
+                        LogUtils.Loger(UrlDecode(s[0] + "===>" + UrlDecode(s[1])));
+
                     }
                 }
             }
@@ -116,10 +114,9 @@ namespace HioldMod.HttpServer.common
                     if (lst[i].type == 0)
                     {
                         data[lst[i].name] = Encoding.UTF8.GetString(lst[i].datas);
-                        if (API.isDebug)
-                        {
-                            Log.Out("param" + i + "： " + lst[i].name + "===>" + Encoding.UTF8.GetString(lst[i].datas));
-                        }
+
+                        LogUtils.Loger("param" + i + "： " + lst[i].name + "===>" + Encoding.UTF8.GetString(lst[i].datas));
+
                     }
                 }
             }

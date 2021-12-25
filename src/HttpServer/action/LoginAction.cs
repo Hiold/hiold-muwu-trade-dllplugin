@@ -1,4 +1,5 @@
-﻿using HioldMod.HttpServer.common;
+﻿using HioldMod.HttpServer;
+using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -39,7 +40,7 @@ namespace HioldMod.src.HttpServer.action
             }
             catch (Exception e)
             {
-                Log.Error(e.Message);
+                LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
         }

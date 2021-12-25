@@ -21,7 +21,7 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -73,6 +73,7 @@
     <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
     <Compile Include="src\HttpServer\common\ServerUtils.cs" />
     <Compile Include="src\HttpServer\database\DataBase.cs" />
+    <Compile Include="src\HttpServer\LogUtils.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
     <Compile Include="src\HttpServer\service\UserService.cs" />
