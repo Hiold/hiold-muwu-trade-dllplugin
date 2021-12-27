@@ -57,13 +57,13 @@ namespace HioldMod.src.HttpServer.action
                         {
                             if (istranslate.Equals("true"))
                             {
-                                if (Localization.dictionary.TryGetValue(itemname, out string[] trData))
+                                if (Localization.dictionary.TryGetValue(_item.Name, out string[] trData))
                                 {
-                                    rs["value"] = trData;
+                                    rs["translate"] = trData;
                                 }
                                 else
                                 {
-                                    rs["value"] = "";
+                                    rs["translate"] = "";
                                 }
                             }
                         }
