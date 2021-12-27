@@ -109,14 +109,17 @@ namespace HioldMod.HttpServer.common
                 HttpListenerPostParaHelper httppost = new HttpListenerPostParaHelper(request);
                 // 获取Post过来的参数和数据
                 List<HttpListenerPostValue> lst = httppost.GetHttpListenerPostValue();
-                for (int i = 0; i < lst.Count; i++)
+                if (lst != null)
                 {
-                    if (lst[i].type == 0)
+                    for (int i = 0; i < lst.Count; i++)
                     {
-                        data[lst[i].name] = Encoding.UTF8.GetString(lst[i].datas);
+                        if (lst[i].type == 0)
+                        {
+                            data[lst[i].name] = Encoding.UTF8.GetString(lst[i].datas);
 
-                        LogUtils.Loger("param" + i + "： " + lst[i].name + "===>" + Encoding.UTF8.GetString(lst[i].datas));
+                            LogUtils.Loger("param" + i + "： " + lst[i].name + "===>" + Encoding.UTF8.GetString(lst[i].datas));
 
+                        }
                     }
                 }
             }

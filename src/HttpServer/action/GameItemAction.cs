@@ -22,25 +22,20 @@ namespace HioldMod.src.HttpServer.action
                 string itemname = null;
                 param.TryGetValue("itemname", out itemname);
 
+                //数据
+                Dictionary<string, object> rs = new Dictionary<string, object>();
 
 
-                //遍历所有物品
-                foreach (ItemClass _item in ItemClass.list)
+                //判断参数是否满足条件
+
+                var query = Localization.dictionary.Where(x => x.Value.ContainsCaseInsensitive(itemname)).Select(p => p);
+
+                foreach (var item in query)
                 {
-                    if (_item != null)
+
+                    var query2 = ItemClass.list.Where(x => x.Name.Equals(item.Key)).Select(p => p);
+                    foreach (ItemClass _item in query2)
                     {
-
-                        //判断参数是否满足条件
-                        if (itemname != null && _item.Name != null && _item.Name != "" && !_item.Name.ContainsCaseInsensitive(itemname))
-                        {
-                            //不满足则跳过
-                            continue;
-                        }
-
-                        
-
-
-                        Dictionary<string, object> rs = new Dictionary<string, object>();
                         string groupInfo = "";
                         foreach (string temp in _item.Groups)
                         {
@@ -52,21 +47,34 @@ namespace HioldMod.src.HttpServer.action
                         }
 
 
-                        //是否翻译
-                        if (param.TryGetValue("translate", out string istranslate))
+
+                        //returnResult += string.Format("{0},{1},{2},{3}", _item.Name, _item.CustomIcon, (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b), groupInfo);
+                        rs.Add("itemname", _item.Name);
+                        rs.Add("icon", _item.CustomIcon);
+                        rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
+                        rs.Add("group", groupInfo);
+                        rs.Add("translate", item.Value);
+                        items.Add(rs);
+                    }
+                }
+
+                var query3 = ItemClass.list.Where(x => x.Name.ContainsCaseInsensitive(itemname)).Select(p => p);
+
+                foreach (var _item in query3)
+                {
+                    var query2 = Localization.dictionary.Where(x => x.Key.Equals(_item.Name)).Select(p => p);
+                    foreach (var item in query2)
+                    {
+                        string groupInfo = "";
+                        foreach (string temp in _item.Groups)
                         {
-                            if (istranslate.Equals("true"))
-                            {
-                                if (Localization.dictionary.TryGetValue(_item.Name, out string[] trData))
-                                {
-                                    rs["translate"] = trData;
-                                }
-                                else
-                                {
-                                    rs["translate"] = "";
-                                }
-                            }
+                            groupInfo += temp + "|";
                         }
+                        if (groupInfo.Length > 0)
+                        {
+                            groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
+                        }
+
 
 
                         //returnResult += string.Format("{0},{1},{2},{3}", _item.Name, _item.CustomIcon, (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b), groupInfo);
@@ -74,12 +82,14 @@ namespace HioldMod.src.HttpServer.action
                         rs.Add("icon", _item.CustomIcon);
                         rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
                         rs.Add("group", groupInfo);
+                        rs.Add("translate", item.Value);
                         items.Add(rs);
-
-
-
                     }
                 }
+
+
+
+
 
                 ResponseUtils.ResponseSuccessWithData(response, SimpleJson2.SimpleJson2.SerializeObject(items));
 
@@ -88,6 +98,7 @@ namespace HioldMod.src.HttpServer.action
             }
             catch (Exception e)
             {
+                ResponseUtils.ResponseFail(response, "参数异常");
                 LogUtils.Loger(e.Message);
                 LogUtils.Loger(e.StackTrace);
                 LogUtils.Loger(e.Source);
