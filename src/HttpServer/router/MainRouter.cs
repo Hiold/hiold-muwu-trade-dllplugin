@@ -32,6 +32,10 @@ namespace HioldMod.HttpServer.router
             {
                 GameItemAction.getSystemItem(request, response);
             }
+            else if (url.Equals("/api/getTranslation"))
+            {
+                TranslationAction.getTranslation(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hiold-muwu-trade-dllplugin", "hiold-muwu-trade-dllplugin.csproj", "{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "..\WindowsFormsApp1\WindowsFormsApp1.csproj", "{4CA62891-42F7-44C2-95CE-21256B9D2FC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{C2FB3D9B-8856-47D2-A469-B1768D6705F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DA7F87-1A66-4920-AADA-6EAF1971F8D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CA62891-42F7-44C2-95CE-21256B9D2FC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CA62891-42F7-44C2-95CE-21256B9D2FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4CA62891-42F7-44C2-95CE-21256B9D2FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4CA62891-42F7-44C2-95CE-21256B9D2FC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2FB3D9B-8856-47D2-A469-B1768D6705F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2FB3D9B-8856-47D2-A469-B1768D6705F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2FB3D9B-8856-47D2-A469-B1768D6705F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2FB3D9B-8856-47D2-A469-B1768D6705F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

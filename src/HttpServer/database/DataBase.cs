@@ -18,7 +18,7 @@ namespace HioldMod.src.HttpServer.database
         //数据库客户端
 
         //调试使用的数据库文件存储路径
-        public static string debugDbfilePath = "H:/SteamLibrary/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin/database/";
+        public static string debugDbfilePath = "D:/database/";
 
         public static LiteDatabase litedb;
 
