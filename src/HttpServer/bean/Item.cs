@@ -51,7 +51,7 @@ namespace HioldMod.src.HttpServer.bean
         public int collect { get; set; }
         //售出量
         public string sell { get; set; }
-        //限购登记 + - fase
+        //限购登记 + - fasevv
         public string xgLevel { get; set; }
         //限购天数
         public string xgDay { get; set; }

@@ -36,6 +36,10 @@ namespace HioldMod.HttpServer.router
             {
                 TranslationAction.getTranslation(request, response);
             }
+            else if (url.StartsWith("/api/image"))
+            {
+                GameItemAction.getImage(request, response);
+            }
             //没有匹配的router 返回404
             else
             {
