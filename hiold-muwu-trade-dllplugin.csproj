@@ -66,6 +66,7 @@
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />
     <Compile Include="src\HttpServer\action\RegisterAction.cs" />
+    <Compile Include="src\HttpServer\action\TradeManage.cs" />
     <Compile Include="src\HttpServer\action\TranslationAction.cs" />
     <Compile Include="src\HttpServer\bean\Item.cs" />
     <Compile Include="src\HttpServer\bean\SpecialItem.cs" />

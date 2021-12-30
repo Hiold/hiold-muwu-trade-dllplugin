@@ -12,7 +12,8 @@ namespace HioldMod.src.HttpServer.bean
         public string couType { get; set; }
         public string couPrice { get; set; }
         public string couCond { get; set; }
-        public string couDate { get; set; }
+        public DateTime couDateStart { get; set; }
+        public DateTime couDateEnd { get; set; }
         public string count { get; set; }
     }
 }

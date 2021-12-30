@@ -60,7 +60,8 @@ namespace HioldMod.src.HttpServer.bean
         //是否跟档
         public string follow { get; set; }
         //限购截止日期
-        public DateTime date { get; set; }
+        public DateTime dateStart { get; set; }
+        public DateTime dateEnd { get; set; }
         //是否已收藏
         public string collected { get; set; }
     }
