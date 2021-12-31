@@ -40,6 +40,10 @@ namespace HioldMod.HttpServer.router
             {
                 GameItemAction.getImage(request, response);
             }
+            else if (url.StartsWith("/api/addShopItem"))
+            {
+                TradeManageAction.addShopItem(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

@@ -1,6 +1,9 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
+using HioldMod.src.HttpServer.service;
+using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +16,7 @@ namespace HioldMod.src.HttpServer.action
     /// <summary>
     /// 交易管理模块
     /// </summary>
-    class TradeManage
+    class TradeManageAction
     {
         /// <summary>
         /// 翻译action
@@ -52,7 +55,51 @@ namespace HioldMod.src.HttpServer.action
                 string itemGroup = param["itemGroup"];
                 string itemIcon = param["itemIcon"];
                 string itemTint = param["itemTint"];
+                string xgCount = param["xgCount"];
+                string stock = param["stock"];
 
+                //类型转换
+
+
+
+                //游戏内物品
+                SpecialItem shopItem = new SpecialItem()
+                {
+                    id = ObjectId.NewObjectId(),
+                    itemtype = itemType,
+                    name = itemName,
+                    itemIcon = itemIcon,
+                    itemTint = itemTint,
+                    quality = int.Parse(quality),
+                    num = int.Parse(itemnum),
+                    currency = currency,
+                    price = double.Parse(price),
+                    discount = double.Parse(discount),
+                    prefer = double.Parse(prefer),
+                    desc = desc,
+                    class1 = itemGroup,
+                    class2 = itemGroup,
+                    classMod = itemType,
+                    hot = hot,
+                    hotSet = int.Parse(hotset),
+                    show = "1",
+                    stock = int.Parse(stock),
+                    xgLevel = level,
+                    xgLevelset = levelset,
+                    xgCount = xgCount,
+                    follow = fallow,
+                    dateStart = DateTime.Parse(xgDateStart),
+                    dateEnd = DateTime.Parse(xgDateEnd),
+                    couCurrType = couCurrType,
+                    couCond = couCond,
+                    couPrice = couPrice,
+                    count = itemnum,
+                    couDateStart = DateTime.Parse(couDateStart),
+                    couDateEnd = DateTime.Parse(couDateEnd),
+                };
+
+                ShopTradeService.addShopItem(shopItem);
+                ResponseUtils.ResponseSuccess(response);
             }
             catch (Exception e)
             {

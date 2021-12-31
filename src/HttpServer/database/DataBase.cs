@@ -51,22 +51,6 @@ namespace HioldMod.src.HttpServer.database
 
             //创建litedb实例
             litedb = new LiteDatabase(@dbFilePath);
-
-
-
-            
-
-
-            UserInfo user = new UserInfo()
-            {
-                name = "海鸥",
-                created_at = DateTime.Now,
-                updated_at = DateTime.Now,
-                password = ServerUtils.md5("a10100"),
-                gameentityid = "test"
-            };
-            var col = litedb.GetCollection<UserInfo>("UserInfo");
-            col.Insert(user);
         }
     }
 }

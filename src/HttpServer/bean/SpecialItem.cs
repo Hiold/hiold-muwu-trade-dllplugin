@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.bean
 {
-    class SpecialItem : Item
+    class SpecialItem : ShopItem
     {
-        public string couCurr { get; set; }
-        public string couType { get; set; }
+        public string couCurrType { get; set; }
         public string couPrice { get; set; }
         public string couCond { get; set; }
         public DateTime couDateStart { get; set; }
