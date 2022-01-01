@@ -16,7 +16,7 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="item">物品</param>
         public static void addShopItem(SpecialItem item)
         {
-            var col = DataBase.litedb.GetCollection<Item>("ShopItem");
+            var col = DataBase.litedb.GetCollection<SpecialItem>("ShopItem");
             col.Insert(item);
         }
     }

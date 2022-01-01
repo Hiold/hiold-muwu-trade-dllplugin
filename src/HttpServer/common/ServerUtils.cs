@@ -26,6 +26,21 @@ namespace HioldMod.HttpServer.common
         }
 
         /// <summary>
+        /// 获取post请求的请求体
+        /// </summary>
+        /// <param name="request">请求对象</param>
+        /// <returns>请求体</returns>
+        public static string getPostData(HttpListenerRequest request)
+        {
+            MemoryStream ms = new MemoryStream();
+            request.InputStream.CopyTo(ms);
+            Encoding utf8 = System.Text.Encoding.GetEncoding("utf-8");
+            string param = utf8.GetString(ms.ToArray());
+            Console.WriteLine(param);
+            return param;
+        }
+
+        /// <summary>
         /// 获取大写的MD5签名结果
         /// </summary>
         /// <param name="encypStr"></param>
