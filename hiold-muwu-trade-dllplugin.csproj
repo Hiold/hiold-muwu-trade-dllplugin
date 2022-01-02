@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,6 +10,7 @@
     <AssemblyName>hiold-muwu-trade-dllplugin</AssemblyName>
     <RootNamespace>HioldMod</RootNamespace>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -33,9 +34,26 @@
       <HintPath>..\7dtd-binaries\mscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="SQLite.Designer, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\SQLite.Designer.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <HintPath>..\7dtd-binaries\System.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.XML" />
     <Reference Include="UnityEngine">
@@ -88,6 +106,10 @@
     <Content Include="bin-lib\Assembly-CSharp.dll" />
     <Content Include="bin-lib\LiteDB.dll" />
     <Content Include="bin-lib\LogLibrary.dll" />
+    <Content Include="bin-lib\SQLite.Designer.dll" />
+    <Content Include="bin-lib\System.Data.SQLite.dll" />
+    <Content Include="bin-lib\System.Data.SQLite.EF6.dll" />
+    <Content Include="bin-lib\System.Data.SQLite.Linq.dll" />
     <Content Include="bin-lib\System.Web.dll" />
     <Content Include="bin-lib\UnityEngine.CoreModule.dll" />
     <Content Include="bin-lib\UnityEngine.dll" />

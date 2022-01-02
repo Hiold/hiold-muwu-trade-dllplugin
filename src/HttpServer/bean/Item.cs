@@ -11,6 +11,7 @@ namespace HioldMod.src.HttpServer.bean
 
         public string itemtype { get; set; }
         public string name { get; set; }
+        public string translate { get; set; }
         //图片
         public string itemIcon { get; set; }
         public string itemTint { get; set; }

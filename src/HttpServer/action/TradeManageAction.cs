@@ -143,6 +143,7 @@ namespace HioldMod.src.HttpServer.action
         public string currency { get; set; }
         public string price { get; set; }
         public string itemName { get; set; }
+        public string translate { get; set; }
         public string itemnum { get; set; }
         public int quality { get; set; }
         public string itemGroup { get; set; }

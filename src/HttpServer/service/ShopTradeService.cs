@@ -19,5 +19,10 @@ namespace HioldMod.src.HttpServer.service
             var col = DataBase.litedb.GetCollection<SpecialItem>("ShopItem");
             col.Insert(item);
         }
+
+        //public static List<SpecialItem> queryShopItem(string itemname, int page, int limit)
+        //{
+
+        //}
     }
 }

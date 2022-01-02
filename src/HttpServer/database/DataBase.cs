@@ -4,6 +4,8 @@ using HioldMod.src.HttpServer.service;
 using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,30 +29,56 @@ namespace HioldMod.src.HttpServer.database
         /// </summary>
         public static void InitTable()
         {
-            //创建数据库链接
-            if (API.isOnServer)
-            {
-                //在服务器端运行获取服务器路径
-                string modDBDir = string.Format("{0}database/", API.AssemblyPath);
-                //判断是否存在路径
-                if (!Directory.Exists(modDBDir))
-                {
-                    Directory.CreateDirectory(modDBDir);
-                }
-                dbFilePath = string.Format("{0}database.db", modDBDir);
+            ////创建数据库链接
+            //if (API.isOnServer)
+            //{
+            //    //在服务器端运行获取服务器路径
+            //    string modDBDir = string.Format("{0}database/", API.AssemblyPath);
+            //    //判断是否存在路径
+            //    if (!Directory.Exists(modDBDir))
+            //    {
+            //        Directory.CreateDirectory(modDBDir);
+            //    }
+            //    dbFilePath = string.Format("{0}database.db", modDBDir);
 
-            }
-            else
-            {
-                if (!Directory.Exists(debugDbfilePath))
-                {
-                    Directory.CreateDirectory(debugDbfilePath);
-                }
-                dbFilePath = string.Format("{0}database.db", debugDbfilePath);
-            }
+            //}
+            //else
+            //{
+            //    if (!Directory.Exists(debugDbfilePath))
+            //    {
+            //        Directory.CreateDirectory(debugDbfilePath);
+            //    }
+            //    dbFilePath = string.Format("{0}database.db", debugDbfilePath);
+            //}
 
-            //创建litedb实例
-            litedb = new LiteDatabase(@dbFilePath);
+            ////创建litedb实例
+            //litedb = new LiteDatabase(@dbFilePath);
+            const string connectionString = "URI=file:SqliteTest.db";
+            IDbConnection dbcon = new SQLiteConnection(connectionString);
+            dbcon.Open();
+            IDbCommand dbcmd = dbcon.CreateCommand();
+            // requires a table to be created named employee
+            // with columns firstname and lastname
+            // such as,
+            //        CREATE TABLE employee (
+            //           firstname nvarchar(32),
+            //           lastname nvarchar(32));
+            const string sql =
+               "SELECT firstname, lastname " +
+               "FROM employee";
+            dbcmd.CommandText = sql;
+            IDataReader reader = dbcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string firstName = reader.GetString(0);
+                string lastName = reader.GetString(1);
+                Console.WriteLine("Name: {0} {1}",
+                    firstName, lastName);
+            }
+            // clean up
+            reader.Dispose();
+            dbcmd.Dispose();
+            dbcon.Close();
         }
     }
 }
