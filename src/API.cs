@@ -34,7 +34,7 @@ namespace HioldMod
         private static void GameStartDone()
         {
             isOnServer = true;
-            DataBase.InitTable();
+            DataBase.InitDataBase();
             Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);
         }
 

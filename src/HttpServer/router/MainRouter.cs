@@ -44,6 +44,18 @@ namespace HioldMod.HttpServer.router
             {
                 TradeManageAction.addShopItem(request, response);
             }
+            else if (url.StartsWith("/api/queryShopItem"))
+            {
+                TradeManageAction.queryShopItem(request, response);
+            }
+            else if (url.StartsWith("/api/updateShopItem"))
+            {
+                TradeManageAction.updateShopItem(request, response);
+            }
+            else if (url.StartsWith("/api/deleteShopItem"))
+            {
+                TradeManageAction.deleteShopItem(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

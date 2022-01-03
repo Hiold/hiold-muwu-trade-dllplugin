@@ -11,7 +11,7 @@ namespace HioldMod.src.HttpServer.service
 {
     class UserService
     {
-        public static bool userRegister(string username, string password, string entityid)
+        public static int userRegister(string username, string password, string entityid)
         {
             UserInfo user = new UserInfo()
             {
@@ -19,16 +19,13 @@ namespace HioldMod.src.HttpServer.service
                 password = ServerUtils.md5(password),
                 gameentityid = entityid
             };
-            var col = DataBase.litedb.GetCollection<UserInfo>("UserInfo");
-            col.Insert(user);
-            return false;
+            var nv = DataBase.db.Insertable<UserInfo>(user).ExecuteCommand();
+            return nv;
         }
 
         public static List<UserInfo> userLogin(string username, string password)
         {
-            var col = DataBase.litedb.GetCollection<UserInfo>("UserInfo");
-            var results = col.Find(s => s.name.Equals(username) && s.password.Equals(ServerUtils.md5(password))).ToList();
-            return results;
+            return DataBase.db.Queryable<UserInfo>().Where(s => s.name.Equals(username) && s.password.Equals(ServerUtils.md5(password))).ToList(); ;
         }
 
     }

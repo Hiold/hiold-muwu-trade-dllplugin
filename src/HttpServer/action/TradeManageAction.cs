@@ -3,7 +3,6 @@ using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
-using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace HioldMod.src.HttpServer.action
     class TradeManageAction
     {
         /// <summary>
-        /// 翻译action
+        /// 添加商品
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
@@ -63,12 +62,9 @@ namespace HioldMod.src.HttpServer.action
 
                 //类型转换
 
-                Console.WriteLine(couDateStart);
-                Console.WriteLine(DateTime.Parse(xgDateStart));
                 //游戏内物品
-                SpecialItem shopItem = new SpecialItem()
+                TradeManageItem shopItem = new TradeManageItem()
                 {
-                    id = ObjectId.NewObjectId(),
                     itemtype = itemType,
                     name = itemName,
                     itemIcon = itemIcon,
@@ -91,6 +87,7 @@ namespace HioldMod.src.HttpServer.action
                     xgLevelset = levelset,
                     xgCount = xgCount,
                     follow = fallow,
+                    xgAll = xgAll,
                     dateStart = DateTime.Parse(xgDateStart),
                     dateEnd = DateTime.Parse(xgDateEnd),
                     couCurrType = couCurrType,
@@ -99,9 +96,12 @@ namespace HioldMod.src.HttpServer.action
                     count = itemnum,
                     couDateStart = DateTime.Parse(couDateStart),
                     couDateEnd = DateTime.Parse(couDateEnd),
+                    postTime = DateTime.Now,
+                    sell = "0",
+                    collect = 0,
+                    collected = "0"
                 };
 
-                Console.WriteLine(shopItem);
 
                 ShopTradeService.addShopItem(shopItem);
                 ResponseUtils.ResponseSuccess(response);
@@ -113,7 +113,196 @@ namespace HioldMod.src.HttpServer.action
             }
 
         }
+
+
+
+
+
+        /// <summary>
+        /// 更新商品
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void updateShopItem(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            //获取参数并进行强制类型转换
+            try
+            {
+                string postData = ServerUtils.getPostData(request);
+                addRequestBean addRequest = new addRequestBean();
+                addRequest = (addRequestBean)SimpleJson2.SimpleJson2.DeserializeObject(postData, addRequest.GetType());
+                string couCurrType = addRequest.couCurrType;
+                string couPrice = addRequest.couPrice;
+                string couCond = addRequest.couCond;
+                string xgDateStart = addRequest.xgDate[0];
+                string xgDateEnd = addRequest.xgDate[1];
+                string xgAll = addRequest.xgAll;
+                string couDateStart = addRequest.couDate[0];
+                string couDateEnd = addRequest.couDate[1];
+                string fallow = addRequest.fallow;
+                string level = addRequest.level;
+                string levelset = addRequest.levelset;
+                string hotset = addRequest.hotset;
+                string hot = addRequest.hot;
+                string sellType = addRequest.sellType;
+                string desc = addRequest.desc;
+                string prefer = addRequest.prefer;
+                double discount = addRequest.discount;
+                string itemType = addRequest.itemType;
+                string currency = addRequest.currency;
+                string price = addRequest.price;
+                string itemName = addRequest.itemName;
+                string itemnum = addRequest.itemnum;
+                int quality = addRequest.quality;
+                string itemname = addRequest.itemName;
+                string itemGroup = addRequest.itemGroup;
+                string itemIcon = addRequest.itemIcon;
+                string itemTint = addRequest.itemTint;
+                string xgCount = addRequest.xgCount;
+                string stock = addRequest.stock;
+                int id = addRequest.id;
+                //类型转换
+
+                List<TradeManageItem> olditem = ShopTradeService.getShopItemById(addRequest.id);
+
+                if (olditem == null || olditem.Count <= 0)
+                {
+                    ResponseUtils.ResponseFail(response, "更新失败，未查询到原数据");
+                    return;
+                }
+
+                //游戏内物品
+                TradeManageItem shopItem = olditem[0];
+
+                shopItem.id = id;
+                shopItem.itemtype = itemType;
+                shopItem.name = itemName;
+                shopItem.itemIcon = itemIcon;
+                shopItem.itemTint = itemTint;
+                shopItem.quality = quality;
+                shopItem.num = int.Parse(itemnum);
+                shopItem.currency = currency;
+                shopItem.price = double.Parse(price);
+                shopItem.discount = discount;
+                shopItem.prefer = double.Parse(prefer);
+                shopItem.desc = desc;
+                shopItem.class1 = itemGroup;
+                shopItem.class2 = itemGroup;
+                shopItem.classMod = itemType;
+                shopItem.hot = hot;
+                shopItem.hotSet = int.Parse(hotset);
+                shopItem.stock = int.Parse(stock);
+                shopItem.xgLevel = level;
+                shopItem.xgLevelset = levelset;
+                shopItem.xgCount = xgCount;
+                shopItem.follow = fallow;
+                shopItem.xgAll = xgAll;
+                shopItem.dateStart = DateTime.Parse(xgDateStart);
+                shopItem.dateEnd = DateTime.Parse(xgDateEnd);
+                shopItem.couCurrType = couCurrType;
+                shopItem.couCond = couCond;
+                shopItem.couPrice = couPrice;
+                shopItem.count = itemnum;
+                shopItem.couDateStart = DateTime.Parse(couDateStart);
+                shopItem.couDateEnd = DateTime.Parse(couDateEnd);
+                shopItem.postTime = DateTime.Now;
+
+                ShopTradeService.updateShopItem(shopItem);
+                ResponseUtils.ResponseSuccess(response);
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+
+        }
+
+
+        /// <summary>
+        /// 删除商品
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void deleteShopItem(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            //获取参数并进行强制类型转换
+            try
+            {
+                string postData = ServerUtils.getPostData(request);
+                addRequestBean addRequest = new addRequestBean();
+                addRequest = (addRequestBean)SimpleJson2.SimpleJson2.DeserializeObject(postData, addRequest.GetType());
+                int id = addRequest.id;
+                //类型转换
+
+                List<TradeManageItem> olditem = ShopTradeService.getShopItemById(addRequest.id);
+
+                if (olditem == null || olditem.Count <= 0)
+                {
+                    ResponseUtils.ResponseFail(response, "更新失败，未查询到原数据");
+                    return;
+                }
+
+                //游戏内物品
+                TradeManageItem shopItem = olditem[0];
+                shopItem.id = id;
+                shopItem.deleteTime = DateTime.Now;
+
+                ShopTradeService.updateShopItem(shopItem);
+                ResponseUtils.ResponseSuccess(response);
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+
+        }
+
+
+
+
+
+        /// <summary>
+        /// 获取ShopItem
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void queryShopItem(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                string itemname = "";
+                int pageIndex = 1;
+                int pageSize = 10;
+                queryRequest.TryGetValue("itemname", out itemname);
+                if (queryRequest.TryGetValue("pageIndex", out string pageIndexStr))
+                {
+                    pageIndex = int.Parse(pageIndexStr);
+                }
+                if (queryRequest.TryGetValue("pageSize", out string pageSizeStr))
+                {
+                    pageSize = int.Parse(pageSizeStr);
+                }
+                Dictionary<string, object> result = ShopTradeService.queryShopItem(itemname, pageIndex, pageSize);
+                ResponseUtils.ResponseSuccessWithData(response, result);
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                LogUtils.Loger(e.StackTrace);
+                LogUtils.Loger(e.ToString());
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
     }
+
+
+
+
 
 
     public class addRequestBean
@@ -149,7 +338,7 @@ namespace HioldMod.src.HttpServer.action
         public string itemGroup { get; set; }
         public string itemIcon { get; set; }
         public string itemTint { get; set; }
-
+        public int id { get; set; }
     }
 
 

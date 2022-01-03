@@ -1,15 +1,6 @@
-﻿using HioldMod.HttpServer.common;
-using HioldMod.src.HttpServer.bean;
-using HioldMod.src.HttpServer.service;
-using LiteDB;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
+﻿using HioldMod.src.HttpServer.bean;
+using SqlSugar;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.database
 {
@@ -21,64 +12,48 @@ namespace HioldMod.src.HttpServer.database
 
         //调试使用的数据库文件存储路径
         public static string debugDbfilePath = "E:/database/";
-
-        public static LiteDatabase litedb;
+        public static SqlSugarClient db = null;
 
         /// <summary>
         /// 初始化数据库
         /// </summary>
-        public static void InitTable()
+        public static void InitDataBase()
         {
             ////创建数据库链接
-            //if (API.isOnServer)
-            //{
-            //    //在服务器端运行获取服务器路径
-            //    string modDBDir = string.Format("{0}database/", API.AssemblyPath);
-            //    //判断是否存在路径
-            //    if (!Directory.Exists(modDBDir))
-            //    {
-            //        Directory.CreateDirectory(modDBDir);
-            //    }
-            //    dbFilePath = string.Format("{0}database.db", modDBDir);
+            if (API.isOnServer)
+            {
+                //在服务器端运行获取服务器路径
+                string modDBDir = string.Format("{0}database/", API.AssemblyPath);
+                //判断是否存在路径
+                if (!Directory.Exists(modDBDir))
+                {
+                    Directory.CreateDirectory(modDBDir);
+                }
+                dbFilePath = string.Format("DataSource={0}TradeManageDB.db", modDBDir);
 
-            //}
-            //else
-            //{
-            //    if (!Directory.Exists(debugDbfilePath))
-            //    {
-            //        Directory.CreateDirectory(debugDbfilePath);
-            //    }
-            //    dbFilePath = string.Format("{0}database.db", debugDbfilePath);
-            //}
+            }
+            else
+            {
+                if (!Directory.Exists(debugDbfilePath))
+                {
+                    Directory.CreateDirectory(debugDbfilePath);
+                }
+                dbFilePath = string.Format("DataSource={0}TradeManageDB.db", debugDbfilePath);
+            }
 
             ////创建litedb实例
             //litedb = new LiteDatabase(@dbFilePath);
-            const string connectionString = "URI=file:SqliteTest.db";
-            IDbConnection dbcon = new SQLiteConnection(connectionString);
-            dbcon.Open();
-            IDbCommand dbcmd = dbcon.CreateCommand();
-            // requires a table to be created named employee
-            // with columns firstname and lastname
-            // such as,
-            //        CREATE TABLE employee (
-            //           firstname nvarchar(32),
-            //           lastname nvarchar(32));
-            const string sql =
-               "SELECT firstname, lastname " +
-               "FROM employee";
-            dbcmd.CommandText = sql;
-            IDataReader reader = dbcmd.ExecuteReader();
-            while (reader.Read())
+            //string connectionString = string.Format("DataSource={0}TradeManageDB.db", @dbFilePath);
+            db = new SqlSugarClient(new ConnectionConfig()
             {
-                string firstName = reader.GetString(0);
-                string lastName = reader.GetString(1);
-                Console.WriteLine("Name: {0} {1}",
-                    firstName, lastName);
-            }
-            // clean up
-            reader.Dispose();
-            dbcmd.Dispose();
-            dbcon.Close();
+                ConnectionString = dbFilePath,
+                DbType = SqlSugar.DbType.Sqlite,
+                IsAutoCloseConnection = true,//自动释放
+            });
+
+            //初始化表
+            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(TradeManageItem));
+            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserInfo));
         }
     }
 }
