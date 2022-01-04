@@ -97,9 +97,10 @@ namespace HioldMod.src.HttpServer.action
                     couDateStart = DateTime.Parse(couDateStart),
                     couDateEnd = DateTime.Parse(couDateEnd),
                     postTime = DateTime.Now,
+                    sellType = int.Parse(sellType),
                     sell = "0",
                     collect = 0,
-                    collected = "0"
+                    collected = "0",
                 };
 
 
@@ -162,7 +163,6 @@ namespace HioldMod.src.HttpServer.action
                 string stock = addRequest.stock;
                 int id = addRequest.id;
                 //类型转换
-
                 List<TradeManageItem> olditem = ShopTradeService.getShopItemById(addRequest.id);
 
                 if (olditem == null || olditem.Count <= 0)
@@ -173,6 +173,8 @@ namespace HioldMod.src.HttpServer.action
 
                 //游戏内物品
                 TradeManageItem shopItem = olditem[0];
+
+                Console.WriteLine("热卖:" + hot);
 
                 shopItem.id = id;
                 shopItem.itemtype = itemType;
@@ -213,6 +215,8 @@ namespace HioldMod.src.HttpServer.action
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
+                LogUtils.Loger(e.StackTrace);
+                LogUtils.Loger(e.ToString());
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
 

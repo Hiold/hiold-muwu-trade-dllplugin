@@ -53,7 +53,7 @@ namespace HioldMod.src.HttpServer.bean
         //折后价格
         public double prefer { get; set; }
         //出售类型 false  vip  或者为空
-        public int sales { get; set; }
+        public int sellType { get; set; }
         //是否热卖 true false auto
         public string hot { get; set; }
         //达到热卖后自动添加热卖
@@ -81,7 +81,7 @@ namespace HioldMod.src.HttpServer.bean
         public string collected { get; set; }
         [SugarColumn(IndexGroupNameList = new string[] { "index_postTime" })]
         public DateTime postTime { get; set; }
-        [SugarColumn(IndexGroupNameList = new string[] { "index_deleteTime" }, IsNullable = true)]
+        [SugarColumn(IndexGroupNameList = new string[] { "index_deleteTime" }, IsNullable = true, DefaultValue = null)]
         public DateTime deleteTime { get; set; }
     }
 }

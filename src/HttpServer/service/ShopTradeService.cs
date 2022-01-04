@@ -29,7 +29,7 @@ namespace HioldMod.src.HttpServer.service
         public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize)
         {
             int totalCount = 0;
-            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime is not null", itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
+            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'", itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("data", ls);
             result.Add("count", totalCount);
