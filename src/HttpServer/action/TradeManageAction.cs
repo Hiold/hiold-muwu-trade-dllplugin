@@ -59,7 +59,7 @@ namespace HioldMod.src.HttpServer.action
                 string itemTint = addRequest.itemTint;
                 string xgCount = addRequest.xgCount;
                 string stock = addRequest.stock;
-
+                string translate = addRequest.translate;
                 //类型转换
 
                 //游戏内物品
@@ -101,6 +101,7 @@ namespace HioldMod.src.HttpServer.action
                     sell = "0",
                     collect = 0,
                     collected = "0",
+                    translate=translate,
                 };
 
 
