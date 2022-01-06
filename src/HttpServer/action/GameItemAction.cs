@@ -151,14 +151,14 @@ namespace HioldMod.src.HttpServer.action
                 fs.Close();
                 response.OutputStream.Flush();
                 response.OutputStream.Close();
-                LogUtils.Loger(url);
+                // LogUtils.Loger(url);
             }
             catch (Exception e)
             {
                 response.StatusCode = 404;
                 response.OutputStream.Flush();
                 response.OutputStream.Close();
-                LogUtils.Loger("读取文件异常:" + e.Message);
+                // LogUtils.Loger("读取文件异常:" + e.Message);
             }
         }
 

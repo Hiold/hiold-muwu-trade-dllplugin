@@ -298,6 +298,7 @@ namespace HioldMod.src.HttpServer.common
                 {
                     MultipartFormItem item = new MultipartFormItem();
                     item.Name = _partName;
+                    item.FileName = _partFilename;
                     item.Data = new byte[_partDataLength];
 
                     Buffer.BlockCopy(_data, _partDataStart, item.Data, 0, _partDataLength);
@@ -329,5 +330,6 @@ namespace HioldMod.src.HttpServer.common
         public byte[] Data { get; set; }
         public string ContentType { get; set; }
         public string ItemType { get; set; }
+        public string FileName { get; set; }
     }
 }

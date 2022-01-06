@@ -20,29 +20,30 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="response">响应</param>
         public static void uploadFile(HttpListenerRequest request, HttpListenerResponse response)
         {
-            DirectoryInfo di = new DirectoryInfo(API.AssemblyPath);
-            string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Data/ItemIcons/";
-            string url = request.RawUrl.Replace("/api/image/", "");
-            response.ContentType = "image/png";
+            List<string> result = new List<string>();
+            string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             try
             {
                 if (API.isOnServer)
                 {
-                    basepath = di.Parent.Parent.FullName + "/Data/ItemIcons/";
+                    basepath = string.Format("{0}/image/", API.AssemblyPath);
                 }
-
-
-                FileStream fs = File.OpenRead(basepath + url);
-                fs.CopyTo(response.OutputStream);
-                fs.Flush();
-                fs.Close();
+                FileUploadUtils fuu = new FileUploadUtils(request, Encoding.UTF8);
+                List<MultipartFormItem> files = fuu.ParseIntoElementList();
+                for (int i = 0; i < files.Count; i++)
+                {
+                    FileStream fs = new FileStream(basepath + DateTime.Now.ToString("yyyyMMddHHmmssfff") + files[i].FileName, FileMode.Create);
+                    fs.Write(files[i].Data, 0, files[i].Data.Length);
+                    fs.Flush();
+                    fs.Close();
+                }
+                response.StatusCode = 200;
                 response.OutputStream.Flush();
                 response.OutputStream.Close();
-                LogUtils.Loger(url);
             }
             catch (Exception e)
             {
-                response.StatusCode = 404;
+                response.StatusCode = 500;
                 response.OutputStream.Flush();
                 response.OutputStream.Close();
                 LogUtils.Loger("读取文件异常:" + e.Message);

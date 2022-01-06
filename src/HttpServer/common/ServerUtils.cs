@@ -36,7 +36,7 @@ namespace HioldMod.HttpServer.common
             request.InputStream.CopyTo(ms);
             Encoding utf8 = System.Text.Encoding.GetEncoding("utf-8");
             string param = utf8.GetString(ms.ToArray());
-            Console.WriteLine(param);
+            //Console.WriteLine(param);
             return param;
         }
 

@@ -175,7 +175,7 @@ namespace HioldMod.src.HttpServer.action
                 //游戏内物品
                 TradeManageItem shopItem = olditem[0];
 
-                Console.WriteLine("热卖:" + hot);
+                //Console.WriteLine("热卖:" + hot);
 
                 shopItem.id = id;
                 shopItem.itemtype = itemType;
