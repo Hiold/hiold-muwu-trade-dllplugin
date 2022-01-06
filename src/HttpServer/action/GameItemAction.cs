@@ -13,6 +13,11 @@ namespace HioldMod.src.HttpServer.action
 {
     class GameItemAction
     {
+        /// <summary>
+        /// 获取系统物品
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
         public static void getSystemItem(HttpListenerRequest request, HttpListenerResponse response)
         {
             try
@@ -121,6 +126,11 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 获取系统图标
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
         public static void getImage(HttpListenerRequest request, HttpListenerResponse response)
         {
             DirectoryInfo di = new DirectoryInfo(API.AssemblyPath);
@@ -148,7 +158,42 @@ namespace HioldMod.src.HttpServer.action
                 response.StatusCode = 404;
                 response.OutputStream.Flush();
                 response.OutputStream.Close();
-                LogUtils.Loger("读取文件异常:"+e.Message);
+                LogUtils.Loger("读取文件异常:" + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 获取自定义图片
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void getImageIcon(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            string url = request.RawUrl.Replace("/api/iconImage/", "");
+            response.ContentType = "image/png";
+            string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
+            try
+            {
+                if (API.isOnServer)
+                {
+                    basepath = string.Format("{0}/image/", API.AssemblyPath);
+                }
+
+
+                FileStream fs = File.OpenRead(basepath + url);
+                fs.CopyTo(response.OutputStream);
+                fs.Flush();
+                fs.Close();
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+                LogUtils.Loger(url);
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = 404;
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+                LogUtils.Loger("读取文件异常:" + e.Message);
             }
         }
     }

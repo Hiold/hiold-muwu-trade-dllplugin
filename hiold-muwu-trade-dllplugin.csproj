@@ -81,6 +81,7 @@
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\API.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
+    <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />
     <Compile Include="src\HttpServer\action\RegisterAction.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="src\HttpServer\action\TranslationAction.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
+    <Compile Include="src\HttpServer\common\FileUploadUtils.cs" />
     <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
     <Compile Include="src\HttpServer\common\ServerUtils.cs" />
     <Compile Include="src\HttpServer\database\DataBase.cs" />

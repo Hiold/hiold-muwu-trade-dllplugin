@@ -40,6 +40,10 @@ namespace HioldMod.HttpServer.router
             {
                 GameItemAction.getImage(request, response);
             }
+            else if (url.StartsWith("/api/iconImage"))
+            {
+                GameItemAction.getImageIcon(request, response);
+            }
             else if (url.StartsWith("/api/addShopItem"))
             {
                 TradeManageAction.addShopItem(request, response);
@@ -55,6 +59,14 @@ namespace HioldMod.HttpServer.router
             else if (url.StartsWith("/api/deleteShopItem"))
             {
                 TradeManageAction.deleteShopItem(request, response);
+            }
+            else if (url.StartsWith("/api/uploadFile"))
+            {
+                FileUpload.uploadFile(request, response);
+            }
+            else if (url.StartsWith("/api/getIconFile"))
+            {
+                FileUpload.getIconFile(request, response);
             }
             //没有匹配的router 返回404
             else
