@@ -30,78 +30,53 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request);
                 addRequestBean addRequest = new addRequestBean();
                 addRequest = (addRequestBean)SimpleJson2.SimpleJson2.DeserializeObject(postData, addRequest.GetType());
-                string couCurrType = addRequest.couCurrType;
-                string couPrice = addRequest.couPrice;
-                string couCond = addRequest.couCond;
-                string xgDateStart = addRequest.xgDate[0];
-                string xgDateEnd = addRequest.xgDate[1];
-                string xgAll = addRequest.xgAll;
-                string couDateStart = addRequest.couDate[0];
-                string couDateEnd = addRequest.couDate[1];
-                string fallow = addRequest.fallow;
-                string level = addRequest.level;
-                string levelset = addRequest.levelset;
-                string hotset = addRequest.hotset;
-                string hot = addRequest.hot;
-                string sellType = addRequest.sellType;
-                string desc = addRequest.desc;
-                string prefer = addRequest.prefer;
-                double discount = addRequest.discount;
-                string itemType = addRequest.itemType;
-                string currency = addRequest.currency;
-                string price = addRequest.price;
-                string itemName = addRequest.itemName;
-                string itemnum = addRequest.itemnum;
-                int quality = addRequest.quality;
-                string itemname = addRequest.itemName;
-                string itemGroup = addRequest.itemGroup;
-                string itemIcon = addRequest.itemIcon;
-                string itemTint = addRequest.itemTint;
-                string xgCount = addRequest.xgCount;
-                string stock = addRequest.stock;
-                string translate = addRequest.translate;
+
                 //类型转换
 
                 //游戏内物品
                 TradeManageItem shopItem = new TradeManageItem()
                 {
-                    itemtype = itemType,
-                    name = itemName,
-                    itemIcon = itemIcon,
-                    itemTint = itemTint,
-                    quality = quality,
-                    num = int.Parse(itemnum),
-                    currency = currency,
-                    price = double.Parse(price),
-                    discount = discount,
-                    prefer = double.Parse(prefer),
-                    desc = desc,
-                    class1 = itemGroup,
-                    class2 = itemGroup,
-                    classMod = itemType,
-                    hot = hot,
-                    hotSet = int.Parse(hotset),
+                    itemtype = addRequest.itemType,
+                    name = addRequest.itemName,
+                    itemicon = addRequest.itemIcon,
+                    itemtint = addRequest.itemTint,
+                    quality = addRequest.quality,
+                    num = int.Parse(addRequest.itemnum),
+                    currency = addRequest.currency,
+                    price = double.Parse(addRequest.price),
+                    discount = addRequest.discount,
+                    prefer = double.Parse(addRequest.prefer),
+                    desc = addRequest.desc,
+                    class1 = addRequest.itemGroup,
+                    class2 = addRequest.itemGroup,
+                    classmod = addRequest.itemType,
+                    hot = addRequest.hot,
+                    hotset = int.Parse(addRequest.hotset),
                     show = "1",
-                    stock = int.Parse(stock),
-                    xgLevel = level,
-                    xgLevelset = levelset,
-                    xgCount = xgCount,
-                    follow = fallow,
-                    xgAll = xgAll,
-                    dateStart = DateTime.Parse(xgDateStart),
-                    dateEnd = DateTime.Parse(xgDateEnd),
-                    couCurrType = couCurrType,
-                    couCond = couCond,
-                    couPrice = couPrice,
-                    count = itemnum,
-                    couDateStart = DateTime.Parse(couDateStart),
-                    couDateEnd = DateTime.Parse(couDateEnd),
+                    stock = int.Parse(addRequest.stock),
+                    xglevel = addRequest.xglevel,
+                    xglevelset = addRequest.xglevelset,
+                    follow = addRequest.fallow,
+                    xgall = addRequest.xgall,
+                    xgallset = addRequest.xgallset,
+                    xgdatelimit = addRequest.xgdatelimit,
+                    dateStart = DateTime.Parse(addRequest.xgDate[0]),
+                    dateEnd = DateTime.Parse(addRequest.xgDate[1]),
+                    couCurrType = addRequest.couCurrType,
+                    couCond = addRequest.couCond,
+                    couPrice = addRequest.couPrice,
+                    count = addRequest.itemnum,
+                    coudatelimit = addRequest.coudatelimit,
+                    couDateStart = DateTime.Parse(addRequest.couDate[0]),
+                    couDateEnd = DateTime.Parse(addRequest.couDate[1]),
                     postTime = DateTime.Now,
-                    sellType = int.Parse(sellType),
-                    sell = "0",
+                    selltype = int.Parse(addRequest.sellType),
+                    selloutcount = "0",
                     collect = 0,
                     collected = "0",
-                    translate=translate,
+                    translate = addRequest.translate,
+                    xgday = addRequest.xgday,
+                    xgdayset = addRequest.xgdayset,
                 };
 
 
@@ -133,36 +108,6 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request);
                 addRequestBean addRequest = new addRequestBean();
                 addRequest = (addRequestBean)SimpleJson2.SimpleJson2.DeserializeObject(postData, addRequest.GetType());
-                string couCurrType = addRequest.couCurrType;
-                string couPrice = addRequest.couPrice;
-                string couCond = addRequest.couCond;
-                string xgDateStart = addRequest.xgDate[0];
-                string xgDateEnd = addRequest.xgDate[1];
-                string xgAll = addRequest.xgAll;
-                string couDateStart = addRequest.couDate[0];
-                string couDateEnd = addRequest.couDate[1];
-                string fallow = addRequest.fallow;
-                string level = addRequest.level;
-                string levelset = addRequest.levelset;
-                string hotset = addRequest.hotset;
-                string hot = addRequest.hot;
-                string sellType = addRequest.sellType;
-                string desc = addRequest.desc;
-                string prefer = addRequest.prefer;
-                double discount = addRequest.discount;
-                string itemType = addRequest.itemType;
-                string currency = addRequest.currency;
-                string price = addRequest.price;
-                string itemName = addRequest.itemName;
-                string itemnum = addRequest.itemnum;
-                int quality = addRequest.quality;
-                string itemname = addRequest.itemName;
-                string itemGroup = addRequest.itemGroup;
-                string itemIcon = addRequest.itemIcon;
-                string itemTint = addRequest.itemTint;
-                string xgCount = addRequest.xgCount;
-                string stock = addRequest.stock;
-                int id = addRequest.id;
                 //类型转换
                 List<TradeManageItem> olditem = ShopTradeService.getShopItemById(addRequest.id);
 
@@ -177,37 +122,41 @@ namespace HioldMod.src.HttpServer.action
 
                 //Console.WriteLine("热卖:" + hot);
 
-                shopItem.id = id;
-                shopItem.itemtype = itemType;
-                shopItem.name = itemName;
-                shopItem.itemIcon = itemIcon;
-                shopItem.itemTint = itemTint;
-                shopItem.quality = quality;
-                shopItem.num = int.Parse(itemnum);
-                shopItem.currency = currency;
-                shopItem.price = double.Parse(price);
-                shopItem.discount = discount;
-                shopItem.prefer = double.Parse(prefer);
-                shopItem.desc = desc;
-                shopItem.class1 = itemGroup;
-                shopItem.class2 = itemGroup;
-                shopItem.classMod = itemType;
-                shopItem.hot = hot;
-                shopItem.hotSet = int.Parse(hotset);
-                shopItem.stock = int.Parse(stock);
-                shopItem.xgLevel = level;
-                shopItem.xgLevelset = levelset;
-                shopItem.xgCount = xgCount;
-                shopItem.follow = fallow;
-                shopItem.xgAll = xgAll;
-                shopItem.dateStart = DateTime.Parse(xgDateStart);
-                shopItem.dateEnd = DateTime.Parse(xgDateEnd);
-                shopItem.couCurrType = couCurrType;
-                shopItem.couCond = couCond;
-                shopItem.couPrice = couPrice;
-                shopItem.count = itemnum;
-                shopItem.couDateStart = DateTime.Parse(couDateStart);
-                shopItem.couDateEnd = DateTime.Parse(couDateEnd);
+                shopItem.id = addRequest.id;
+                shopItem.itemtype = addRequest.itemType;
+                shopItem.name = addRequest.itemName;
+                shopItem.itemicon = addRequest.itemIcon;
+                shopItem.itemtint = addRequest.itemTint;
+                shopItem.quality = addRequest.quality;
+                shopItem.num = int.Parse(addRequest.itemnum);
+                shopItem.currency = addRequest.currency;
+                shopItem.price = double.Parse(addRequest.price);
+                shopItem.discount = addRequest.discount;
+                shopItem.prefer = double.Parse(addRequest.prefer);
+                shopItem.desc = addRequest.desc;
+                shopItem.class1 = addRequest.itemGroup;
+                shopItem.class2 = addRequest.itemGroup;
+                shopItem.classmod = addRequest.itemType;
+                shopItem.hot = addRequest.hot;
+                shopItem.hotset = int.Parse(addRequest.hotset);
+                shopItem.stock = int.Parse(addRequest.stock);
+                shopItem.xglevel = addRequest.xglevel;
+                shopItem.xglevelset = addRequest.xglevelset;
+                shopItem.follow = addRequest.fallow;
+                shopItem.xgall = addRequest.xgall;
+                shopItem.xgallset = addRequest.xgallset;
+                shopItem.dateStart = DateTime.Parse(addRequest.xgDate[0]);
+                shopItem.dateEnd = DateTime.Parse(addRequest.xgDate[1]);
+                shopItem.couCurrType = addRequest.couCurrType;
+                shopItem.couCond = addRequest.couCond;
+                shopItem.couPrice = addRequest.couPrice;
+                shopItem.count = addRequest.itemnum;
+                shopItem.couDateStart = DateTime.Parse(addRequest.couDate[0]);
+                shopItem.couDateEnd = DateTime.Parse(addRequest.couDate[1]);
+                shopItem.xgday = addRequest.xgday;
+                shopItem.xgdayset = addRequest.xgdayset;
+                shopItem.xgdatelimit = addRequest.xgdatelimit;
+                shopItem.coudatelimit = addRequest.coudatelimit;
                 shopItem.postTime = DateTime.Now;
 
                 ShopTradeService.updateShopItem(shopItem);
@@ -314,19 +263,14 @@ namespace HioldMod.src.HttpServer.action
     {
         public string xgCount { get; set; }
         public string stock { get; set; }
+        public string xgdatelimit { get; set; }
+        public string coudatelimit { get; set; }
         public string[] xgDate { get; set; }
         public string[] couDate { get; set; }
         public string couCurrType { get; set; }
         public string couPrice { get; set; }
         public string couCond { get; set; }
-        public string xgDateStart { get; set; }
-        public string xgDateEnd { get; set; }
-        public string xgAll { get; set; }
-        public string couDateStart { get; set; }
-        public string couDateEnd { get; set; }
         public string fallow { get; set; }
-        public string level { get; set; }
-        public string levelset { get; set; }
         public string hotset { get; set; }
         public string hot { get; set; }
         public string sellType { get; set; }
@@ -344,6 +288,15 @@ namespace HioldMod.src.HttpServer.action
         public string itemIcon { get; set; }
         public string itemTint { get; set; }
         public int id { get; set; }
+        //登记限购
+        public string xglevel { get; set; }
+        public string xglevelset { get; set; }
+        //每日限购
+        public string xgday { get; set; }
+        public string xgdayset { get; set; }
+        //总限购
+        public string xgall { get; set; }
+        public string xgallset { get; set; }
     }
 
 

@@ -67,6 +67,8 @@ namespace HioldMod.src.HttpServer.action
                 }
                 DirectoryInfo flooder = new DirectoryInfo(basepath);
                 FileInfo[] fss = flooder.GetFiles();
+                //对结果进行排序
+                SortAsFileCreationTime(ref fss);
                 for (int i = 0; i < fss.Length; i++)
                 {
                     result.Add(fss[i].Name);
@@ -78,6 +80,15 @@ namespace HioldMod.src.HttpServer.action
                 ResponseUtils.ResponseFail(response, "获取文件异常");
                 LogUtils.Loger("读取文件异常:" + e.Message);
             }
+        }
+
+        /// <summary>
+        /// 文件排序
+        /// </summary>
+        /// <param name="arrFi">文件列表</param>
+        public static void SortAsFileCreationTime(ref FileInfo[] arrFi)
+        {
+            Array.Sort(arrFi, delegate (FileInfo x, FileInfo y) { return y.CreationTime.CompareTo(x.CreationTime); });
         }
 
     }

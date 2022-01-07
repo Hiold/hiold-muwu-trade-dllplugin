@@ -135,6 +135,7 @@ namespace HioldMod.src.HttpServer.action
         {
             DirectoryInfo di = new DirectoryInfo(API.AssemblyPath);
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Data/ItemIcons/";
+            string basepath2 = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             string url = request.RawUrl.Replace("/api/image/", "");
             response.ContentType = "image/png";
             try
@@ -142,16 +143,36 @@ namespace HioldMod.src.HttpServer.action
                 if (API.isOnServer)
                 {
                     basepath = di.Parent.Parent.FullName + "/Data/ItemIcons/";
+                    basepath2 = string.Format("{0}/image/", API.AssemblyPath);
+                }
+
+                //判断两个路径是否存在文件，均不存在返回404
+                if (File.Exists(basepath + url))
+                {
+                    FileStream fs = File.OpenRead(basepath + url);
+                    fs.CopyTo(response.OutputStream);
+                    fs.Flush();
+                    fs.Close();
+                    response.OutputStream.Flush();
+                    response.OutputStream.Close();
+                }
+                else if (File.Exists(basepath2 + url))
+                {
+                    FileStream fs = File.OpenRead(basepath2 + url);
+                    fs.CopyTo(response.OutputStream);
+                    fs.Flush();
+                    fs.Close();
+                    response.OutputStream.Flush();
+                    response.OutputStream.Close();
+                }
+                else
+                {
+                    response.StatusCode = 404;
+                    response.OutputStream.Flush();
+                    response.OutputStream.Close();
                 }
 
 
-                FileStream fs = File.OpenRead(basepath + url);
-                fs.CopyTo(response.OutputStream);
-                fs.Flush();
-                fs.Close();
-                response.OutputStream.Flush();
-                response.OutputStream.Close();
-                // LogUtils.Loger(url);
             }
             catch (Exception e)
             {

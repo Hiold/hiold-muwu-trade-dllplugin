@@ -18,31 +18,30 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IndexGroupNameList = new string[] { "index_translate" }, IsNullable = true)]
         public string translate { get; set; }
         //图片
-        public string itemIcon { get; set; }
-        public string itemTint { get; set; }
+        public string itemicon { get; set; }
+        public string itemtint { get; set; }
         //品质
         public int quality { get; set; }
         //数量
         public int num { get; set; }
-
         //类型2
         public string class1 { get; set; }
         //类型2
         public string class2 { get; set; }
         //是否为mod物品
-        public string classMod { get; set; }
+        public string classmod { get; set; }
         //描述
         [SugarColumn(ColumnDataType = "text")]
         public string desc { get; set; }
 
+        //特殊物品数据
         public string couCurrType { get; set; }
         public string couPrice { get; set; }
         public string couCond { get; set; }
+        public string coudatelimit { get; set; }
         public DateTime couDateStart { get; set; }
         public DateTime couDateEnd { get; set; }
         public string count { get; set; }
-
-        //物品类型
 
         //货币类型
         public string currency { get; set; }
@@ -53,11 +52,11 @@ namespace HioldMod.src.HttpServer.bean
         //折后价格
         public double prefer { get; set; }
         //出售类型 false  vip  或者为空
-        public int sellType { get; set; }
+        public int selltype { get; set; }
         //是否热卖 true false auto
         public string hot { get; set; }
         //达到热卖后自动添加热卖
-        public int hotSet { get; set; }
+        public int hotset { get; set; }
         //是否显示 t  f  a
         public string show { get; set; }
         //剩余库存量
@@ -65,18 +64,25 @@ namespace HioldMod.src.HttpServer.bean
         //收藏量
         public int collect { get; set; }
         //售出量
-        public string sell { get; set; }
-        //限购登记 + - fasevv
-        public string xgLevel { get; set; }
-        public string xgAll { get; set; }
-        public string xgLevelset { get; set; }
-        //总限购
-        public string xgCount { get; set; }
+        public string selloutcount { get; set; }
         //是否跟档
         public string follow { get; set; }
+
+        //等级限购
+        public string xglevel { get; set; }
+        public string xglevelset { get; set; }
+        //每日限购
+        public string xgday { get; set; }
+        public string xgdayset { get; set; }
+        //总限购
+        public string xgall { get; set; }
+        public string xgallset { get; set; }
+
         //限购截止日期
+        public string xgdatelimit { get; set; }
         public DateTime dateStart { get; set; }
         public DateTime dateEnd { get; set; }
+
         //是否已收藏
         public string collected { get; set; }
         [SugarColumn(IndexGroupNameList = new string[] { "index_postTime" })]
