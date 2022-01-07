@@ -5,6 +5,7 @@ using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
@@ -43,6 +44,23 @@ namespace HioldMod.src.HttpServer.action
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
+        }
+        /// <summary>
+        /// 测试
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void debug(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            FileStream fs = new FileStream("D:/test.txt",FileMode.OpenOrCreate);
+            byte[] data = Encoding.UTF8.GetBytes(SimpleJson2.SimpleJson2.SerializeObject(request.Headers));
+            fs.Write(data,0,data.Length);
+
+
+            fs.Flush();
+            fs.Close();
+            response.StatusCode = 200;
+            response.Close();
         }
     }
 }

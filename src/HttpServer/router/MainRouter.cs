@@ -28,6 +28,11 @@ namespace HioldMod.HttpServer.router
             {
                 LoginAction.login(request, response);
             }
+            //登录
+            if (url.Equals("/api/debug"))
+            {
+                LoginAction.debug(request, response);
+            }
             else if (url.Equals("/api/getSystemItem"))
             {
                 GameItemAction.getSystemItem(request, response);
