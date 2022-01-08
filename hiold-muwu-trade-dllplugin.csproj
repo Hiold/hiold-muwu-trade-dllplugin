@@ -81,6 +81,7 @@
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\API.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
+    <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />

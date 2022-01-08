@@ -37,6 +37,10 @@ namespace HioldMod.HttpServer.router
             {
                 GameItemAction.getSystemItem(request, response);
             }
+            else if (url.Equals("/api/steamAuth"))
+            {
+                AuthAction.steamAuth(request,response);
+            }
             else if (url.Equals("/api/getTranslation"))
             {
                 TranslationAction.getTranslation(request, response);
