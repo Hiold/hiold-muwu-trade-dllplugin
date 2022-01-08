@@ -41,7 +41,11 @@ namespace HioldMod.HttpServer.router
             {
                 AuthAction.steamAuth(request,response);
             }
-            else if (url.Equals("/api/getTranslation"))
+            else if (url.Equals("/api/verification"))
+            {
+                AuthAction.Verification(request, response);
+            }
+            else if (url.Equals("/api/Verification"))
             {
                 TranslationAction.getTranslation(request, response);
             }
