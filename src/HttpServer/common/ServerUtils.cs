@@ -25,6 +25,19 @@ namespace HioldMod.HttpServer.common
             return s;
         }
 
+        public static string GetRandomPwd(int length)
+        {
+            byte[] b = new byte[4];
+            new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
+            Random r = new Random(BitConverter.ToInt32(b, 0));
+            string s = null, str = "0123456789";
+            for (int i = 0; i < length; i++)
+            {
+                s += str.Substring(r.Next(0, str.Length - 1), 1);
+            }
+            return s;
+        }
+
         /// <summary>
         /// 获取post请求的请求体
         /// </summary>

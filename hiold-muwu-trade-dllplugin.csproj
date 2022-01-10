@@ -90,6 +90,7 @@
     <Compile Include="src\HttpServer\action\TranslationAction.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
+    <Compile Include="src\HttpServer\common\ClientWindowsUtils.cs" />
     <Compile Include="src\HttpServer\common\FileUploadUtils.cs" />
     <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
     <Compile Include="src\HttpServer\common\ServerUtils.cs" />

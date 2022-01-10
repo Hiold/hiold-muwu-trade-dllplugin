@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,20 +7,24 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.bean
 {
-
+    [SugarTable("userinfo")]
     public class UserInfo
     {
-
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]//数据库是自增才配自增
         public int id { get; set; }
-
+        [SugarColumn(IndexGroupNameList = new string[] { "index_usercreateat" },IsNullable =true)]
         public DateTime created_at { get; set; }
-
+        [SugarColumn(IsNullable =true)]
         public DateTime updated_at { get; set; }
-
+        [SugarColumn(IsNullable = true)]
         public DateTime deleted_at { get; set; }
 
+        [SugarColumn(IndexGroupNameList = new string[] { "index_username" })]
         public string name { get; set; }
+        [SugarColumn(IndexGroupNameList = new string[] { "index_entityid" })]
         public string gameentityid { get; set; }
+        [SugarColumn(IndexGroupNameList = new string[] { "index_platformid" })]
+        public string platformid { get; set; }
 
         public float money { get; set; }
 
