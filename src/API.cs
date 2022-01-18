@@ -29,6 +29,7 @@ namespace HioldMod
             //Log.Warning(assembly2.Location);
             //注册事件
             ModEvents.GameStartDone.RegisterHandler(GameStartDone);
+            ModEvents.PlayerSpawnedInWorld.RegisterHandler(PlayerSpawnedInWorld);
         }
 
         /// <summary>
@@ -67,44 +68,52 @@ namespace HioldMod
                 try
                 {
                     string pwd = ServerUtils.GetRandomPwd(6);
-                    int id = UserService.userRegister(new UserInfo()
+                    //根据SteamID获取已注册用户信息
+                    List<UserInfo> exists = UserService.getUserBySteamid(_cInfo.PlatformId.ReadablePlatformUserIdentifier);
+
+                    if (exists == null || exists.Count <= 0)
                     {
-                        created_at = DateTime.Now,
-                        name = _cInfo.playerName,
-                        gameentityid = _cInfo.PlatformId.PlatformIdentifierString,
-                        platformid = _cInfo.CrossplatformId.PlatformIdentifierString,
-                        money = 0,
-                        credit = 0,
-                        status = 1,
-                        password = pwd,
-                        qq = "",
-                        email = "",
-                        avatar = "",
-                        sign = "",
-                        extinfo1 = "",
-                        extinfo2 = "",
-                        extinfo3 = "",
-                        extinfo4 = "",
-                        extinfo5 = "",
-                        extinfo6 = "",
-                        trade_count = "",
-                        store_count = "",
-                        require_count = "",
-                        type = "0",
-                        level = "",
-                        online_time = "",
-                        zombie_kills = "",
-                        player_kills = "",
-                        total_crafted = "",
-                        vipdiscount = 0,
-                        creditcharge = 0,
-                        creditcost = 0,
-                        moneycharge = 0,
-                        moneycost = 0,
-                        signdays = 0,
-                        likecount = 0,
-                        shopname = _cInfo.playerName + "的小店",
-                    });
+
+                        int id = UserService.userRegister(new UserInfo()
+                        {
+                            created_at = DateTime.Now,
+                            name = _cInfo.playerName,
+                            gameentityid = _cInfo.PlatformId.ReadablePlatformUserIdentifier,
+                            platformid = _cInfo.CrossplatformId.ReadablePlatformUserIdentifier,
+                            money = 0,
+                            credit = 0,
+                            status = 1,
+                            password = ServerUtils.md5(pwd),
+                            qq = "",
+                            email = "",
+                            avatar = "",
+                            sign = "",
+                            extinfo1 = "",
+                            extinfo2 = "",
+                            extinfo3 = "",
+                            extinfo4 = "",
+                            extinfo5 = "",
+                            extinfo6 = "",
+                            trade_count = "",
+                            store_count = "",
+                            require_count = "",
+                            type = "0",
+                            level = "",
+                            online_time = "",
+                            zombie_kills = "",
+                            player_kills = "",
+                            total_crafted = "",
+                            vipdiscount = 0,
+                            creditcharge = 0,
+                            creditcost = 0,
+                            moneycharge = 0,
+                            moneycost = 0,
+                            signdays = 0,
+                            likecount = 0,
+                            shopname = _cInfo.playerName + "的小店",
+                        });
+
+                    }
 
                     if (id > 0)
                     {
