@@ -27,9 +27,9 @@ namespace HioldMod.HttpServer.router
             if (url.Equals("/api/login"))
             {
                 LoginAction.login(request, response);
-            }
-            //登录
-            if (url.Equals("/api/debug"))
+            }else if
+            //调试
+            (url.Equals("/api/debug"))
             {
                 LoginAction.debug(request, response);
             }

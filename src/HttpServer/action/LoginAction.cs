@@ -26,13 +26,12 @@ namespace HioldMod.src.HttpServer.action
             try
             {
                 Dictionary<string, string> param = ServerUtils.GetParam(request);
-                //Console.WriteLine(param["username"]);
-                //Console.WriteLine(param["password"]);
-                //查询用户信息
-                List<UserInfo> resultList = UserService.userLogin(param["username"], param["password"]);
+                List<UserInfo> resultList = UserService.userLogin(param["username"], ServerUtils.md5(param["password"]));
                 if (resultList != null && resultList.Count > 0)
                 {
-                    ResponseUtils.ResponseSuccess(response);
+                    UserInfo ui = resultList[0];
+                    ui.password = "[masked]";
+                    ResponseUtils.ResponseSuccessWithData(response, ui);
                 }
                 else
                 {

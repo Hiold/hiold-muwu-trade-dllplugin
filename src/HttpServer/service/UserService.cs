@@ -49,7 +49,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> userLogin(string username, string password)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(string.Format("username = '{0}' and password = '{1}' ", username, password)).ToList(); ;
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("(name = '{0}' and `password` = '{1}') or (gameentityid = '{0}' and `password` = '{1}') ", username, password)).ToList(); ;
         }
 
         /// <summary>

@@ -143,15 +143,31 @@ namespace HioldMod.HttpServer.common
                     {
                         if (lst[i].type == 0)
                         {
-                            data[lst[i].name] = Encoding.UTF8.GetString(lst[i].datas);
+                            data[lst[i].name] = ProcessParamRN(Encoding.UTF8.GetString(lst[i].datas));
 
-                            LogUtils.Loger("param" + i + "： " + lst[i].name + "===>" + Encoding.UTF8.GetString(lst[i].datas));
+                            LogUtils.Loger("param" + i + "： " + lst[i].name + "===>" + ProcessParamRN(Encoding.UTF8.GetString(lst[i].datas)));
 
                         }
                     }
                 }
             }
             return data;
+        }
+
+        /// <summary>
+        /// 时间
+        /// </summary>
+        /// <param name="od"></param>
+        /// <returns></returns>
+        public static string ProcessParamRN(string od)
+        {
+            while (od.EndsWith("\r") || od.EndsWith("\n"))
+            {
+                //Console.WriteLine(od);
+                od = od.TrimEnd('\r');
+                od = od.TrimEnd('\n');
+            }
+            return od;
         }
 
 
