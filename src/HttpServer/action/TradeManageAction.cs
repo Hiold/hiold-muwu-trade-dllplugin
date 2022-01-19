@@ -158,6 +158,7 @@ namespace HioldMod.src.HttpServer.action
                 shopItem.xgdatelimit = addRequest.xgdatelimit;
                 shopItem.coudatelimit = addRequest.coudatelimit;
                 shopItem.postTime = DateTime.Now;
+                shopItem.translate = addRequest.translate;
 
                 ShopTradeService.updateShopItem(shopItem);
                 ResponseUtils.ResponseSuccess(response);

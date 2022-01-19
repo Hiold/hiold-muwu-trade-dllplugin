@@ -112,16 +112,14 @@ namespace HioldMod
                             likecount = 0,
                             shopname = _cInfo.playerName + "的小店",
                         });
-
-                    }
-
-                    if (id > 0)
-                    {
-                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "您的初始密码为：" + pwd, "[87CEFA]交易系统", false, null));
-                    }
-                    else
-                    {
-                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "注册失败，请联系管理员", "[87CEFA]交易系统", false, null));
+                        if (id >= 0)
+                        {
+                            _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "您的初始密码为：" + pwd, "[87CEFA]交易系统", false, null));
+                        }
+                        else
+                        {
+                            _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "注册失败，请联系管理员", "[87CEFA]交易系统", false, null));
+                        }
                     }
                 }
                 catch (Exception e)

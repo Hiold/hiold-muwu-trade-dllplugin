@@ -49,7 +49,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> userLogin(string username, string password)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(s => s.name.Equals(username) && s.password.Equals(ServerUtils.md5(password))).ToList(); ;
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("username = '{0}' and password = '{1}' ", username, password)).ToList(); ;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> getUserById(string id)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(s => s.id.Equals(id)).ToList(); ;
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("id = '{0}' ", id)).ToList(); ;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> getUserByEOS(string eos)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(s => s.platformid.Equals(eos)).ToList(); ;
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("platformid = '{0}' ", eos)).ToList(); ;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> getUserBySteamid(string steamid)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(s => s.gameentityid.Equals(steamid)).ToList(); ;
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList(); ;
         }
 
     }
