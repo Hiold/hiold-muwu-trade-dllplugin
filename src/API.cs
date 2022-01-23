@@ -30,6 +30,7 @@ namespace HioldMod
             //注册事件
             ModEvents.GameStartDone.RegisterHandler(GameStartDone);
             ModEvents.PlayerSpawnedInWorld.RegisterHandler(PlayerSpawnedInWorld);
+            ModEvents.ChatMessage.RegisterHandler(ChatMessage);
         }
 
         /// <summary>
@@ -40,6 +41,27 @@ namespace HioldMod
             isOnServer = true;
             DataBase.InitDataBase();
             Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);
+        }
+
+        public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,
+             bool _localizeMain, List<int> _recipientEntityIds)
+        {
+
+            //监听[/sa]命令
+            if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
+            {
+                Log.Out("正在执行shop");
+                if (_cInfo != null)
+                {
+                    _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageConsoleCmdClient>().Setup("xui open HioldshopWindows", true));
+                }
+                else
+                {
+                    Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
+                }
+                return false;
+            }
+            return true;
         }
 
         /// <summary>

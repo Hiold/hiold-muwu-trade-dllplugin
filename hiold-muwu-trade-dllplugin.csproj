@@ -108,6 +108,7 @@
     <Content Include="bin-lib\Assembly-CSharp.dll" />
     <Content Include="bin-lib\LiteDB.dll" />
     <Content Include="bin-lib\LogLibrary.dll" />
+    <Content Include="bin-lib\Noemax.GZip.dll" />
     <Content Include="bin-lib\SQLite.Designer.dll" />
     <Content Include="bin-lib\System.Data.SQLite.dll" />
     <Content Include="bin-lib\System.Data.SQLite.EF6.dll" />
