@@ -1,4 +1,5 @@
-﻿using HioldMod.src.UserTools;
+﻿using HarmonyLib;
+using HioldMod.src.UserTools;
 using System;
 using System.Collections.Generic;
 public static class Injections
@@ -50,13 +51,23 @@ public static class Injections
 
     public static void SendXmlsToClient(ClientInfo _cInfo)
     {
-        foreach (WorldStaticData.XmlLoadInfo xmlLoadInfo in WorldStaticData.xmlsToLoad)
+
+    }
+
+    
+    public static bool SendXmlsToClient_postfix(ClientInfo _cInfo)
+    {
+        Log.Out("已进入拦截方法");
+        //以__instance实例创建Traverse           挖掘字段mood   取float类型值
+        object[] Rootxmls = Traverse.Create(typeof(WorldStaticData)).Field("xmlsToLoad").GetValue<object[]>();
+        Log.Out("实际长度为:"+ Rootxmls.Length);
+        for (int i=0;i<Rootxmls.Length;i++)
         {
-            if (xmlLoadInfo.SendToClients && (xmlLoadInfo.LoadClientFile || xmlLoadInfo.CompressedXmlData != null))
-            {
-                _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageConfigFile>().Setup(xmlLoadInfo.XmlName, xmlLoadInfo.LoadClientFile ? null : xmlLoadInfo.CompressedXmlData));
-            }
+            object xmls = Rootxmls[i];
+            string xmlname = Traverse.Create(xmls).Field("XmlName").GetValue<string>();
+            Log.Out("读取到xml数据:"+ xmlname);
         }
+        return true; //继续执行原方法
     }
 
 

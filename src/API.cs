@@ -7,6 +7,7 @@ using HioldMod.src.HttpServer.database;
 using HioldMod.src.HttpServer.service;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.HttpServer.common;
+using ServerTools;
 
 namespace HioldMod
 {
@@ -41,6 +42,8 @@ namespace HioldMod
             isOnServer = true;
             DataBase.InitDataBase();
             Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);
+            //注入hook
+            RunTimePatch.PatchAll();
         }
 
         public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,
