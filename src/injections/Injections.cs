@@ -72,7 +72,7 @@ public static class Injections
                 object xmls = Rootxmls[i];
                 string xmlname = Traverse.Create(xmls).Field("XmlName").GetValue<string>();
                 //
-                if (xmlname.Equals("XUi/windows"))
+                if (xmlname.Equals("XUi/windowsf"))
                 {
                     MemoryStream ms = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
                     DeflateInputStream dis = new DeflateInputStream(ms);
@@ -166,9 +166,22 @@ public static class Injections
                     //插入目标节点
                     xmlDoc.SelectSingleNode("/xui/ruleset").AppendChild(window_group);
                     //修改目标数据
-                    MemoryStream msenc = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
-                    DeflateOutputStream dos = new DeflateOutputStream(msenc,3);
-                    Traverse.Create(xmls).Field("CompressedXmlData").SetValue(StreamToBytes(dos));
+
+                    //开始压缩
+                    MemoryStream msencTarget = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
+                    MemoryStream msenc = new MemoryStream();
+                    DeflateOutputStream dos = new DeflateOutputStream(msenc, 3, true);
+                    StreamUtils.StreamCopy(msencTarget,dos);
+                    
+                    Log.Out("CompressedXmlData修改前长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
+                    Traverse.Create(xmls).Field("CompressedXmlData").SetValue(msenc.ToArray());
+                    Log.Out("CompressedXmlData修改后长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
+                    //
+                    MemoryStream msenc2 = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
+                    DeflateInputStream dos2 = new DeflateInputStream(msenc2);
+                    FileStream fs = new FileStream("D:\\xmlCongif\\xui.xml", FileMode.OpenOrCreate);
+                    dos2.CopyTo(fs);
+
                 }
             }
         }
