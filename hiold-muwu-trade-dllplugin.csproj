@@ -125,6 +125,8 @@
     <Content Include="bin-lib\UnityEngine.CoreModule.dll" />
     <Content Include="bin-lib\UnityEngine.dll" />
     <Content Include="bin-lib\UnityEngine.ImageConversionModule.dll" />
+    <Content Include="default-xml\window.xml" />
+    <Content Include="default-xml\xui.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

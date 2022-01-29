@@ -72,7 +72,7 @@ public static class Injections
                 object xmls = Rootxmls[i];
                 string xmlname = Traverse.Create(xmls).Field("XmlName").GetValue<string>();
                 //
-                if (xmlname.Equals("XUi/windowsf"))
+                if (xmlname.Equals("XUi/windows"))
                 {
                     MemoryStream ms = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
                     DeflateInputStream dis = new DeflateInputStream(ms);
@@ -98,8 +98,7 @@ public static class Injections
                     window.SetAttribute("cursor_area", "true");
                     //rect
                     XmlElement rect = xmlDoc.CreateElement("rect");
-                    rect.SetAttribute("name", "serverinfo");
-                    rect.SetAttribute("controller", "ServerInfo");
+                    rect.SetAttribute("name", "HioldShop");
                     //lable1
                     XmlElement lable1 = xmlDoc.CreateElement("lable");
                     lable1.SetAttribute("depth", "2");
@@ -117,7 +116,9 @@ public static class Injections
                     lable2.SetAttribute("height", "32");
                     lable2.SetAttribute("name", "ServerWebsiteURL");
                     /*下面是网页链接*/
-                    lable2.SetAttribute("text", "https://td.hiold.net/");
+                    //生成动态码
+                    string ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
+                    lable2.SetAttribute("text", "https://td.hiold.net/?ncode=" + ncode);
                     lable2.SetAttribute("justify", "left");
                     lable2.SetAttribute("style", "press,hover");
                     lable2.SetAttribute("font_size", "30");
@@ -132,13 +133,70 @@ public static class Injections
                     panel.SetAttribute("depth", "1");
                     panel.SetAttribute("pivot", "center");
                     panel.SetAttribute("disableautobackground", "true");
-
+                    //panel1lable
+                    XmlElement panellable1 = xmlDoc.CreateElement("lable");
+                    panellable1.SetAttribute("depth", "6");
+                    panellable1.SetAttribute("pos", "10,0");
+                    panellable1.SetAttribute("width", "547");
+                    panellable1.SetAttribute("height", "200");
+                    panellable1.SetAttribute("name", "ServerDescription");
+                    panellable1.SetAttribute("justify", "center");
+                    panellable1.SetAttribute("font_size", "32");
+                    panellable1.SetAttribute("pivot", "topleft");
+                    panellable1.SetAttribute("upper_case", "false");
+                    panel.AppendChild(panellable1);
+                    //
+                    XmlElement browsergameoptioninfo1 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo1.SetAttribute("name", "CurrentServerTime");
+                    browsergameoptioninfo1.SetAttribute("title", "goServerTime");
+                    XmlElement browsergameoptioninfo2 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo2.SetAttribute("name", "GameMode");
+                    browsergameoptioninfo2.SetAttribute("title", "goGameMode");
+                    browsergameoptioninfo2.SetAttribute("value_localization_prefix", "gm");
+                    XmlElement browsergameoptioninfo3 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo3.SetAttribute("name", "StockSettings");
+                    browsergameoptioninfo3.SetAttribute("title", "goStockSettings");
+                    XmlElement browsergameoptioninfo4 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo4.SetAttribute("name", "StockFiles");
+                    browsergameoptioninfo4.SetAttribute("title", "goStockFiles");
+                    XmlElement browsergameoptioninfo5 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo5.SetAttribute("name", "RequiresMod");
+                    browsergameoptioninfo5.SetAttribute("title", "goRequiresMod");
+                    XmlElement browsergameoptioninfo6 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo6.SetAttribute("name", "IP");
+                    browsergameoptioninfo6.SetAttribute("title", "goIp");
+                    XmlElement browsergameoptioninfo7 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo7.SetAttribute("name", "Port");
+                    browsergameoptioninfo7.SetAttribute("title", "goPort");
+                    XmlElement browsergameoptioninfo8 = xmlDoc.CreateElement("browsergameoptioninfo");
+                    browsergameoptioninfo8.SetAttribute("name", "Version");
+                    browsergameoptioninfo8.SetAttribute("title", "goVersion");
+                    panel.AppendChild(browsergameoptioninfo1);
+                    panel.AppendChild(browsergameoptioninfo2);
+                    panel.AppendChild(browsergameoptioninfo3);
+                    panel.AppendChild(browsergameoptioninfo4);
+                    panel.AppendChild(browsergameoptioninfo5);
+                    panel.AppendChild(browsergameoptioninfo6);
+                    panel.AppendChild(browsergameoptioninfo7);
+                    panel.AppendChild(browsergameoptioninfo8);
+                    rect.AppendChild(panel);
+                    window.AppendChild(rect);
                     //插入目标节点
-                    xmlDoc.SelectSingleNode("/xui/ruleset").AppendChild(window);
-                    //修改目标数据
-                    MemoryStream msenc = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
-                    DeflateOutputStream dos = new DeflateOutputStream(msenc, 3);
-                    Traverse.Create(xmls).Field("CompressedXmlData").SetValue(StreamToBytes(dos));
+                    xmlDoc.SelectSingleNode("/windows").AppendChild(window);
+                    //开始压缩
+                    MemoryStream msencTarget = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
+                    MemoryStream msenc = new MemoryStream();
+                    DeflateOutputStream dos = new DeflateOutputStream(msenc, 3, true);
+                    StreamUtils.StreamCopy(msencTarget, dos);
+
+                    Log.Out("CompressedXmlData修改前长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
+                    Traverse.Create(xmls).Field("CompressedXmlData").SetValue(msenc.ToArray());
+                    Log.Out("CompressedXmlData修改后长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
+                    //
+                    MemoryStream msenc2 = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
+                    DeflateInputStream dos2 = new DeflateInputStream(msenc2);
+                    FileStream fs = new FileStream("D:\\xmlCongif\\window.xml", FileMode.OpenOrCreate);
+                    dos2.CopyTo(fs);
 
 
                 }
@@ -171,8 +229,8 @@ public static class Injections
                     MemoryStream msencTarget = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
                     MemoryStream msenc = new MemoryStream();
                     DeflateOutputStream dos = new DeflateOutputStream(msenc, 3, true);
-                    StreamUtils.StreamCopy(msencTarget,dos);
-                    
+                    StreamUtils.StreamCopy(msencTarget, dos);
+
                     Log.Out("CompressedXmlData修改前长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
                     Traverse.Create(xmls).Field("CompressedXmlData").SetValue(msenc.ToArray());
                     Log.Out("CompressedXmlData修改后长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
