@@ -88,6 +88,7 @@ public static class Injections
 
                     //生成数据结构
                     //window
+                    //window
                     XmlElement window = xmlDoc.CreateElement("window");
                     window.SetAttribute("name", "HioldShopWindow");
                     window.SetAttribute("anchor", "LeftTop");
@@ -98,33 +99,36 @@ public static class Injections
                     window.SetAttribute("cursor_area", "true");
                     //rect
                     XmlElement rect = xmlDoc.CreateElement("rect");
+                    rect.SetAttribute("name", "serverinfo");
+                    rect.SetAttribute("controller", "ServerInfo");
                     rect.SetAttribute("name", "HioldShop");
-                    //lable1
-                    XmlElement lable1 = xmlDoc.CreateElement("lable");
-                    lable1.SetAttribute("depth", "2");
-                    lable1.SetAttribute("pos", "520,-550");
-                    lable1.SetAttribute("text", "[D65E62]★--- [FFFFFF]点击此处网页链接，跳转至交易系统[D65E62] ---★");
-                    lable1.SetAttribute("width", "100%");
-                    lable1.SetAttribute("justify", "center");
-                    lable1.SetAttribute("font_size", "32");
-                    rect.AppendChild(lable1);
-                    //lable2
-                    XmlElement lable2 = xmlDoc.CreateElement("lable");
-                    lable2.SetAttribute("depth", "11");
-                    lable2.SetAttribute("pos", "550,-600");
-                    lable2.SetAttribute("width", "480");
-                    lable2.SetAttribute("height", "32");
-                    lable2.SetAttribute("name", "ServerWebsiteURL");
+                    //label1
+                    XmlElement label1 = xmlDoc.CreateElement("label");
+                    label1.SetAttribute("depth", "2");
+                    label1.SetAttribute("pos", "520,-550");
+                    label1.SetAttribute("text", "[D65E62]★--- [FFFFFF]点击此处网页链接，跳转至交易系统[D65E62] ---★");
+                    label1.SetAttribute("width", "100%");
+                    label1.SetAttribute("justify", "center");
+                    label1.SetAttribute("font_size", "32");
+                    rect.AppendChild(label1);
+                    //label2
+                    XmlElement label2 = xmlDoc.CreateElement("label");
+                    label2.SetAttribute("depth", "11");
+                    label2.SetAttribute("pos", "550,-600");
+                    label2.SetAttribute("width", "480");
+                    label2.SetAttribute("height", "32");
+                    label2.SetAttribute("name", "ServerWebsiteURL");
                     /*下面是网页链接*/
+                    //label2.SetAttribute("text", "https://td.hiold.net/");
                     //生成动态码
                     string ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
-                    lable2.SetAttribute("text", "https://td.hiold.net/?ncode=" + ncode);
-                    lable2.SetAttribute("justify", "left");
-                    lable2.SetAttribute("style", "press,hover");
-                    lable2.SetAttribute("font_size", "30");
-                    lable2.SetAttribute("pivot", "topleft");
-                    lable2.SetAttribute("upper_case", "false");
-                    rect.AppendChild(lable2);
+                    label2.SetAttribute("text", "https://td.hiold.net/?ncode=" + ncode);
+                    label2.SetAttribute("justify", "left");
+                    label2.SetAttribute("style", "press,hover");
+                    label2.SetAttribute("font_size", "30");
+                    label2.SetAttribute("pivot", "topleft");
+                    label2.SetAttribute("upper_case", "false");
+                    rect.AppendChild(label2);
                     //panel
                     XmlElement panel = xmlDoc.CreateElement("panel");
                     panel.SetAttribute("name", "content");
@@ -133,18 +137,19 @@ public static class Injections
                     panel.SetAttribute("depth", "1");
                     panel.SetAttribute("pivot", "center");
                     panel.SetAttribute("disableautobackground", "true");
-                    //panel1lable
-                    XmlElement panellable1 = xmlDoc.CreateElement("lable");
-                    panellable1.SetAttribute("depth", "6");
-                    panellable1.SetAttribute("pos", "10,0");
-                    panellable1.SetAttribute("width", "547");
-                    panellable1.SetAttribute("height", "200");
-                    panellable1.SetAttribute("name", "ServerDescription");
-                    panellable1.SetAttribute("justify", "center");
-                    panellable1.SetAttribute("font_size", "32");
-                    panellable1.SetAttribute("pivot", "topleft");
-                    panellable1.SetAttribute("upper_case", "false");
-                    panel.AppendChild(panellable1);
+
+                    //panel1label
+                    XmlElement panellabel1 = xmlDoc.CreateElement("label");
+                    panellabel1.SetAttribute("depth", "6");
+                    panellabel1.SetAttribute("pos", "10,0");
+                    panellabel1.SetAttribute("width", "547");
+                    panellabel1.SetAttribute("height", "200");
+                    panellabel1.SetAttribute("name", "ServerDescription");
+                    panellabel1.SetAttribute("justify", "center");
+                    panellabel1.SetAttribute("font_size", "32");
+                    panellabel1.SetAttribute("pivot", "topleft");
+                    panellabel1.SetAttribute("upper_case", "false");
+                    panel.AppendChild(panellabel1);
                     //
                     XmlElement browsergameoptioninfo1 = xmlDoc.CreateElement("browsergameoptioninfo");
                     browsergameoptioninfo1.SetAttribute("name", "CurrentServerTime");
@@ -181,6 +186,8 @@ public static class Injections
                     panel.AppendChild(browsergameoptioninfo8);
                     rect.AppendChild(panel);
                     window.AppendChild(rect);
+
+
                     //插入目标节点
                     xmlDoc.SelectSingleNode("/windows").AppendChild(window);
                     //开始压缩
@@ -193,10 +200,10 @@ public static class Injections
                     Traverse.Create(xmls).Field("CompressedXmlData").SetValue(msenc.ToArray());
                     Log.Out("CompressedXmlData修改后长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
                     //
-                    MemoryStream msenc2 = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
-                    DeflateInputStream dos2 = new DeflateInputStream(msenc2);
-                    FileStream fs = new FileStream("D:\\xmlCongif\\window.xml", FileMode.OpenOrCreate);
-                    dos2.CopyTo(fs);
+                    //MemoryStream msenc2 = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
+                    //DeflateInputStream dos2 = new DeflateInputStream(msenc2);
+                    //FileStream fs = new FileStream("D:\\xmlCongif\\window.xml", FileMode.OpenOrCreate);
+                    //dos2.CopyTo(fs);
 
 
                 }
@@ -235,10 +242,10 @@ public static class Injections
                     Traverse.Create(xmls).Field("CompressedXmlData").SetValue(msenc.ToArray());
                     Log.Out("CompressedXmlData修改后长度为:" + Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>().Length);
                     //
-                    MemoryStream msenc2 = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
-                    DeflateInputStream dos2 = new DeflateInputStream(msenc2);
-                    FileStream fs = new FileStream("D:\\xmlCongif\\xui.xml", FileMode.OpenOrCreate);
-                    dos2.CopyTo(fs);
+                    //MemoryStream msenc2 = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
+                    //DeflateInputStream dos2 = new DeflateInputStream(msenc2);
+                    //FileStream fs = new FileStream("D:\\xmlCongif\\xui.xml", FileMode.OpenOrCreate);
+                    //dos2.CopyTo(fs);
 
                 }
             }
