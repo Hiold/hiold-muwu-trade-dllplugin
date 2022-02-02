@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void uploadFile(HttpListenerRequest request, HttpListenerResponse response)
+        public static void uploadFile(HioldRequest request, HttpListenerResponse response)
         {
             List<string> result = new List<string>();
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
@@ -28,7 +29,7 @@ namespace HioldMod.src.HttpServer.action
                 {
                     basepath = string.Format("{0}/image/", API.AssemblyPath);
                 }
-                FileUploadUtils fuu = new FileUploadUtils(request, Encoding.UTF8);
+                FileUploadUtils fuu = new FileUploadUtils(request.request, Encoding.UTF8);
                 List<MultipartFormItem> files = fuu.ParseIntoElementList();
                 for (int i = 0; i < files.Count; i++)
                 {
@@ -55,7 +56,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void getIconFile(HttpListenerRequest request, HttpListenerResponse response)
+        public static void getIconFile(HioldRequest request, HttpListenerResponse response)
         {
             List<string> result = new List<string>();
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";

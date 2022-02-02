@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,11 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void getSystemItem(HttpListenerRequest request, HttpListenerResponse response)
+        public static void getSystemItem(HioldRequest request, HttpListenerResponse response)
         {
             try
             {
-                Dictionary<string, string> param = ServerUtils.GetParam(request);
+                Dictionary<string, string> param = ServerUtils.GetParam(request.request);
                 List<Dictionary<string, object>> items = new List<Dictionary<string, object>>();
                 //声明查询参数
                 string itemname = null;
@@ -131,12 +132,12 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void getImage(HttpListenerRequest request, HttpListenerResponse response)
+        public static void getImage(HioldRequest request, HttpListenerResponse response)
         {
             DirectoryInfo di = new DirectoryInfo(API.AssemblyPath);
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Data/ItemIcons/";
             string basepath2 = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
-            string url = request.RawUrl.Replace("/api/image/", "");
+            string url = request.request.RawUrl.Replace("/api/image/", "");
             response.ContentType = "image/png";
             try
             {
@@ -188,9 +189,9 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void getImageIcon(HttpListenerRequest request, HttpListenerResponse response)
+        public static void getImageIcon(HioldRequest request, HttpListenerResponse response)
         {
-            string url = request.RawUrl.Replace("/api/iconImage/", "");
+            string url = request.request.RawUrl.Replace("/api/iconImage/", "");
             response.ContentType = "image/png";
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             try

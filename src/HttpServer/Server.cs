@@ -6,14 +6,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.bean;
 
 namespace HioldMod
 {
 
     public class Server
     {
+
         //用户会话信息
-        private static Dictionary<string, string> userCookies = new Dictionary<string, string>();
+        public static Dictionary<string, UserInfo> userCookies = new Dictionary<string, UserInfo>();
         public static void RunServer(int port)
         {
 
@@ -30,6 +32,10 @@ namespace HioldMod
                     HttpListenerRequest request = context.Request;
                     HttpListenerResponse response = context.Response;
                     //尝试获取用户是cookie
+                    //组装自定义请求对象
+                    HioldRequest hioldRequest = new HioldRequest();
+                    hioldRequest.request = request;
+
                     string sessionId = null;
                     for (int i = 0; i < request.Cookies.Count; i++)
                     {
@@ -49,8 +55,16 @@ namespace HioldMod
                         ce.Path = "/";
                         response.Cookies.Add(ce);
                     }
+                    else
+                    {
+                        hioldRequest.sessionid = sessionId;
+                        if (userCookies.TryGetValue(sessionId, out UserInfo ui))
+                        {
+                            hioldRequest.user = ui;
+                        }
+                    }
                     //使用分发器处理请求
-                    HioldMod.HttpServer.router.MainRouter.DispacherRouter(request, response);
+                    HioldMod.HttpServer.router.MainRouter.DispacherRouter(hioldRequest, response);
                 }
                 listener.Stop(); //关闭HttpListener
             })).Start();

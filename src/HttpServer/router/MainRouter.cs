@@ -1,4 +1,5 @@
 ﻿using HioldMod.src.HttpServer.action;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,17 @@ namespace HioldMod.HttpServer.router
 {
     class MainRouter
     {
-        public static void DispacherRouter(HttpListenerRequest request, HttpListenerResponse response)
+        public static void DispacherRouter(HioldRequest request, HttpListenerResponse response)
         {
             //Console.WriteLine(request.RawUrl);
             string url = "";
-            if (request.RawUrl.Contains("?"))
+            if (request.request.RawUrl.Contains("?"))
             {
-                url = request.RawUrl.Substring(0, request.RawUrl.IndexOf("?"));
+                url = request.request.RawUrl.Substring(0, request.request.RawUrl.IndexOf("?"));
             }
             else
             {
-                url = request.RawUrl;
+                url = request.request.RawUrl;
             }
             //登录
             if (url.Equals("/api/login"))

@@ -1,4 +1,5 @@
-﻿using HioldMod.src.HttpServer.common;
+﻿using HioldMod.src.HttpServer.bean;
+using HioldMod.src.HttpServer.common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace HioldMod.src.HttpServer.action
 {
     class RegisterAction
     {
-        public static void register(HttpListenerRequest request, HttpListenerResponse response)
+        public static void register(HioldRequest request, HttpListenerResponse response)
         {
             ResponseUtils.setResponseJSON(response);
             string responseString = "{\"aaa\":\"1\"}";

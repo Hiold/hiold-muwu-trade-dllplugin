@@ -111,6 +111,20 @@ public static class Injections
                     label1.SetAttribute("justify", "center");
                     label1.SetAttribute("font_size", "32");
                     rect.AppendChild(label1);
+                    //添加背景色
+                    XmlElement sprite = xmlDoc.CreateElement("sprite");
+                    sprite.SetAttribute("depth", "8");
+                    sprite.SetAttribute("name", "backgroundMain");
+                    sprite.SetAttribute("sprite", "menu_empty3px");
+                    sprite.SetAttribute("pos", "500,-510");
+                    sprite.SetAttribute("width", "900");
+                    sprite.SetAttribute("height", "400");
+                    sprite.SetAttribute("color", "[black]");
+                    sprite.SetAttribute("type", "sliced");
+                    sprite.SetAttribute("fillcenter", "true");
+                    sprite.SetAttribute("globalopacity", "true");
+                    sprite.SetAttribute("globalopacitymod", "1");
+                    rect.AppendChild(sprite);
                     //label2
                     XmlElement label2 = xmlDoc.CreateElement("label");
                     label2.SetAttribute("depth", "11");

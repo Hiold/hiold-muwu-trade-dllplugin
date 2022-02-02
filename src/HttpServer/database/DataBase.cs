@@ -54,6 +54,7 @@ namespace HioldMod.src.HttpServer.database
             //初始化表
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(TradeManageItem));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserInfo));
+            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserStorage));
         }
     }
 }

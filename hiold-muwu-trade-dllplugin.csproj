@@ -89,12 +89,16 @@
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
+    <Compile Include="src\HttpServer\action\UserInfos.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />
     <Compile Include="src\HttpServer\action\RegisterAction.cs" />
     <Compile Include="src\HttpServer\action\TradeManageAction.cs" />
     <Compile Include="src\HttpServer\action\TranslationAction.cs" />
+    <Compile Include="src\HttpServer\action\UserTradeAction.cs" />
+    <Compile Include="src\HttpServer\bean\HioldRequest.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
+    <Compile Include="src\HttpServer\bean\UserStorage.cs" />
     <Compile Include="src\HttpServer\common\ClientWindowsUtils.cs" />
     <Compile Include="src\HttpServer\common\FileUploadUtils.cs" />
     <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
@@ -105,6 +109,7 @@
     <Compile Include="src\HttpServer\Server.cs" />
     <Compile Include="src\HttpServer\service\ShopTradeService.cs" />
     <Compile Include="src\HttpServer\service\UserService.cs" />
+    <Compile Include="src\HttpServer\service\UserStorageService.cs" />
     <Compile Include="src\HttpTools.cs" />
     <Compile Include="src\injections\Injections.cs" />
     <Compile Include="src\injections\RunTimePatch.cs" />

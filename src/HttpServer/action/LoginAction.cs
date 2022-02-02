@@ -21,17 +21,21 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void login(HttpListenerRequest request, HttpListenerResponse response)
+        public static void login(HioldRequest request, HttpListenerResponse response)
         {
             try
             {
-                Dictionary<string, string> param = ServerUtils.GetParam(request);
-                List<UserInfo> resultList = UserService.userLogin(param["username"], ServerUtils.md5(param["password"]));
+                string postData = ServerUtils.getPostData(request.request);
+                //Dictionary<string, string> param = ServerUtils.GetParam(request);
+                LoginRequest loginreq = new LoginRequest();
+                loginreq = (LoginRequest)SimpleJson2.SimpleJson2.DeserializeObject(postData, loginreq.GetType());
+                List<UserInfo> resultList = UserService.userLogin(loginreq.username, ServerUtils.md5(loginreq.password));
                 if (resultList != null && resultList.Count > 0)
                 {
                     UserInfo ui = resultList[0];
                     ui.password = "[masked]";
                     ResponseUtils.ResponseSuccessWithData(response, ui);
+                    Server.userCookies.Add(request.sessionid,ui);
                 }
                 else
                 {
@@ -49,17 +53,28 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void debug(HttpListenerRequest request, HttpListenerResponse response)
+        public static void debug(HioldRequest request, HttpListenerResponse response)
         {
-            FileStream fs = new FileStream("D:/test.txt",FileMode.OpenOrCreate);
-            byte[] data = Encoding.UTF8.GetBytes(SimpleJson2.SimpleJson2.SerializeObject(request.Headers));
-            fs.Write(data,0,data.Length);
+            //FileStream fs = new FileStream("D:/test.txt", FileMode.OpenOrCreate);
+            //byte[] data = Encoding.UTF8.GetBytes(SimpleJson2.SimpleJson2.SerializeObject(request.request.Headers));
+            //fs.Write(data, 0, data.Length);
 
 
-            fs.Flush();
-            fs.Close();
+            //fs.Flush();
+            //fs.Close();
+            //response.StatusCode = 200;
+            //response.Close();
+            Console.WriteLine(request.sessionid);
+            Console.WriteLine(request.user.name);
             response.StatusCode = 200;
             response.Close();
+        }
+
+
+        public class LoginRequest
+        {
+            public string username { get; set; }
+            public string password { get; set; }
         }
     }
 }

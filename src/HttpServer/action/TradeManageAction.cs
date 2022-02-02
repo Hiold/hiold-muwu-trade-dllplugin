@@ -22,12 +22,12 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void addShopItem(HttpListenerRequest request, HttpListenerResponse response)
+        public static void addShopItem(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数并进行强制类型转换
             try
             {
-                string postData = ServerUtils.getPostData(request);
+                string postData = ServerUtils.getPostData(request.request);
                 addRequestBean addRequest = new addRequestBean();
                 addRequest = (addRequestBean)SimpleJson2.SimpleJson2.DeserializeObject(postData, addRequest.GetType());
 
@@ -100,12 +100,12 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void updateShopItem(HttpListenerRequest request, HttpListenerResponse response)
+        public static void updateShopItem(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数并进行强制类型转换
             try
             {
-                string postData = ServerUtils.getPostData(request);
+                string postData = ServerUtils.getPostData(request.request);
                 addRequestBean addRequest = new addRequestBean();
                 addRequest = (addRequestBean)SimpleJson2.SimpleJson2.DeserializeObject(postData, addRequest.GetType());
                 //类型转换
@@ -179,12 +179,12 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void deleteShopItem(HttpListenerRequest request, HttpListenerResponse response)
+        public static void deleteShopItem(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数并进行强制类型转换
             try
             {
-                string postData = ServerUtils.getPostData(request);
+                string postData = ServerUtils.getPostData(request.request);
                 addRequestBean addRequest = new addRequestBean();
                 addRequest = (addRequestBean)SimpleJson2.SimpleJson2.DeserializeObject(postData, addRequest.GetType());
                 int id = addRequest.id;
@@ -223,12 +223,12 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void queryShopItem(HttpListenerRequest request, HttpListenerResponse response)
+        public static void queryShopItem(HioldRequest request, HttpListenerResponse response)
         {
             try
             {
                 //获取参数
-                string postData = ServerUtils.getPostData(request);
+                string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 string itemname = "";
                 int pageIndex = 1;

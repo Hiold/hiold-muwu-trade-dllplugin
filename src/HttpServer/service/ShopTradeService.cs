@@ -51,6 +51,19 @@ namespace HioldMod.src.HttpServer.service
             return result;
         }
 
+        /// <summary>
+        /// 根据用户ID获取玩家折扣券数据
+        /// </summary>
+        /// <param name="itemname">物品名</param>
+        /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">数量</param>
+        /// <returns></returns>
+        public static List<TradeManageItem> getUserDiscountTicket(int userid)
+        {
+            List<TradeManageItem> result = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("id='{0}' and deleteTime is not null", userid)).ToList();
+            return result;
+        }
+
 
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.bean;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,10 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="returnUrl">返回链接</param>
         /// <returns></returns>
-        public static void steamAuth(HttpListenerRequest request, HttpListenerResponse response)
+        public static void steamAuth(HioldRequest request, HttpListenerResponse response)
         {
             string authUrl = string.Empty;
-            string host = request.Url.Scheme + "://" + request.Url.Authority.Trim('/');
+            string host = request.request.Url.Scheme + "://" + request.request.Url.Authority.Trim('/');
             StringBuilder sb = new StringBuilder();
             sb.Append(OpenIdURI);
             sb.Append("?");
@@ -98,12 +99,12 @@ namespace HioldMod.src.HttpServer.action
         }
 
         //登录成功返回
-        public static void Verification(HttpListenerRequest Request, HttpListenerResponse response)
+        public static void Verification(HioldRequest Request, HttpListenerResponse response)
         {
-            if (IsFromSteam(Request))
+            if (IsFromSteam(Request.request))
             {
                 #region OpenID验证
-                SteamOpenIDIdentity identity = Profile(Request, response);
+                SteamOpenIDIdentity identity = Profile(Request.request, response);
                 if (identity != null)
                 {
                     Console.WriteLine(SimpleJson2.SimpleJson2.SerializeObject(identity));

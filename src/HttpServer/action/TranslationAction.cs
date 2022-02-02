@@ -19,11 +19,11 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void getTranslation(HttpListenerRequest request, HttpListenerResponse response)
+        public static void getTranslation(HioldRequest request, HttpListenerResponse response)
         {
             try
             {
-                Dictionary<string, string> param = ServerUtils.GetParam(request);
+                Dictionary<string, string> param = ServerUtils.GetParam(request.request);
                 string itemname = param["itemname"];
 
                 Dictionary<string, object> result = new Dictionary<string, object>();
