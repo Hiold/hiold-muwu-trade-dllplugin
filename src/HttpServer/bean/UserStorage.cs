@@ -13,7 +13,7 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]//数据库是自增才配自增
         public int id { get; set; }
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_username" })]
-        public string name { get; set; }
+        public string username { get; set; }
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_entityid" })]
         public string gameentityid { get; set; }
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_platformid" })]

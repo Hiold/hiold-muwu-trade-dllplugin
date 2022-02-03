@@ -61,65 +61,74 @@ namespace HioldMod.src.HttpServer.action
                 if (request.user != null)
                 {
                     TradeManageItem item = ShopTradeService.getShopItemById(int.Parse(_buy.id))[0];
-                    UserStorage userStorate = new UserStorage() {
-         id 
-         itemtype 
-         name 
-         translate 
-         itemicon 
-         itemtint 
-         quality 
-         num 
-         class1 
-         class2 
-         classmod 
-         desc 
-         couCurrType 
-         couPrice 
-         couCond 
-         coudatelimit 
-         couDateStart 
-         couDateEnd 
-         count 
-         currency 
-         price 
-         discount 
-         prefer 
-         selltype 
-         hot 
-         hotset 
-         show 
-         stock 
-         collect 
-         selloutcount 
-         follow 
-         xglevel 
-         xglevelset 
-         xgday 
-         xgdayset 
-         xgall 
-         xgallset 
-         xgdatelimit 
-         dateStart 
-         dateEnd 
-         collected 
-         postTime 
-         deleteTime 
-    };
-                    
+                    UserStorage userStorate = new UserStorage()
+                    {
+                        //id
+                        itemtype = item.itemtype,
+                        name = item.name,
+                        translate = item.translate,
+                        itemicon = item.itemicon,
+                        itemtint = item.itemtint,
+                        quality = item.quality,
+                        num = item.num,
+                        class1 = item.class1,
+                        class2 = item.class2,
+                        classmod = item.classmod,
+                        desc = item.desc,
+                        couCurrType = item.couCurrType,
+                        couPrice = item.couPrice,
+                        couCond = item.couCond,
+                        coudatelimit = item.coudatelimit,
+                        couDateStart = item.couDateStart,
+                        couDateEnd = item.couDateEnd,
+                        count = item.count,
+                        currency = item.currency,
+                        price = item.price,
+                        discount = item.discount,
+                        prefer = item.prefer,
+                        selltype = item.selltype,
+                        hot = item.hot,
+                        hotset = item.hotset,
+                        show = item.show,
+                        stock = item.stock,
+                        collect = item.collect,
+                        selloutcount = item.selloutcount,
+                        follow = item.follow,
+                        xglevel = item.xglevel,
+                        xglevelset = item.xglevelset,
+                        xgday = item.xgday,
+                        xgdayset = item.xgdayset,
+                        xgall = item.xgall,
+                        xgallset = item.xgallset,
+                        xgdatelimit = item.xgdatelimit,
+                        dateStart = item.dateStart,
+                        dateEnd = item.dateEnd,
+                        collected = item.collected,
+                        postTime = item.postTime,
+                        deleteTime = item.deleteTime,
+                        //非继承属性
+                        username = request.user.name,
+                        platformid = request.user.platformid,
+                        gameentityid = request.user.gameentityid,
+                        collectTime = DateTime.Now,
+                        storageCount = int.Parse(_buy.count),
+                        //拓展属性
+                        extinfo1="",
+                        extinfo2 = "",
+                        extinfo3 = "",
+                        extinfo4 = "",
+                        extinfo5 = "",
+                    };
 
-                    userStorate.name = request.user.name;
-                    userStorate.platformid = request.user.platformid;
-                    userStorate.gameentityid = request.user.gameentityid;
-                    userStorate.collectTime = DateTime.Now;
-                    userStorate.storageCount = int.Parse(_buy.count);
+                    
 
                     //添加数据到数据库
                     UserStorageService.addUserStorage(userStorate);
+                    ResponseUtils.ResponseSuccess(response);
                 }
                 else
                 {
-                    ResponseUtils.ResponseFail(response,"没登录，请登录后再试");
+                    ResponseUtils.ResponseFail(response, "没登录，请登录后再试");
                     return;
                 }
 
