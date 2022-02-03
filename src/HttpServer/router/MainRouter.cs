@@ -82,6 +82,10 @@ namespace HioldMod.HttpServer.router
             {
                 FileUpload.getIconFile(request, response);
             }
+            else if (url.StartsWith("/api/buyItem"))
+            {
+                UserTradeAction.buyItem(request,response);
+            }
             //没有匹配的router 返回404
             else
             {

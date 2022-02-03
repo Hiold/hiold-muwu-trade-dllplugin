@@ -19,6 +19,8 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_platformid" })]
         public string platformid { get; set; }
 
+        public int storageCount { get; set; }
+
         //获取时间
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_collecttime" })]
         public DateTime collectTime { get; set; }

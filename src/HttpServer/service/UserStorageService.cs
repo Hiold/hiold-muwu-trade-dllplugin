@@ -14,7 +14,7 @@ namespace HioldMod.src.HttpServer.service
         /// 向数据库中插入玩家库存数据
         /// </summary>
         /// <param name="item">物品</param>
-        public static void addShopItem(UserStorage storage)
+        public static void addUserStorage(UserStorage storage)
         {
             DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
         }
