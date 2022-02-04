@@ -14,24 +14,25 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
-    class UserInfos
+    class UserInfoAction
     {
         /// <summary>
         /// 用户登录action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
-        public static void getdisCountTicket(HttpListenerRequest request, HttpListenerResponse response)
+        public static void getdisCountTicket(HioldRequest request, HttpListenerResponse response)
         {
             try
             {
-                string postData = ServerUtils.getPostData(request);
-                //Dictionary<string, string> param = ServerUtils.GetParam(request);
-                info _info = new info();
-                _info = (info)SimpleJson2.SimpleJson2.DeserializeObject(postData, _info.GetType());
+                //string postData = ServerUtils.getPostData(request.request);
+                ////Dictionary<string, string> param = ServerUtils.GetParam(request);
+                //info _info = new info();
+                //_info = (info)SimpleJson2.SimpleJson2.DeserializeObject(postData, _info.GetType());
+                List<UserStorage> cous = UserStorageService.selectPlayersCou(request.user.gameentityid);
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
 
-                //ResponseUtils.ResponseSuccessWithData(response, ui);
+                ResponseUtils.ResponseSuccessWithData(response, cous);
 
             }
             catch (Exception e)

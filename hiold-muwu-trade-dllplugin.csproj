@@ -89,7 +89,7 @@
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
-    <Compile Include="src\HttpServer\action\UserInfos.cs" />
+    <Compile Include="src\HttpServer\action\UserInfoAction.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />
     <Compile Include="src\HttpServer\action\RegisterAction.cs" />
     <Compile Include="src\HttpServer\action\TradeManageAction.cs" />
@@ -105,6 +105,7 @@
     <Compile Include="src\HttpServer\common\ServerUtils.cs" />
     <Compile Include="src\HttpServer\database\DataBase.cs" />
     <Compile Include="src\HttpServer\LogUtils.cs" />
+    <Compile Include="src\HttpServer\router\Filters.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
     <Compile Include="src\HttpServer\service\ShopTradeService.cs" />

@@ -18,5 +18,11 @@ namespace HioldMod.src.HttpServer.service
         {
             DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
         }
+
+        public static List<UserStorage> selectPlayersCou(string playerid)
+        {
+            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount > 0 and itemtype='2' ", playerid)).ToList();
+        }
     }
 }
+ 

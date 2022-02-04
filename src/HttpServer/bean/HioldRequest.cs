@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.bean
 {
-    class HioldRequest
+    public class HioldRequest
     {
         public HttpListenerRequest request { get; set; }
         public UserInfo user { get; set; }

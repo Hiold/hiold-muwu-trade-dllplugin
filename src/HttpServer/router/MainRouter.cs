@@ -1,6 +1,7 @@
 ﻿using HioldMod.src.HttpServer.action;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
+using HioldMod.src.HttpServer.router;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,10 @@ namespace HioldMod.HttpServer.router
             if (url.Equals("/api/login"))
             {
                 LoginAction.login(request, response);
-            }else if
-            //调试
-            (url.Equals("/api/debug"))
+            }
+            else if
+           //调试
+           (url.Equals("/api/debug"))
             {
                 LoginAction.debug(request, response);
             }
@@ -40,7 +42,7 @@ namespace HioldMod.HttpServer.router
             }
             else if (url.Equals("/api/steamAuth"))
             {
-                AuthAction.steamAuth(request,response);
+                AuthAction.steamAuth(request, response);
             }
             else if (url.Equals("/api/verification"))
             {
@@ -84,8 +86,16 @@ namespace HioldMod.HttpServer.router
             }
             else if (url.StartsWith("/api/buyItem"))
             {
-                UserTradeAction.buyItem(request,response);
+                UserTradeAction.buyItem(request, response);
             }
+            //获取优惠券  校验登录
+            else if (url.StartsWith("/api/getdisCountTicket"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserInfoAction.getdisCountTicket(request, response);
+
+            }
+
             //没有匹配的router 返回404
             else
             {
