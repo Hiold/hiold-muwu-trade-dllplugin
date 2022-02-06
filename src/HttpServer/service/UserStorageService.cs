@@ -19,10 +19,24 @@ namespace HioldMod.src.HttpServer.service
             DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
         }
 
+        /// <summary>
+        /// 根据用户id获取优惠券
+        /// </summary>
+        /// <param name="playerid">用户id</param>
+        /// <returns></returns>
         public static List<UserStorage> selectPlayersCou(string playerid)
         {
             return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount > 0 and itemtype='2' ", playerid)).ToList();
         }
+
+        /// <summary>
+        /// 根据用户id获取物品库存
+        /// </summary>
+        /// <param name="id">物品id</param>
+        /// <returns></returns>
+        public static List<UserStorage> selectPlayerStorage(string id)
+        {
+            return DataBase.db.Queryable<UserStorage>().Where(string.Format("id = '{0}' ", id)).ToList();
+        }
     }
 }
- 

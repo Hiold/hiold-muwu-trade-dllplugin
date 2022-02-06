@@ -60,7 +60,168 @@ namespace HioldMod.src.HttpServer.action
                 //根据id获取
                 if (request.user != null)
                 {
+                    //查询用户请求购买的物品
                     TradeManageItem item = ShopTradeService.getShopItemById(int.Parse(_buy.id))[0];
+                    //首先计算总价格
+                    double priceAll;
+                    double priceBefore;
+                    if (int.TryParse(_buy.count, out int intCount))
+                    {
+                        priceAll = item.price * intCount;
+                        priceBefore = priceAll;
+                    }
+                    else
+                    {
+                        ResponseUtils.ResponseFail(response, "购买数量异常，请检查数量");
+                        return;
+                    }
+
+                    //检查请求购买物品的库存数量
+                    if (item.stock < intCount)
+                    {
+                        //库存量不足
+                        ResponseUtils.ResponseFail(response, "此物品已售罄，无法购买");
+                        return;
+                    }
+
+
+                    //如果玩家优惠率不为0，计算折后总价
+                    if (request.user.vipdiscount != 0)
+                    {
+                        priceAll = priceAll * ((100D - request.user.vipdiscount) / 100D);
+                    }
+
+                    //检查用户是否使用了优惠券
+                    if (_buy.couid != null && !_buy.couid.Equals(""))
+                    {
+                        if (int.TryParse(_buy.couid, out int intCouid))
+                        {
+                            List<UserStorage> couTicket = UserStorageService.selectPlayerStorage(intCouid + "");
+                            if (couTicket.Count > 0)
+                            {
+                                UserStorage couInfo = couTicket[0];
+                                if (couInfo.couCurrType.Equals("积分折扣"))
+                                {
+                                    //货币类型错误
+                                    if (item.currency.Equals("2"))
+                                    {
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为钻石优惠券");
+                                        return;
+                                    }
+
+                                    if (int.TryParse(couInfo.couCond, out int intCouCond))
+                                    {
+                                        //未达到折扣标准
+                                        if (priceBefore < intCouCond)
+                                        {
+                                            ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券需要购买总价大于" + intCouCond + "才能使用");
+                                            return;
+                                        }
+                                        if (double.TryParse(couInfo.couPrice, out double intCouPrice))
+                                        {
+                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        ResponseUtils.ResponseFail(response, "优惠券配置异常，请联系管理员或者不使用优惠券");
+                                        return;
+                                    }
+                                }
+
+                                if (couInfo.couCurrType.Equals("积分满减"))
+                                {
+                                    if (item.currency.Equals("2"))
+                                    {
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为钻石优惠券");
+                                        return;
+                                    }
+                                    if (int.TryParse(couInfo.couCond, out int intCouCond))
+                                    {
+                                        //未达到折扣标准
+                                        if (priceBefore < intCouCond)
+                                        {
+                                            ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券需要购买总价大于" + intCouCond + "才能使用");
+                                            return;
+                                        }
+                                        if (double.TryParse(couInfo.couPrice, out double intCouPrice))
+                                        {
+                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        ResponseUtils.ResponseFail(response, "优惠券配置异常，请联系管理员或者不使用优惠券");
+                                        return;
+                                    }
+                                }
+
+                                if (couInfo.couCurrType.Equals("钻石折扣"))
+                                {
+                                    if (item.currency.Equals("1"))
+                                    {
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为积分优惠券");
+                                        return;
+                                    }
+                                    if (int.TryParse(couInfo.couCond, out int intCouCond))
+                                    {
+                                        //未达到折扣标准
+                                        if (priceBefore < intCouCond)
+                                        {
+                                            ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券需要购买总价大于" + intCouCond + "才能使用");
+                                            return;
+                                        }
+                                        if (double.TryParse(couInfo.couPrice, out double intCouPrice))
+                                        {
+                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        ResponseUtils.ResponseFail(response, "优惠券配置异常，请联系管理员或者不使用优惠券");
+                                        return;
+                                    }
+                                }
+
+                                if (couInfo.couCurrType.Equals("钻石满减"))
+                                {
+                                    if (item.currency.Equals("1"))
+                                    {
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为积分优惠券");
+                                        return;
+                                    }
+                                    if (int.TryParse(couInfo.couCond, out int intCouCond))
+                                    {
+                                        //未达到折扣标准
+                                        if (priceBefore < intCouCond)
+                                        {
+                                            ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券需要购买总价大于" + intCouCond + "才能使用");
+                                            return;
+                                        }
+                                        if (double.TryParse(couInfo.couPrice, out double intCouPrice))
+                                        {
+                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        ResponseUtils.ResponseFail(response, "优惠券配置异常，请联系管理员或者不使用优惠券");
+                                        return;
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+
+
+
+
                     UserStorage userStorate = new UserStorage()
                     {
                         //id
@@ -113,17 +274,31 @@ namespace HioldMod.src.HttpServer.action
                         collectTime = DateTime.Now,
                         storageCount = int.Parse(_buy.count),
                         //拓展属性
-                        extinfo1="",
+                        extinfo1 = "",
                         extinfo2 = "",
                         extinfo3 = "",
                         extinfo4 = "",
                         extinfo5 = "",
                     };
 
-                    
+
 
                     //添加数据到数据库
                     UserStorageService.addUserStorage(userStorate);
+                    //更新数据库存
+                    item.stock -= intCount;
+                    ShopTradeService.updateShopItem(item);
+                    //记录用户购买数据
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.BuyItem,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = _buy.id,
+                        extinfo2 = _buy.couid,
+                        extinfo3 = _buy.count,
+                        extinfo4 = priceAll + ""
+                    });
                     ResponseUtils.ResponseSuccess(response);
                 }
                 else
@@ -140,6 +315,9 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+
+
+
         public class info
         {
 
@@ -149,6 +327,7 @@ namespace HioldMod.src.HttpServer.action
         {
             public string id { get; set; }
             public string count { get; set; }
+            public string couid { get; set; }
         }
     }
 }
