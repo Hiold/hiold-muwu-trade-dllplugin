@@ -34,6 +34,45 @@ namespace HioldMod.src.HttpServer.action
                 {
                     //查询用户请求购买的物品
                     TradeManageItem item = ShopTradeService.getShopItemById(int.Parse(_buy.id))[0];
+
+                    //限购检查
+                    if (item.xgdatelimit.Equals("2"))
+                    {
+                        if (item.dateStart > DateTime.Now)
+                        {
+                            ResponseUtils.ResponseFail(response, "此物品暂时不能购买，开售时间：" + item.dateStart.ToString("yyyy-MM-dd HH:mm:ss"));
+                            return;
+                        }
+
+                        if (item.dateEnd < DateTime.Now)
+                        {
+                            ResponseUtils.ResponseFail(response, "此物品不能购买，售卖结束时间：" + item.dateEnd.ToString("yyyy-MM-dd HH:mm:ss"));
+                            return;
+                        }
+                    }
+                    //检查登记限制
+                    if (item.xglevel.Equals("2") || item.xglevel.Equals("3"))
+                    {
+                        if (int.TryParse(item.xglevelset, out int levelSet) && int.TryParse(request.user.level, out int userLevel))
+                        {
+                            if (item.xglevel.Equals("2") && levelSet > userLevel)
+                            {
+                                ResponseUtils.ResponseFail(response, "此物品需要达到" + levelSet + "级才能购买！您的游戏角色目前等级为" + userLevel);
+                                return;
+                            }
+                            if (item.xglevel.Equals("3") && levelSet < userLevel)
+                            {
+                                ResponseUtils.ResponseFail(response, "此物品超过" + levelSet + "级无法购买！您的游戏角色目前等级为" + userLevel);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            ResponseUtils.ResponseFail(response, "此物品限购，无法获取您的等级信息");
+                            return;
+                        }
+                    }
+
                     //首先计算总价格
                     double priceAll;
                     double priceBefore;
@@ -62,7 +101,7 @@ namespace HioldMod.src.HttpServer.action
                     Int64 allCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, item.id + "", LogType.BuyItem, null, null);
                     if (int.TryParse(item.xgdayset, out int intxgdayset))
                     {
-                        if (tdCount >= intxgdayset)
+                        if (tdCount + intCount > intxgdayset)
                         {
                             //库存量不足
                             ResponseUtils.ResponseFail(response, "此物品每日限购" + intxgdayset + "，已达到限购额，无法继续购买");
@@ -72,7 +111,7 @@ namespace HioldMod.src.HttpServer.action
 
                     if (int.TryParse(item.xgallset, out int intxgallset))
                     {
-                        if (allCount >= intxgallset)
+                        if (allCount + intCount > intxgallset)
                         {
                             //库存量不足
                             ResponseUtils.ResponseFail(response, "此物品总限购" + intxgallset + "，已达到限购额，无法继续购买");
@@ -106,6 +145,23 @@ namespace HioldMod.src.HttpServer.action
                             if (couTicket.Count > 0)
                             {
                                 UserStorage couInfo = couTicket[0];
+                                if (couInfo.coudatelimit.Equals("2"))
+                                {
+                                    if (item.couDateStart > DateTime.Now)
+                                    {
+                                        ResponseUtils.ResponseFail(response, "无法使用此优惠券购买，有效期开始时间：" + item.couDateStart.ToString("yyyy-MM-dd HH:mm:ss"));
+                                        return;
+                                    }
+
+                                    if (item.couDateEnd < DateTime.Now)
+                                    {
+                                        ResponseUtils.ResponseFail(response, "无法使用此优惠券购买，有效期截止：" + item.couDateEnd.ToString("yyyy-MM-dd HH:mm:ss"));
+                                        return;
+                                    }
+                                }
+
+
+
                                 if (couInfo.couCurrType.Equals("积分折扣"))
                                 {
                                     //货币类型错误
