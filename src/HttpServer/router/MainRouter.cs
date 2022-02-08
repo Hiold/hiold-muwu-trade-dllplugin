@@ -86,7 +86,8 @@ namespace HioldMod.HttpServer.router
             }
             else if (url.StartsWith("/api/buyItem"))
             {
-                UserTradeAction.buyItem(request, response);
+                if (Filters.UserLoginFilter(request, response))
+                    UserTradeAction.buyItem(request, response);
             }
             //获取优惠券  校验登录
             else if (url.StartsWith("/api/getdisCountTicket"))
@@ -95,7 +96,13 @@ namespace HioldMod.HttpServer.router
                     UserInfoAction.getdisCountTicket(request, response);
 
             }
+            //获取限购数据
+            else if (url.StartsWith("/api/getItemBuyLimit"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserInfoAction.getItemBuyLimit(request, response);
 
+            }
             //没有匹配的router 返回404
             else
             {

@@ -26,9 +26,9 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IndexGroupNameList = new string[] { "index_platformid" })]
         public string platformid { get; set; }
 
-        public float money { get; set; }
+        public double money { get; set; }
 
-        public float credit { get; set; }
+        public double credit { get; set; }
 
         public long status { get; set; }
 

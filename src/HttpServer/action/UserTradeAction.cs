@@ -9,40 +9,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static HioldMod.src.HttpServer.database.DataBase;
 
 namespace HioldMod.src.HttpServer.action
 {
     class UserTradeAction
     {
-        /// <summary>
-        /// 用户登录获取用户折扣券
-        /// </summary>
-        /// <param name="request">请求</param>
-        /// <param name="response">响应</param>
-        public static void getdisCountTicket(HioldRequest request, HttpListenerResponse response)
-        {
-            try
-            {
-
-
-                string postData = ServerUtils.getPostData(request.request);
-                //Dictionary<string, string> param = ServerUtils.GetParam(request);
-                info _info = new info();
-                _info = (info)SimpleJson2.SimpleJson2.DeserializeObject(postData, _info.GetType());
-                //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
-
-                //ResponseUtils.ResponseSuccessWithData(response, ui);
-
-            }
-            catch (Exception e)
-            {
-                LogUtils.Loger(e.Message);
-                ResponseUtils.ResponseFail(response, "参数异常");
-            }
-        }
-
-
-
         /// <summary>
         /// 购买物品
         /// </summary>
@@ -83,6 +55,40 @@ namespace HioldMod.src.HttpServer.action
                         ResponseUtils.ResponseFail(response, "此物品已售罄，无法购买");
                         return;
                     }
+                    //进行限购检查
+                    string tdStart = DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00";
+                    string tdEnd = DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59";
+                    Int64 tdCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, item.id + "", LogType.BuyItem, tdStart, tdEnd);
+                    Int64 allCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, item.id + "", LogType.BuyItem, null, null);
+                    if (int.TryParse(item.xgdayset, out int intxgdayset))
+                    {
+                        if (tdCount >= intxgdayset)
+                        {
+                            //库存量不足
+                            ResponseUtils.ResponseFail(response, "此物品每日限购" + intxgdayset + "，已达到限购额，无法继续购买");
+                            return;
+                        }
+                    }
+
+                    if (int.TryParse(item.xgallset, out int intxgallset))
+                    {
+                        if (allCount >= intxgallset)
+                        {
+                            //库存量不足
+                            ResponseUtils.ResponseFail(response, "此物品总限购" + intxgallset + "，已达到限购额，无法继续购买");
+                            return;
+                        }
+                    }
+
+
+
+
+
+                    //查看当前物品是否有折扣
+                    if (item.discount < 10)
+                    {
+                        priceAll = priceAll * (item.discount / 10D);
+                    }
 
 
                     //如果玩家优惠率不为0，计算折后总价
@@ -119,7 +125,10 @@ namespace HioldMod.src.HttpServer.action
                                         }
                                         if (double.TryParse(couInfo.couPrice, out double intCouPrice))
                                         {
-                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                            priceAll = priceAll * (intCouPrice / 10D);
+                                            //执行扣除优惠券
+                                            couInfo.storageCount--;
+                                            UserStorageService.UpdateUserStorage(couInfo);
                                         }
 
                                     }
@@ -147,7 +156,10 @@ namespace HioldMod.src.HttpServer.action
                                         }
                                         if (double.TryParse(couInfo.couPrice, out double intCouPrice))
                                         {
-                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                            priceAll -= intCouPrice;
+                                            //执行扣除优惠券
+                                            couInfo.storageCount--;
+                                            UserStorageService.UpdateUserStorage(couInfo);
                                         }
 
                                     }
@@ -175,7 +187,10 @@ namespace HioldMod.src.HttpServer.action
                                         }
                                         if (double.TryParse(couInfo.couPrice, out double intCouPrice))
                                         {
-                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                            priceAll = priceAll * (intCouPrice / 10D);
+                                            //执行扣除优惠券
+                                            couInfo.storageCount--;
+                                            UserStorageService.UpdateUserStorage(couInfo);
                                         }
 
                                     }
@@ -203,7 +218,10 @@ namespace HioldMod.src.HttpServer.action
                                         }
                                         if (double.TryParse(couInfo.couPrice, out double intCouPrice))
                                         {
-                                            priceAll = priceAll * ((10D - intCouPrice) / 10D);
+                                            priceAll -= intCouPrice;
+                                            //执行扣除优惠券
+                                            couInfo.storageCount--;
+                                            UserStorageService.UpdateUserStorage(couInfo);
                                         }
 
                                     }
@@ -213,15 +231,29 @@ namespace HioldMod.src.HttpServer.action
                                         return;
                                     }
                                 }
-
                             }
                         }
-
                     }
 
-
-
-
+                    //执行扣款
+                    //积分
+                    if (item.currency == "1")
+                    {
+                        if (!database.DataBase.MoneyEditor(request.user, MoneyType.Money, EditType.Sub, priceAll))
+                        {
+                            ResponseUtils.ResponseFail(response, "积分不足。购买失败！");
+                            return;
+                        }
+                    }
+                    //点券
+                    if (item.currency == "2")
+                    {
+                        if (!database.DataBase.MoneyEditor(request.user, MoneyType.Credit, EditType.Sub, priceAll))
+                        {
+                            ResponseUtils.ResponseFail(response, "点券不足。购买失败！");
+                            return;
+                        }
+                    }
                     UserStorage userStorate = new UserStorage()
                     {
                         //id

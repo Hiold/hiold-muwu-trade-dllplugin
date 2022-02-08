@@ -41,6 +41,41 @@ namespace HioldMod.src.HttpServer.action
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
         }
+
+        /// <summary>
+        /// 用户登录action
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void getItemBuyLimit(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                limitinfo _limit = new limitinfo();
+                _limit = (limitinfo)SimpleJson2.SimpleJson2.DeserializeObject(postData, _limit.GetType());
+                //获取当日购买数量
+                string tdStart = DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00";
+                string tdEnd = DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59";
+                Int64 tdCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, _limit.id, LogType.BuyItem, tdStart, tdEnd);
+                Int64 allCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, _limit.id, LogType.BuyItem, null, null);
+                limitCountInfo lci = new limitCountInfo()
+                {
+                    tdCount = tdCount,
+                    allCount = allCount,
+                };
+
+                ResponseUtils.ResponseSuccessWithData(response, lci);
+
+
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
         /// <summary>
         /// 测试
         /// </summary>
@@ -63,6 +98,17 @@ namespace HioldMod.src.HttpServer.action
         public class info
         {
             public string userid { get; set; }
+        }
+
+        public class limitinfo
+        {
+            public string id { get; set; }
+        }
+
+        public class limitCountInfo
+        {
+            public Int64 tdCount { get; set; }
+            public Int64 allCount { get; set; }
         }
     }
 }

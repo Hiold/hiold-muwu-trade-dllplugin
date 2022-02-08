@@ -1,5 +1,8 @@
 ﻿using HioldMod.src.HttpServer.bean;
+using HioldMod.src.HttpServer.service;
 using SqlSugar;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace HioldMod.src.HttpServer.database
@@ -51,10 +54,96 @@ namespace HioldMod.src.HttpServer.database
                 IsAutoCloseConnection = true,//自动释放
             });
 
+            Console.WriteLine("开始同步表结构");
             //初始化表
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(TradeManageItem));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserInfo));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserStorage));
+            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(ActionLog));
+        }
+
+        /// <summary>
+        /// 修改玩家积分、点券数量
+        /// </summary>
+        /// <param name="info">玩家信息</param>
+        /// <param name="mt">货币类型</param>
+        /// <param name="et">编辑类型</param>
+        /// <param name="count">数量</param>
+        /// <returns></returns>
+        public static bool MoneyEditor(UserInfo info, MoneyType mt, EditType et, double count)
+        {
+            List<UserInfo> targetUsers = UserService.getUserById(info.id + "");
+            if (targetUsers != null && targetUsers.Count > 0)
+            {
+                UserInfo _target = targetUsers[0];
+                //积分
+                if (mt == MoneyType.Money)
+                {
+                    if (et == EditType.Add)
+                    {
+                        _target.money += count;
+                        UserService.UpdateUserInfo(_target);
+                        return true;
+                    }
+                    if (et == EditType.Sub)
+                    {
+                        //积分不足
+                        if (_target.money < count)
+                        {
+                            return false;
+                        }
+                        _target.money -= count;
+                        UserService.UpdateUserInfo(_target);
+                        return true;
+                    }
+                    if (et == EditType.Set)
+                    {
+                        _target.money = count;
+                        UserService.UpdateUserInfo(_target);
+                        return true;
+                    }
+                }
+
+                //点券
+                else if (mt == MoneyType.Credit)
+                {
+                    if (et == EditType.Add)
+                    {
+                        _target.credit += count;
+                        UserService.UpdateUserInfo(_target);
+                        return true;
+                    }
+                    if (et == EditType.Sub)
+                    {
+                        //积分不足
+                        if (_target.credit < count)
+                        {
+                            return false;
+                        }
+                        _target.credit -= count;
+                        UserService.UpdateUserInfo(_target);
+                        return true;
+                    }
+                    if (et == EditType.Set)
+                    {
+                        _target.credit = count;
+                        UserService.UpdateUserInfo(_target);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public enum MoneyType
+        {
+            Money, Credit
+        }
+
+        public enum EditType
+        {
+            Add, Sub, Set
         }
     }
 }

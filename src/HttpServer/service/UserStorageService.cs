@@ -38,5 +38,14 @@ namespace HioldMod.src.HttpServer.service
         {
             return DataBase.db.Queryable<UserStorage>().Where(string.Format("id = '{0}' ", id)).ToList();
         }
+
+        /// <summary>
+        /// 更新物品信息
+        /// </summary>
+        /// <param name="item">物品</param>
+        public static void UpdateUserStorage(UserStorage storage)
+        {
+            DataBase.db.Updateable<UserStorage>(storage).ExecuteCommand();
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.bean
 {
-    [SugarTable("userinfo")]
+    [SugarTable("actionlog")]
     class ActionLog
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]//数据库是自增才配自增
@@ -19,15 +19,25 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IndexGroupNameList = new string[] { "act_playerid" }, IsNullable = true)]
         public string atcPlayerEntityId { get; set; }
 
+        [SugarColumn(IndexGroupNameList = new string[] { "act_extinfo1" }, IsNullable = true)]
         public string extinfo1 { get; set; }
+        [SugarColumn(IndexGroupNameList = new string[] { "act_extinfo2" }, IsNullable = true)]
         public string extinfo2 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo3 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo4 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo5 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo6 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo7 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo8 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo9 { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string extinfo10 { get; set; }
     }
 

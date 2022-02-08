@@ -82,5 +82,9 @@ namespace HioldMod.src.HttpServer.service
             return DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList(); ;
         }
 
+        public static void UpdateUserInfo(UserInfo user)
+        {
+            DataBase.db.Updateable<UserInfo>(user).ExecuteCommand();
+        }
     }
 }
