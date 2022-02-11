@@ -143,11 +143,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="db\TradeManageDB.db" />
     <None Include="ModInfo.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="db\TradeManageDB.db" />
   </ItemGroup>
   <ItemGroup />
 </Project>
