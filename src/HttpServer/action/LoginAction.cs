@@ -34,7 +34,10 @@ namespace HioldMod.src.HttpServer.action
                 {
                     UserInfo ui = resultList[0];
                     ui.password = "[masked]";
-                    Server.userCookies.Add(request.sessionid,ui);
+                    if (Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
+                    {
+                        Server.userCookies.Add(request.sessionid, ui);
+                    }
                     ResponseUtils.ResponseSuccessWithData(response, ui);
                 }
                 else

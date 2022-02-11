@@ -35,6 +35,10 @@
       <HintPath>..\7dtd-binaries\mscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Noemax.GZip, Version=17.269.5336.0, Culture=neutral, PublicKeyToken=4c0defa954f97f18, processorArchitecture=MSIL" />
     <Reference Include="SQLite.Designer, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

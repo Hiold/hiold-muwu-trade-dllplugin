@@ -26,10 +26,30 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">数量</param>
         /// <returns></returns>
-        public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize)
+        public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize, string gruopsStrs)
         {
             int totalCount = 0;
-            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'", itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
+            string groupStr = "";
+            if (gruopsStrs != null && gruopsStrs.Length > 0)
+            {
+                groupStr += " and (";
+                string[] groups = gruopsStrs.Split('/');
+                for (int i = 0; i < groups.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        groupStr += string.Format(" class1 like '%{0}%' or class2 like '%{0}%'", groups[i]);
+                    }
+                    else
+                    {
+                        groupStr += string.Format(" or class1 like '%{0}%' or class2 like '%{0}%'", groups[i]);
+                    }
+                }
+                groupStr += ") ";
+            }
+            Console.WriteLine(groupStr);
+
+            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'" + groupStr, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("data", ls);
             result.Add("count", totalCount);

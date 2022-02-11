@@ -54,6 +54,7 @@ namespace HioldMod
                         ce.Expires = DateTime.Now.AddDays(1);
                         ce.Path = "/";
                         response.Cookies.Add(ce);
+                        hioldRequest.sessionid = ce.Value;
                     }
                     else
                     {
