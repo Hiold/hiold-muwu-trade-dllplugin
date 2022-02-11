@@ -26,10 +26,12 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">数量</param>
         /// <returns></returns>
-        public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize, string gruopsStrs)
+        public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize, string mainType, string gruopsStrs)
         {
             int totalCount = 0;
             string groupStr = "";
+            string mainTypeStr = "";
+            //包含group信息
             if (gruopsStrs != null && gruopsStrs.Length > 0)
             {
                 groupStr += " and (";
@@ -47,9 +49,29 @@ namespace HioldMod.src.HttpServer.service
                 }
                 groupStr += ") ";
             }
-            Console.WriteLine(groupStr);
+            //包含大分类信息
+            if (mainType != null && mainType.Length > 0)
+            {
+                if (mainType.Equals("活动折扣"))
+                {
+                    mainTypeStr += " and discount<10 ";
+                }
+                if (mainType.Equals("特殊商品"))
+                {
+                    mainTypeStr += " and itemtype='2' ";
+                }
+                if (mainType.Equals("积分商城"))
+                {
+                    mainTypeStr += " and currency='1' ";
+                }
+                if (mainType.Equals("钻石商城"))
+                {
+                    mainTypeStr += " and currency='2' ";
+                }
+            }
 
-            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'" + groupStr, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
+
+            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'" + groupStr + mainTypeStr, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("data", ls);
             result.Add("count", totalCount);

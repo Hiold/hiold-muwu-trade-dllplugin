@@ -246,7 +246,7 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("class1", out string class1);
                 queryRequest.TryGetValue("class2", out string class2);
 
-                Dictionary<string, object> result = ShopTradeService.queryShopItem(itemname, pageIndex, pageSize, class2);
+                Dictionary<string, object> result = ShopTradeService.queryShopItem(itemname, pageIndex, pageSize, class1 ,class2);
                 ResponseUtils.ResponseSuccessWithData(response, result);
             }
             catch (Exception e)
