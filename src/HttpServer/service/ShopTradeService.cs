@@ -26,11 +26,12 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">数量</param>
         /// <returns></returns>
-        public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize, string mainType, string gruopsStrs)
+        public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize, string mainType, string gruopsStrs, string sorttype)
         {
             int totalCount = 0;
             string groupStr = "";
             string mainTypeStr = "";
+            string sortStr = "";
             //包含group信息
             if (gruopsStrs != null && gruopsStrs.Length > 0)
             {
@@ -69,9 +70,33 @@ namespace HioldMod.src.HttpServer.service
                     mainTypeStr += " and currency='2' ";
                 }
             }
+            //排序处理
+            if (sorttype != null)
+            {
+                if (sorttype.Equals("默认排序"))
+                {
+                    sortStr = "";
+                }
+                if (sorttype.Equals("销量优先"))
+                {
+                    sortStr = " order by selloutcount desc";
+                }
+                if (sorttype.Equals("收藏最多"))
+                {
+                    sortStr = " order by collect desc";
+                }
+                if (sorttype.Equals("价格低到高"))
+                {
+                    sortStr = " order by price asc";
+                }
+                if (sorttype.Equals("价格高到低"))
+                {
+                    sortStr = " order by price desc";
+                }
+            }
 
 
-            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'" + groupStr + mainTypeStr, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
+            List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'" + groupStr + mainTypeStr + sortStr, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("data", ls);
             result.Add("count", totalCount);

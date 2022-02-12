@@ -375,6 +375,9 @@ namespace HioldMod.src.HttpServer.action
                     UserStorageService.addUserStorage(userStorate);
                     //更新数据库存
                     item.stock -= intCount;
+                    int selled = 0;
+                    int.TryParse(item.selloutcount, out selled);
+                    item.selloutcount = (selled + intCount) + "";
                     ShopTradeService.updateShopItem(item);
                     //记录用户购买数据
                     ActionLogService.addLog(new ActionLog()

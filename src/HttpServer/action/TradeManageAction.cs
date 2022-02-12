@@ -160,6 +160,11 @@ namespace HioldMod.src.HttpServer.action
                 shopItem.postTime = DateTime.Now;
                 shopItem.translate = addRequest.translate;
 
+                if (addRequest.itemType.Equals("2"))
+                {
+                    shopItem.translate = addRequest.couCurrType;
+                }
+
                 ShopTradeService.updateShopItem(shopItem);
                 ResponseUtils.ResponseSuccess(response);
             }
@@ -245,8 +250,10 @@ namespace HioldMod.src.HttpServer.action
 
                 queryRequest.TryGetValue("class1", out string class1);
                 queryRequest.TryGetValue("class2", out string class2);
+                queryRequest.TryGetValue("sorttype", out string sorttype);
 
-                Dictionary<string, object> result = ShopTradeService.queryShopItem(itemname, pageIndex, pageSize, class1 ,class2);
+
+                Dictionary<string, object> result = ShopTradeService.queryShopItem(itemname, pageIndex, pageSize, class1, class2, sorttype);
                 ResponseUtils.ResponseSuccessWithData(response, result);
             }
             catch (Exception e)

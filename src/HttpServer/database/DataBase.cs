@@ -14,6 +14,7 @@ namespace HioldMod.src.HttpServer.database
         //数据库客户端
 
         //调试使用的数据库文件存储路径
+        public static string relatedPath = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
         public static string debugDbfilePath = @"C:\Users\Administrator\Source\Repos\hiold-muwu-trade-dllplugin\db\";
         public static SqlSugarClient db = null;
 
@@ -22,6 +23,9 @@ namespace HioldMod.src.HttpServer.database
         /// </summary>
         public static void InitDataBase()
         {
+            //加载固定路径
+            debugDbfilePath = relatedPath.Substring(0, relatedPath.IndexOf("Repos\\")) + "Repos\\hiold-muwu-trade-dllplugin\\db\\";
+            Console.WriteLine(debugDbfilePath);
             ////创建数据库链接
             if (API.isOnServer)
             {
