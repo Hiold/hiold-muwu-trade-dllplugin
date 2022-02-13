@@ -95,6 +95,54 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
+
+        /// <summary>
+        /// 用户登录action
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void updateCollect(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("id", out string id);
+                queryRequest.TryGetValue("value", out string value);
+                //获取配置
+                List<UserConfig> cfgs = UserConfigService.QueryConfig(request.user.gameentityid, ConfigType.Collect, id);
+                if (cfgs != null && cfgs.Count > 0)
+                {
+                    UserConfig cfg = cfgs[0];
+                    cfg.available = value;
+                    cfg.updated_at = DateTime.Now;
+                    UserConfigService.updateConfig(cfg);
+                    ResponseUtils.ResponseSuccessWithData(response, cfg);
+                }
+                else
+                {
+                    UserConfig cfg = new UserConfig()
+                    {
+                        created_at = DateTime.Now,
+                        name = request.user.name,
+                        gameentityid = request.user.gameentityid,
+                        platformid = request.user.platformid,
+                        configType = ConfigType.Collect,
+                        configValue = id,
+                        available = "1"
+                    };
+                    UserConfigService.addConfig(cfg);
+                    ResponseUtils.ResponseSuccessWithData(response, cfg);
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+
         public class info
         {
             public string userid { get; set; }

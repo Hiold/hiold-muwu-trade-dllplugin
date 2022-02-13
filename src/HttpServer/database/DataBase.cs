@@ -64,6 +64,7 @@ namespace HioldMod.src.HttpServer.database
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserInfo));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserStorage));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(ActionLog));
+            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserConfig));
         }
 
         /// <summary>

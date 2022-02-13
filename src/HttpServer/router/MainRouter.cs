@@ -101,6 +101,12 @@ namespace HioldMod.HttpServer.router
             {
                 if (Filters.UserLoginFilter(request, response))
                     UserInfoAction.getItemBuyLimit(request, response);
+            }
+            //更新收藏数据
+            else if (url.StartsWith("/api/updateCollect"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserInfoAction.updateCollect(request, response);
 
             }
             //没有匹配的router 返回404

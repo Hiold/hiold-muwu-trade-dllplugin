@@ -26,7 +26,7 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">数量</param>
         /// <returns></returns>
-        public static Dictionary<string, object> queryShopItem(string itemname, int pageIndex, int pageSize, string mainType, string gruopsStrs, string sorttype)
+        public static Dictionary<string, object> queryShopItem(UserInfo userInfo, string itemname, int pageIndex, int pageSize, string mainType, string gruopsStrs, string sorttype)
         {
             int totalCount = 0;
             string groupStr = "";
@@ -97,6 +97,21 @@ namespace HioldMod.src.HttpServer.service
 
 
             List<TradeManageItem> ls = DataBase.db.Queryable<TradeManageItem>().Where(string.Format("(name like '%{0}%' or translate like '%{0}%') and deleteTime ='0001-01-01 00:00:00'" + groupStr + mainTypeStr + sortStr, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
+            //逐一查询收藏数据
+            if (userInfo != null)
+            {
+                foreach (TradeManageItem item in ls)
+                {
+                    List<UserConfig> cfgs = UserConfigService.QueryConfig(userInfo.gameentityid, ConfigType.Collect, item.id + "");
+                    if (cfgs != null && cfgs.Count > 0)
+                    {
+                        UserConfig cfg = cfgs[0];
+                        item.collected = cfg.available;
+                    }
+                }
+            }
+
+
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("data", ls);
             result.Add("count", totalCount);

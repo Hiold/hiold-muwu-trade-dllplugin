@@ -102,6 +102,7 @@
     <Compile Include="src\HttpServer\bean\ActionLog.cs" />
     <Compile Include="src\HttpServer\bean\HioldRequest.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
+    <Compile Include="src\HttpServer\bean\UserConfig.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
     <Compile Include="src\HttpServer\bean\UserStorage.cs" />
     <Compile Include="src\HttpServer\common\ClientWindowsUtils.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="src\HttpServer\Server.cs" />
     <Compile Include="src\HttpServer\service\ActionLogService.cs" />
     <Compile Include="src\HttpServer\service\ShopTradeService.cs" />
+    <Compile Include="src\HttpServer\service\UserConfigService.cs" />
     <Compile Include="src\HttpServer\service\UserService.cs" />
     <Compile Include="src\HttpServer\service\UserStorageService.cs" />
     <Compile Include="src\HttpTools.cs" />

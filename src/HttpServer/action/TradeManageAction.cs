@@ -253,7 +253,7 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("sorttype", out string sorttype);
 
 
-                Dictionary<string, object> result = ShopTradeService.queryShopItem(itemname, pageIndex, pageSize, class1, class2, sorttype);
+                Dictionary<string, object> result = ShopTradeService.queryShopItem(request.user,itemname, pageIndex, pageSize, class1, class2, sorttype);
                 ResponseUtils.ResponseSuccessWithData(response, result);
             }
             catch (Exception e)
