@@ -361,6 +361,8 @@ namespace HioldMod.src.HttpServer.action
                         gameentityid = request.user.gameentityid,
                         collectTime = DateTime.Now,
                         storageCount = int.Parse(_buy.count),
+                        itemGetChenal = UserStorageGetChanel.SHOP_BUY,
+                        itemStatus = UserStorageStatus.NORMAL_STORAGED,
                         //拓展属性
                         extinfo1 = "",
                         extinfo2 = "",

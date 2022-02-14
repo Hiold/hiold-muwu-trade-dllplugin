@@ -109,6 +109,13 @@ namespace HioldMod.HttpServer.router
                     UserInfoAction.updateCollect(request, response);
 
             }
+            //查询用户库存
+            else if (url.StartsWith("/api/getPlayerStorage"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserInfoAction.getPlayerStorage(request, response);
+
+            }
             //没有匹配的router 返回404
             else
             {

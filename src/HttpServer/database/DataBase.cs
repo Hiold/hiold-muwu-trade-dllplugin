@@ -24,8 +24,14 @@ namespace HioldMod.src.HttpServer.database
         public static void InitDataBase()
         {
             //加载固定路径
-            debugDbfilePath = relatedPath.Substring(0, relatedPath.IndexOf("Repos\\")) + "Repos\\hiold-muwu-trade-dllplugin\\db\\";
-            Console.WriteLine(debugDbfilePath);
+            try
+            {
+                debugDbfilePath = relatedPath.Substring(0, relatedPath.IndexOf("Repos\\")) + "Repos\\hiold-muwu-trade-dllplugin\\db\\";
+            }
+            catch (Exception)
+            {
+                debugDbfilePath = relatedPath.Substring(0, relatedPath.IndexOf("repos\\")) + "repos\\hiold-muwu-trade-dllplugin\\db\\";
+            }
             ////创建数据库链接
             if (API.isOnServer)
             {

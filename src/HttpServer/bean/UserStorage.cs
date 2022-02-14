@@ -29,11 +29,45 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_obtaintime" })]
         public DateTime obtainTime { get; set; }
 
+        [SugarColumn(IndexGroupNameList = new string[] { "us_index_itemgetchanel" })]
+        public int itemGetChenal { get; set; }
+
+        [SugarColumn(IndexGroupNameList = new string[] { "us_index_itemusedchanel" })]
+        public int itemUsedChenal { get; set; }
+
+        [SugarColumn(IndexGroupNameList = new string[] { "us_index_itemstatus" })]
+        public int itemStatus { get; set; }
+
+        [SugarColumn(Length = 2048)]
+        public string itemdata { get; set; }
+
         public string extinfo1 { get; set; }
         public string extinfo2 { get; set; }
         public string extinfo3 { get; set; }
         public string extinfo4 { get; set; }
         public string extinfo5 { get; set; }
 
+    }
+
+
+    //物品获取途径
+    public class UserStorageStatus
+    {
+        //正常在库
+        public static int NORMAL_STORAGED = 1;
+    }
+
+    //物品获取途径
+    public class UserStorageGetChanel
+    {
+        //从系统中获得
+        public static int SHOP_BUY = 1;
+    }
+
+    //物品最终用途
+    public class UserStorageUsedChanel
+    {
+        //已发放到游戏内
+        public static int OBTAIN_TO_GAME = 1;
     }
 }
