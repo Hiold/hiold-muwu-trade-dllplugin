@@ -123,7 +123,8 @@ namespace HioldMod.src.HttpServer.action
                     ResponseUtils.ResponseFail(response, "库存不足，发放失败，当前剩余" + us.storageCount);
                     return;
                 }
-                if (!us.itemStatus.Equals("1"))
+                Console.WriteLine(us.itemStatus);
+                if (us.itemStatus != 1 && us.itemStatus != 2)
                 {
                     ResponseUtils.ResponseFail(response, "该物品无法领取，发放失败");
                     return;
@@ -157,8 +158,19 @@ namespace HioldMod.src.HttpServer.action
                     }); ;
                 }
 
+                //
+                if (us.storageCount > count)
+                {
+                    us.storageCount -= count;
+                    us.itemStatus = UserStorageStatus.DISPACHED_APART;
+                }
+                else
+                {
+                    us.storageCount = 0;
+                    us.itemStatus = UserStorageStatus.DISPACHED;
+                }
+
                 //发放完成 更新数据
-                us.itemStatus = UserStorageStatus.DISPACHED;
                 us.obtainTime = DateTime.Now;
                 UserStorageService.UpdateUserStorage(us);
 
@@ -199,8 +211,22 @@ namespace HioldMod.src.HttpServer.action
                     ResponseUtils.ResponseFail(response, "非个人物品，删除失败");
                     return;
                 }
+                if (us.storageCount < count || count <= 0)
+                {
+                    ResponseUtils.ResponseFail(response, "删除失败，数量异常");
+                    return;
+                }
+                if (us.storageCount == count)
+                {
+                    us.storageCount = 0;
+                    us.itemStatus = UserStorageStatus.USERDELETED;
+                }
+                else
+                {
+                    us.storageCount -= count;
+                }
 
-                us.itemStatus = UserStorageStatus.USERDELETED;
+
                 UserStorageService.UpdateUserStorage(us);
                 ResponseUtils.ResponseSuccessWithData(response, "删除成功!");
             }

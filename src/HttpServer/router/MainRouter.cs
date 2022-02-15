@@ -130,6 +130,13 @@ namespace HioldMod.HttpServer.router
                     UserInfoAction.deleteItem(request, response);
 
             }
+            //出售物品
+            else if (url.StartsWith("/api/sellOutItem"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserTradeAction.sellOutItem(request, response);
+
+            }
             //没有匹配的router 返回404
             else
             {

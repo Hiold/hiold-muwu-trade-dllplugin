@@ -105,6 +105,7 @@
     <Compile Include="src\HttpServer\bean\UserConfig.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
     <Compile Include="src\HttpServer\bean\UserStorage.cs" />
+    <Compile Include="src\HttpServer\bean\UserTrade.cs" />
     <Compile Include="src\HttpServer\common\ClientWindowsUtils.cs" />
     <Compile Include="src\HttpServer\common\FileUploadUtils.cs" />
     <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="src\HttpServer\service\ShopTradeService.cs" />
     <Compile Include="src\HttpServer\service\UserConfigService.cs" />
     <Compile Include="src\HttpServer\service\UserService.cs" />
+    <Compile Include="src\HttpServer\service\UserTradeService.cs" />
     <Compile Include="src\HttpServer\service\UserStorageService.cs" />
     <Compile Include="src\HttpTools.cs" />
     <Compile Include="src\injections\Injections.cs" />

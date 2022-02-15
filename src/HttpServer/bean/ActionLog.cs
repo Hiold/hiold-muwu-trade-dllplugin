@@ -45,5 +45,6 @@ namespace HioldMod.src.HttpServer.bean
     {
         public static int PlayerLogin = 0;
         public static int BuyItem = 1;
+        public static int SellItem = 2;
     }
 }

@@ -38,7 +38,7 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_itemstatus" })]
         public int itemStatus { get; set; }
 
-        [SugarColumn(Length = 2048)]
+        [SugarColumn(Length = 2048,DefaultValue ="",IsNullable =true)]
         public string itemdata { get; set; }
 
         public string extinfo1 { get; set; }
@@ -55,10 +55,14 @@ namespace HioldMod.src.HttpServer.bean
     {
         //正常在库
         public static int NORMAL_STORAGED = 1;
+        //已发放到游戏内（部分）
+        public static int DISPACHED_APART = 1;
         //已发放到游戏内
         public static int DISPACHED = 2;
         //用户自行删除
         public static int USERDELETED = 3;
+        //用户自行卖出
+        public static int USERSELLED = 4;
     }
 
     //物品获取途径
