@@ -3,7 +3,6 @@ using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
-using HioldMod.src.UserTools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -100,69 +99,21 @@ namespace HioldMod.src.HttpServer.action
                 //获取参数
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
-                int count = 0;
+                int count = 10;
                 if (queryRequest.TryGetValue("count", out string countStr))
                 {
                     count = int.Parse(countStr);
                 }
                 queryRequest.TryGetValue("id", out string id);
+
+
                 UserStorage us = UserStorageService.selectUserStorageByid(id);
-                //检查物品属性
-                if (!request.user.gameentityid.Equals(us.gameentityid))
-                {
-                    ResponseUtils.ResponseFail(response, "非个人物品，发放失败");
-                    return;
-                }
-                if (count <= 0)
-                {
-                    ResponseUtils.ResponseFail(response, "数量填写异常，发放失败");
-                    return;
-                }
-                if (us.storageCount <= 0 && us.storageCount < count)
-                {
-                    ResponseUtils.ResponseFail(response, "库存不足，发放失败，当前剩余" + us.storageCount);
-                    return;
-                }
-                if (!us.itemStatus.Equals("1"))
-                {
-                    ResponseUtils.ResponseFail(response, "该物品无法领取，发放失败");
-                    return;
-                }
-                if (!us.itemtype.Equals("1"))
-                {
-                    ResponseUtils.ResponseFail(response, "该物品类型无法领取，发放失败");
-                    return;
-                }
 
-                //检查完毕开始添加数据到发放队列
-                if (us.itemdata != null && !us.itemdata.Equals(""))
-                {
-                    //加入发放队列
-                    DeliverItemTools.deliverDataItemQueue.Enqueue(new DeliverItemWithData()
-                    {
-                        steamid = us.gameentityid,
-                        data = us.itemdata,
-                        count = (count * us.num) + ""
-                    });
-                }
-                else
-                {
-                    //加入发放队列
-                    DeliverItemTools.deliverQueue.Enqueue(new DeliverItem
-                    {
-                        steamid = us.gameentityid,
-                        itemName = us.name,
-                        count = count * us.num,
-                        itemquality = us.quality
-                    }); ;
-                }
 
-                //发放完成 更新数据
-                us.itemStatus = UserStorageStatus.DISPACHED;
-                us.obtainTime = DateTime.Now;
-                UserStorageService.UpdateUserStorage(us);
+                
+                //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
 
-                ResponseUtils.ResponseSuccessWithData(response, "成功发放" + count * us.num + "个物品");
+                //ResponseUtils.ResponseSuccessWithData(response, items);
 
             }
             catch (Exception e)
@@ -172,44 +123,6 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
-        /// <summary>
-        /// 获取用户库存
-        /// </summary>
-        /// <param name="request">请求</param>
-        /// <param name="response">响应</param>
-        public static void deleteItem(HioldRequest request, HttpListenerResponse response)
-        {
-            try
-            {
-                //获取参数
-                string postData = ServerUtils.getPostData(request.request);
-                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
-                int count = 0;
-                if (queryRequest.TryGetValue("count", out string countStr))
-                {
-                    count = int.Parse(countStr);
-                }
-                queryRequest.TryGetValue("id", out string id);
-                UserStorage us = UserStorageService.selectUserStorageByid(id);
-                //检查物品属性
-                //检查物品属性
-                if (!request.user.gameentityid.Equals(us.gameentityid))
-                {
-                    ResponseUtils.ResponseFail(response, "非个人物品，删除失败");
-                    return;
-                }
-
-                us.itemStatus = UserStorageStatus.USERDELETED;
-                UserStorageService.UpdateUserStorage(us);
-                ResponseUtils.ResponseSuccessWithData(response, "删除成功!");
-            }
-            catch (Exception e)
-            {
-                LogUtils.Loger(e.Message);
-                ResponseUtils.ResponseFail(response, "参数异常");
-            }
-        }
 
 
 

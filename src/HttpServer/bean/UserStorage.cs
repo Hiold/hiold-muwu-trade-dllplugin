@@ -55,10 +55,6 @@ namespace HioldMod.src.HttpServer.bean
     {
         //正常在库
         public static int NORMAL_STORAGED = 1;
-        //已发放到游戏内
-        public static int DISPACHED = 2;
-        //用户自行删除
-        public static int USERDELETED = 3;
     }
 
     //物品获取途径

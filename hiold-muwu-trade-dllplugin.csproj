@@ -122,7 +122,6 @@
     <Compile Include="src\HttpTools.cs" />
     <Compile Include="src\injections\Injections.cs" />
     <Compile Include="src\injections\RunTimePatch.cs" />
-    <Compile Include="src\UserTools\DeliverItemTools.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

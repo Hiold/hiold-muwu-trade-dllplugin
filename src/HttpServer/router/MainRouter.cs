@@ -116,20 +116,6 @@ namespace HioldMod.HttpServer.router
                     UserInfoAction.getPlayerStorage(request, response);
 
             }
-            //发放物品
-            else if (url.StartsWith("/api/dispachItemToGame"))
-            {
-                if (Filters.UserLoginFilter(request, response))
-                    UserInfoAction.dispachItemToGame(request, response);
-
-            }
-            //删除物品
-            else if (url.StartsWith("/api/deleteItem"))
-            {
-                if (Filters.UserLoginFilter(request, response))
-                    UserInfoAction.deleteItem(request, response);
-
-            }
             //没有匹配的router 返回404
             else
             {

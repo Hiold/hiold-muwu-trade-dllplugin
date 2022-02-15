@@ -32,7 +32,6 @@ namespace HioldMod
             ModEvents.GameStartDone.RegisterHandler(GameStartDone);
             ModEvents.PlayerSpawnedInWorld.RegisterHandler(PlayerSpawnedInWorld);
             ModEvents.ChatMessage.RegisterHandler(ChatMessage);
-            ModEvents.GameUpdate.RegisterHandler(GameUpdate);
         }
 
         /// <summary>
@@ -67,23 +66,6 @@ namespace HioldMod
             }
             return true;
         }
-
-        /// <summary>
-        /// 执行update主线程任务
-        /// </summary>
-        private static void GameUpdate()
-        {
-            DeliverItemTools.TryDeliverItem();
-            DeliverItemTools.TryExecuteCommand();
-            DeliverItemTools.TryDeleverItemWithData();
-
-            //处理调度任务
-            //if (chatInstance != null)
-            //{
-            //    chatInstance.PullMessages(OnChatMessage);
-            //}
-        }
-
 
         /// <summary>
         /// 获取当前mod运行路径
