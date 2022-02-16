@@ -89,6 +89,50 @@ namespace HioldMod.src.HttpServer.action
 
 
         /// <summary>
+        /// 获取用户在售物品
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void getPlayerOnSell(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                string itemname = "";
+                int pageIndex = 1;
+                int pageSize = 10;
+                queryRequest.TryGetValue("itemname", out itemname);
+                if (queryRequest.TryGetValue("pageIndex", out string pageIndexStr))
+                {
+                    pageIndex = int.Parse(pageIndexStr);
+                }
+                if (queryRequest.TryGetValue("pageSize", out string pageSizeStr))
+                {
+                    pageSize = int.Parse(pageSizeStr);
+                }
+                queryRequest.TryGetValue("class1", out string class1);
+                queryRequest.TryGetValue("class2", out string class2);
+
+
+
+                Dictionary<string, object> items = UserTradeService.selectPlayersOnSell(request.user.gameentityid, itemname, pageIndex, pageSize, class1, class2);
+                //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
+
+                ResponseUtils.ResponseSuccessWithData(response, items);
+
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+
+
+        /// <summary>
         /// 获取用户库存
         /// </summary>
         /// <param name="request">请求</param>

@@ -137,6 +137,13 @@ namespace HioldMod.HttpServer.router
                     UserTradeAction.sellOutItem(request, response);
 
             }
+            //查询玩家在售
+            else if (url.StartsWith("/api/getPlayerOnSell"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserInfoAction.getPlayerOnSell(request, response);
+
+            }
             //没有匹配的router 返回404
             else
             {

@@ -37,7 +37,7 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="playerid">用户id</param>
         /// <param name="itemtype">物品类型</param>
         /// <returns></returns>
-        public static Dictionary<string, object> selectPlayersStorage(string playerid, string itemname, int pageIndex, int pageSize, string mainType, string gruopsStrs)
+        public static Dictionary<string, object> selectPlayersOnSell(string playerid, string itemname, int pageIndex, int pageSize, string mainType, string gruopsStrs)
         {
             int totalCount = 0;
             string groupStr = "";
@@ -82,7 +82,7 @@ namespace HioldMod.src.HttpServer.service
                 }
             }
 
-            List<UserTrade> ls = DataBase.db.Queryable<UserTrade>().Where(string.Format("gameentityid = '{0}' and storageCount > 0 and (name like '%{1}%' or translate like '%{1}%') and deleteTime ='0001-01-01 00:00:00' and itemStatus='1' " + groupStr + mainTypeStr, playerid, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
+            List<UserTrade> ls = DataBase.db.Queryable<UserTrade>().Where(string.Format("gameentityid = '{0}' and stock > 0 and (name like '%{1}%' or translate like '%{1}%') and deleteTime ='0001-01-01 00:00:00' and itemStatus='1' " + groupStr + mainTypeStr, playerid, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("data", ls);
             result.Add("count", totalCount);
