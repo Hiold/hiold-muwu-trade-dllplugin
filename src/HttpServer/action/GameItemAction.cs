@@ -218,5 +218,68 @@ namespace HioldMod.src.HttpServer.action
                 LogUtils.Loger("读取文件异常:" + e.Message);
             }
         }
+
+
+
+        /// <summary>
+        /// 获取静态资源
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void getStaticSource(HioldRequest request, HttpListenerResponse response)
+        {
+            //string url = request.request.RawUrl.Replace("/api/iconImage/", "");
+            //response.ContentType = "image/png";
+            string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/web";
+            try
+            {
+                if (API.isOnServer)
+                {
+                    basepath = string.Format("{0}/web", API.AssemblyPath);
+                }
+
+                //application/javascript
+                if (request.request.RawUrl.Contains(".js"))
+                {
+                    response.ContentType = "application/javascript";
+                }
+                //text/css
+                if (request.request.RawUrl.Contains(".css"))
+                {
+                    //response.AddHeader("max-age", "86400");
+                    response.ContentType = "text/css";
+                }
+                //image/x-icon
+                if (request.request.RawUrl.Contains(".ico"))
+                {
+                    //response.AddHeader("max-age", "8640000");
+                    response.ContentType = "image/x-icon";
+                }
+                //max-age:86400
+                //if (request.request.RawUrl.Contains(".png") || request.request.RawUrl.Contains(".jpg") || request.request.RawUrl.Contains(".mov"))
+                //{
+                //    response.AddHeader("max-age", "86400");
+                //}
+                string appendUrl = "";
+                if (request.request.RawUrl.Equals("/"))
+                {
+                    appendUrl += "index.html";
+                }
+                FileStream fs = File.OpenRead(basepath + request.request.RawUrl + appendUrl);
+                fs.CopyTo(response.OutputStream);
+                fs.Flush();
+                fs.Close();
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+                //LogUtils.Loger(basepath + request.request.RawUrl);
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = 404;
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+                LogUtils.Loger("读取文件异常:" + e.Message);
+            }
+        }
     }
 }

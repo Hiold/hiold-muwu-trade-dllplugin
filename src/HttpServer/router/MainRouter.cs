@@ -140,13 +140,14 @@ namespace HioldMod.HttpServer.router
             //没有匹配的router 返回404
             else
             {
-                byte[] buffer = System.Text.Encoding.UTF8.GetBytes("404-ERROR");
-                //对客户端输出相应信息.
-                response.ContentLength64 = buffer.Length;
-                System.IO.Stream output = response.OutputStream;
-                output.Write(buffer, 0, buffer.Length);
-                //关闭输出流，释放相应资源
-                output.Close();
+                GameItemAction.getStaticSource(request, response);
+                //byte[] buffer = System.Text.Encoding.UTF8.GetBytes("404-ERROR");
+                ////对客户端输出相应信息.
+                //response.ContentLength64 = buffer.Length;
+                //System.IO.Stream output = response.OutputStream;
+                //output.Write(buffer, 0, buffer.Length);
+                ////关闭输出流，释放相应资源
+                //output.Close();
             }
         }
     }
