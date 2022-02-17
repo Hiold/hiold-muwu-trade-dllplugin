@@ -136,7 +136,9 @@ public static class Injections
                     //label2.SetAttribute("text", "https://td.hiold.net/");
                     //生成动态码
                     string ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
-                    label2.SetAttribute("text", "https://td.hiold.net/?ncode=" + ncode);
+                    int port = GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11;
+                    string host = GamePrefs.GetString(EnumGamePrefs.ServerIP);
+                    label2.SetAttribute("text", "http://" + host + ":" + port + "/?ncode=" + ncode);
                     label2.SetAttribute("justify", "left");
                     label2.SetAttribute("style", "press,hover");
                     label2.SetAttribute("font_size", "30");
