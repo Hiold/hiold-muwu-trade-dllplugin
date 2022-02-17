@@ -43,8 +43,13 @@ namespace HioldMod.src.HttpServer.bean
 
     public class LogType
     {
+        //登录
         public static int PlayerLogin = 0;
+        //购买物品
         public static int BuyItem = 1;
+        //出售物品
         public static int SellItem = 2;
+        //取回
+        public static int TackBack = 3;
     }
 }

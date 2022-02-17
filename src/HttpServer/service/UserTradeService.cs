@@ -106,7 +106,7 @@ namespace HioldMod.src.HttpServer.service
         /// 更新物品信息
         /// </summary>
         /// <param name="item">物品</param>
-        public static void UpdateUserStorage(UserTrade storage)
+        public static void UpdateUserTrade(UserTrade storage)
         {
             DataBase.db.Updateable<UserTrade>(storage).ExecuteCommand();
         }

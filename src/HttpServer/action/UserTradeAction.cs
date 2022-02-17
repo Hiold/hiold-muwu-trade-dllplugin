@@ -515,7 +515,7 @@ namespace HioldMod.src.HttpServer.action
                     extinfo3 = "",
                     extinfo4 = "",
                     extinfo5 = "",
-                    itemdata="",
+                    itemdata = "",
                     //重新定义内容属性
                     stock = count,
                 };
@@ -530,6 +530,119 @@ namespace HioldMod.src.HttpServer.action
                 });
                 UserTradeService.addUserTrade(userTrade);
                 ResponseUtils.ResponseSuccessWithData(response, "出售成功!");
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+
+
+        /// <summary>
+        /// 出售物品
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void TackBackItem(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+
+                queryRequest.TryGetValue("id", out string id);
+                UserTrade item = UserTradeService.selectUserTradeByid(id);
+                if (item==null)
+                {
+                    ResponseUtils.ResponseFail(response, "未找到对应物品，取回失败");
+                    return;
+                }
+                //检查物品属性
+                if (!request.user.gameentityid.Equals(item.gameentityid))
+                {
+                    ResponseUtils.ResponseFail(response, "非个人物品，取回失败");
+                    return;
+                }
+                //更新库存数据
+                item.itemStatus = UserTradeConfig.TAKC_BACK;
+                UserTradeService.UpdateUserTrade(item);
+
+
+                //将物品保存到trade信息中
+                UserStorage userStorate = new UserStorage()
+                {
+                    //id
+                    itemtype = item.itemtype,
+                    name = item.name,
+                    translate = item.translate,
+                    itemicon = item.itemicon,
+                    itemtint = item.itemtint,
+                    quality = item.quality,
+                    num = item.num,
+                    class1 = item.class1,
+                    class2 = item.class2,
+                    classmod = item.classmod,
+                    desc = item.desc,
+                    couCurrType = item.couCurrType,
+                    couPrice = item.couPrice,
+                    couCond = item.couCond,
+                    coudatelimit = item.coudatelimit,
+                    couDateStart = item.couDateStart,
+                    couDateEnd = item.couDateEnd,
+                    count = item.count,
+                    currency = item.currency,
+                    price = item.price,
+                    discount = item.discount,
+                    prefer = item.prefer,
+                    selltype = item.selltype,
+                    hot = item.hot,
+                    hotset = item.hotset,
+                    show = item.show,
+                    stock = item.stock,
+                    collect = item.collect,
+                    selloutcount = item.selloutcount,
+                    follow = item.follow,
+                    xglevel = item.xglevel,
+                    xglevelset = item.xglevelset,
+                    xgday = item.xgday,
+                    xgdayset = item.xgdayset,
+                    xgall = item.xgall,
+                    xgallset = item.xgallset,
+                    xgdatelimit = item.xgdatelimit,
+                    dateStart = item.dateStart,
+                    dateEnd = item.dateEnd,
+                    collected = item.collected,
+                    postTime = item.postTime,
+                    deleteTime = item.deleteTime,
+                    //非继承属性
+                    username = request.user.name,
+                    platformid = request.user.platformid,
+                    gameentityid = request.user.gameentityid,
+                    collectTime = DateTime.Now,
+                    storageCount = item.stock,
+                    itemGetChenal = UserStorageGetChanel.TACK_BACK,
+                    itemStatus = UserStorageStatus.NORMAL_STORAGED,
+                    //拓展属性
+                    extinfo1 = "",
+                    extinfo2 = "",
+                    extinfo3 = "",
+                    extinfo4 = "",
+                    extinfo5 = "",
+                    itemdata = "",
+                };
+                //记录用户购买数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.TackBack,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = item.id + "",
+                });
+                UserStorageService.addUserStorage(userStorate);
+                ResponseUtils.ResponseSuccessWithData(response, "下架成功!");
             }
             catch (Exception e)
             {

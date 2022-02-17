@@ -40,6 +40,10 @@ namespace HioldMod.HttpServer.router
             {
                 GameItemAction.getSystemItem(request, response);
             }
+            else if (url.Equals("/api/getSystemItemByPage"))
+            {
+                GameItemAction.getSystemItemByPage(request, response);
+            }
             else if (url.Equals("/api/steamAuth"))
             {
                 AuthAction.steamAuth(request, response);
@@ -135,6 +139,13 @@ namespace HioldMod.HttpServer.router
             {
                 if (Filters.UserLoginFilter(request, response))
                     UserTradeAction.sellOutItem(request, response);
+
+            }
+            //下架物品
+            else if (url.StartsWith("/api/TackBackItem"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserTradeAction.TackBackItem(request, response);
 
             }
             //查询玩家在售

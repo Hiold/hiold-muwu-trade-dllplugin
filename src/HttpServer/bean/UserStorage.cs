@@ -70,6 +70,8 @@ namespace HioldMod.src.HttpServer.bean
     {
         //从系统中获得
         public static int SHOP_BUY = 1;
+        //下架物品
+        public static int TACK_BACK = 2;
     }
 
     //物品最终用途

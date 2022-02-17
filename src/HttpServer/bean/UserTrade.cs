@@ -41,7 +41,11 @@ namespace HioldMod.src.HttpServer.bean
 
     public class UserTradeConfig
     {
+        //正常在售
         public static int NORMAL_ON_TRADE = 1;
+        //已售出
         public static int SELLED = 2;
+        //已下架取回
+        public static int TAKC_BACK = 3;
     }
 }
