@@ -93,6 +93,7 @@
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
+    <Compile Include="src\HttpServer\action\UserRequireAction.cs" />
     <Compile Include="src\HttpServer\action\UserInfoAction.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />
     <Compile Include="src\HttpServer\action\RegisterAction.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
     <Compile Include="src\HttpServer\bean\UserConfig.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
+    <Compile Include="src\HttpServer\bean\UserRequire.cs" />
     <Compile Include="src\HttpServer\bean\UserStorage.cs" />
     <Compile Include="src\HttpServer\bean\UserTrade.cs" />
     <Compile Include="src\HttpServer\common\ClientWindowsUtils.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="src\HttpServer\service\ShopTradeService.cs" />
     <Compile Include="src\HttpServer\service\UserConfigService.cs" />
     <Compile Include="src\HttpServer\service\UserService.cs" />
+    <Compile Include="src\HttpServer\service\UserRequireService.cs" />
     <Compile Include="src\HttpServer\service\UserTradeService.cs" />
     <Compile Include="src\HttpServer\service\UserStorageService.cs" />
     <Compile Include="src\HttpTools.cs" />

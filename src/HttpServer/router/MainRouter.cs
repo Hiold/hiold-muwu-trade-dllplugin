@@ -155,6 +155,19 @@ namespace HioldMod.HttpServer.router
                     UserInfoAction.getPlayerOnSell(request, response);
 
             }
+            //发布求购
+            else if (url.StartsWith("/api/postRequire"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserRequireAction.postRequire(request, response);
+
+            }
+            //查询求购
+            else if (url.StartsWith("/api/getUserRequire"))
+            {
+                UserRequireAction.getUserRequire(request, response);
+
+            }
             //没有匹配的router 返回404
             else
             {

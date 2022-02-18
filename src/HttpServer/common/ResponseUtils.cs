@@ -58,7 +58,7 @@ namespace HioldMod.src.HttpServer.common
 
         public static void ResponseFail(HttpListenerResponse response, string msg)
         {
-            ResponseUtils.setResponseJSON(response);
+            //ResponseUtils.setResponseJSON(response);
             //设置返回数据
             ResponseBase rbase = new ResponseBase()
             {

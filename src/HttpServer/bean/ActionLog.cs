@@ -51,5 +51,7 @@ namespace HioldMod.src.HttpServer.bean
         public static int SellItem = 2;
         //取回
         public static int TackBack = 3;
+        //上架求购
+        public static int PostRequire = 4;
     }
 }
