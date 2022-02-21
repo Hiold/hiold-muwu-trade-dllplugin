@@ -151,9 +151,7 @@ namespace HioldMod.HttpServer.router
             //查询玩家在售
             else if (url.StartsWith("/api/getPlayerOnSell"))
             {
-                if (Filters.UserLoginFilter(request, response))
-                    UserInfoAction.getPlayerOnSell(request, response);
-
+                UserInfoAction.getPlayerOnSell(request, response);
             }
             //发布求购
             else if (url.StartsWith("/api/postRequire"))
@@ -166,7 +164,6 @@ namespace HioldMod.HttpServer.router
             else if (url.StartsWith("/api/getUserRequire"))
             {
                 UserRequireAction.getUserRequire(request, response);
-
             }
             //没有匹配的router 返回404
             else

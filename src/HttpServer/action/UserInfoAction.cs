@@ -114,10 +114,11 @@ namespace HioldMod.src.HttpServer.action
                 }
                 queryRequest.TryGetValue("class1", out string class1);
                 queryRequest.TryGetValue("class2", out string class2);
+                queryRequest.TryGetValue("id", out string id);
 
 
 
-                Dictionary<string, object> items = UserTradeService.selectPlayersOnSell(request.user.gameentityid, itemname, pageIndex, pageSize, class1, class2);
+                Dictionary<string, object> items = UserTradeService.selectPlayersOnSell(id, itemname, pageIndex, pageSize, class1, class2);
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
 
                 ResponseUtils.ResponseSuccessWithData(response, items);
