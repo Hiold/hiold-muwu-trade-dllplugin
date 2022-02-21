@@ -83,17 +83,20 @@ namespace HioldMod.src.HttpServer.action
                     Itemcount = count,
                     Status = UserRequireConfig.NORMAL_REQUIRE,
                     //默认字段
-                    supplygameentityid="",
-                    supplyplatformid="",
-                    supplyusername="",
-                    Supplytime=DateTime.MinValue,
-                    Extinfo1="",
-                    Extinfo2="",
-                    Extinfo3="",
+                    supplygameentityid = "",
+                    supplyplatformid = "",
+                    supplyusername = "",
+                    Supplytime = DateTime.MinValue,
+                    Extinfo1 = "",
+                    Extinfo2 = "",
+                    Extinfo3 = "",
                 };
                 //保存求购数据
                 UserRequireService.addUserRequire(require);
 
+                //更新交易信息数据
+                UserService.UpdateAmount(request.user, UserInfoCountType.REQUIRE_COUNT, 1);
+                UserService.UpdateAmount(request.user, UserInfoCountType.REQUIRE_MONEY, price);
 
                 //记录用户购买数据
                 ActionLogService.addLog(new ActionLog()

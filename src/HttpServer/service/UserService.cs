@@ -86,5 +86,59 @@ namespace HioldMod.src.HttpServer.service
         {
             DataBase.db.Updateable<UserInfo>(user).ExecuteCommand();
         }
+
+        public static void UpdateAmount(UserInfo info, int actType, double actCount)
+        {
+            List<UserInfo> targetUsers = UserService.getUserById(info.id + "");
+            if (targetUsers != null && targetUsers.Count > 0)
+            {
+                UserInfo _target = targetUsers[0];
+                //buy
+                if (actType == UserInfoCountType.BUY_COUNT)
+                {
+                    if (int.TryParse(_target.buy_count, out int buycount))
+                    {
+                        _target.buy_count = (buycount + actCount) + "";
+                        UserService.UpdateUserInfo(_target);
+                    }
+                }
+                if (actType == UserInfoCountType.BUY_MONEY)
+                {
+                    _target.moneycost += actCount;
+                    UserService.UpdateUserInfo(_target);
+                }
+
+                //trade
+                if (actType == UserInfoCountType.TRADE_COUNT)
+                {
+                    if (int.TryParse(_target.trade_count, out int buycount))
+                    {
+                        _target.trade_count = (buycount + actCount) + "";
+                        UserService.UpdateUserInfo(_target);
+                    }
+                }
+                if (actType == UserInfoCountType.BUY_MONEY)
+                {
+                    _target.trade_money += actCount;
+                    UserService.UpdateUserInfo(_target);
+                }
+                //require
+                //
+                if (actType == UserInfoCountType.REQUIRE_COUNT)
+                {
+                    if (int.TryParse(_target.require_count, out int buycount))
+                    {
+                        _target.require_count = (buycount + actCount) + "";
+                        UserService.UpdateUserInfo(_target);
+                    }
+                }
+                if (actType == UserInfoCountType.REQUIRE_MONEY)
+                {
+                    _target.require_money += actCount;
+                    UserService.UpdateUserInfo(_target);
+                }
+
+            }
+        }
     }
 }

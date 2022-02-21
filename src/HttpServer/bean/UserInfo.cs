@@ -12,9 +12,9 @@ namespace HioldMod.src.HttpServer.bean
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]//数据库是自增才配自增
         public int id { get; set; }
-        [SugarColumn(IndexGroupNameList = new string[] { "index_usercreateat" },IsNullable =true)]
+        [SugarColumn(IndexGroupNameList = new string[] { "index_usercreateat" }, IsNullable = true)]
         public DateTime created_at { get; set; }
-        [SugarColumn(IsNullable =true)]
+        [SugarColumn(IsNullable = true)]
         public DateTime updated_at { get; set; }
         [SugarColumn(IsNullable = true)]
         public DateTime deleted_at { get; set; }
@@ -30,7 +30,7 @@ namespace HioldMod.src.HttpServer.bean
 
         public double credit { get; set; }
 
-        public long status { get; set; }
+        public double status { get; set; }
 
         public string password { get; set; }
 
@@ -55,10 +55,13 @@ namespace HioldMod.src.HttpServer.bean
         public string extinfo6 { get; set; }
 
         public string trade_count { get; set; }
+        public double trade_money { get; set; }
 
         public string store_count { get; set; }
+        public string buy_count { get; set; }
 
         public string require_count { get; set; }
+        public double require_money { get; set; }
 
         public string type { get; set; }
 
@@ -72,20 +75,35 @@ namespace HioldMod.src.HttpServer.bean
 
         public string total_crafted { get; set; }
 
-        public long vipdiscount { get; set; }
+        public double vipdiscount { get; set; }
 
-        public long creditcharge { get; set; }
+        public double creditcharge { get; set; }
 
-        public long creditcost { get; set; }
+        public double creditcost { get; set; }
 
-        public long moneycharge { get; set; }
+        public double moneycharge { get; set; }
 
-        public long moneycost { get; set; }
+        public double moneycost { get; set; }
 
-        public long signdays { get; set; }
+        public double signdays { get; set; }
 
-        public long likecount { get; set; }
+        public double likecount { get; set; }
 
         public string shopname { get; set; }
+    }
+
+    public static class UserInfoCountType
+    {
+        public static int TRADE_COUNT = 1;
+        public static int BUY_COUNT = 2;
+        public static int REQUIRE_COUNT = 3;
+        public static int TRADE_MONEY = 4;
+        public static int BUY_MONEY = 5;
+        public static int REQUIRE_MONEY = 5;
+    }
+    public static class UserInfoCountAct
+    {
+        public static int ADD = 1;
+        public static int SUB = 2;
     }
 }
