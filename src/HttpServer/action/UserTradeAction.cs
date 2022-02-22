@@ -382,6 +382,10 @@ namespace HioldMod.src.HttpServer.action
                     int.TryParse(item.selloutcount, out selled);
                     item.selloutcount = (selled + intCount) + "";
                     ShopTradeService.updateShopItem(item);
+                    //更新交易信息数据
+                    UserService.UpdateAmount(request.user, UserInfoCountType.BUY_COUNT, intCount);
+                    UserService.UpdateAmount(request.user, UserInfoCountType.BUY_MONEY, priceAll);
+
                     //记录用户购买数据
                     ActionLogService.addLog(new ActionLog()
                     {
@@ -555,7 +559,7 @@ namespace HioldMod.src.HttpServer.action
 
                 queryRequest.TryGetValue("id", out string id);
                 UserTrade item = UserTradeService.selectUserTradeByid(id);
-                if (item==null)
+                if (item == null)
                 {
                     ResponseUtils.ResponseFail(response, "未找到对应物品，取回失败");
                     return;

@@ -139,7 +139,6 @@ namespace HioldMod.HttpServer.router
             {
                 if (Filters.UserLoginFilter(request, response))
                     UserTradeAction.sellOutItem(request, response);
-
             }
             //下架物品
             else if (url.StartsWith("/api/TackBackItem"))
