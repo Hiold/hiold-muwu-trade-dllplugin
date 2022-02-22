@@ -140,5 +140,41 @@ namespace HioldMod.src.HttpServer.service
 
             }
         }
+
+        /// <summary>
+        /// 获取玩家店铺信息
+        /// </summary>
+        /// <param name="name">用户名/店铺名</param>
+        /// <param name="orderby">排序</param>
+        /// <returns></returns>
+        public static List<UserInfo> getUserShopList(string name, string sorttype)
+        {
+            string sortStr = "";
+            //排序处理
+            if (sorttype != null)
+            {
+                if (sorttype.Equals("默认排序"))
+                {
+                    sortStr = "";
+                }
+                if (sorttype.Equals("等级高到低"))
+                {
+                    sortStr = " order by level desc";
+                }
+                if (sorttype.Equals("积分高到低"))
+                {
+                    sortStr = " order by money desc";
+                }
+                if (sorttype.Equals("获赞高到低"))
+                {
+                    sortStr = " order by likecount desc";
+                }
+                if (sorttype.Equals("销售额高到低"))
+                {
+                    sortStr = " order by trade_money desc";
+                }
+            }
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToList(); ;
+        }
     }
 }

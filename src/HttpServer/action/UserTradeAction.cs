@@ -35,6 +35,8 @@ namespace HioldMod.src.HttpServer.action
                     //查询用户请求购买的物品
                     TradeManageItem item = ShopTradeService.getShopItemById(int.Parse(_buy.id))[0];
 
+                    UserInfo ui = UserService.getUserById(request.user.id+"")[0];
+
                     //限购检查
                     if (item.xgdatelimit.Equals("2"))
                     {
@@ -53,16 +55,16 @@ namespace HioldMod.src.HttpServer.action
                     //检查登记限制
                     if (item.xglevel.Equals("2") || item.xglevel.Equals("3"))
                     {
-                        if (int.TryParse(item.xglevelset, out int levelSet) && int.TryParse(request.user.level, out int userLevel))
+                        if (int.TryParse(item.xglevelset, out int levelSet) && ui.level >= 0)
                         {
-                            if (item.xglevel.Equals("2") && levelSet > userLevel)
+                            if (item.xglevel.Equals("2") && levelSet > ui.level)
                             {
-                                ResponseUtils.ResponseFail(response, "此物品需要达到" + levelSet + "级才能购买！您的游戏角色目前等级为" + userLevel);
+                                ResponseUtils.ResponseFail(response, "此物品需要达到" + levelSet + "级才能购买！您的游戏角色目前等级为" + ui.level);
                                 return;
                             }
-                            if (item.xglevel.Equals("3") && levelSet < userLevel)
+                            if (item.xglevel.Equals("3") && levelSet < ui.level)
                             {
-                                ResponseUtils.ResponseFail(response, "此物品超过" + levelSet + "级无法购买！您的游戏角色目前等级为" + userLevel);
+                                ResponseUtils.ResponseFail(response, "此物品超过" + levelSet + "级无法购买！您的游戏角色目前等级为" + ui.level);
                                 return;
                             }
                         }

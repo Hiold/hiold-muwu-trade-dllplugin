@@ -17,6 +17,42 @@ namespace HioldMod.src.HttpServer.action
 {
     class UserInfoAction
     {
+
+        /// <summary>
+        /// 根据玩家gameentityid获取玩家数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getUserInfo(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("id", out string id);
+                List<UserInfo> rest = UserService.getUserBySteamid(id);
+                if (rest != null && rest.Count > 0)
+                {
+                    foreach (UserInfo infoTemp in rest)
+                    {
+                        infoTemp.password = "[masked]";
+                    }
+
+                    ResponseUtils.ResponseSuccessWithData(response, rest[0]);
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "未找到用户信息");
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
         /// <summary>
         /// 获取用户折扣券
         /// </summary>
@@ -376,6 +412,30 @@ namespace HioldMod.src.HttpServer.action
                     UserConfigService.addConfig(cfg);
                     ResponseUtils.ResponseSuccessWithData(response, cfg);
                 }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+
+        public static void getUserShopList(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("name", out string name);
+                queryRequest.TryGetValue("orderby", out string orderby);
+                List<UserInfo> rest = UserService.getUserShopList(name, orderby);
+                foreach (UserInfo infoTemp in rest)
+                {
+                    infoTemp.password = "[masked]";
+                }
+
+                ResponseUtils.ResponseSuccessWithData(response, rest);
             }
             catch (Exception e)
             {

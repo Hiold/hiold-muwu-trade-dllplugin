@@ -141,7 +141,7 @@ namespace HioldMod
                             store_count = "0",
                             require_count = "0",
                             type = "0",
-                            level = "0",
+                            level = 0,
                             online_time = "0",
                             zombie_kills = "0",
                             player_kills = "0",

@@ -164,6 +164,17 @@ namespace HioldMod.HttpServer.router
             {
                 UserRequireAction.getUserRequire(request, response);
             }
+            //查询店铺信息
+            else if (url.StartsWith("/api/getUserShopList"))
+            {
+                UserInfoAction.getUserShopList(request, response);
+            }
+            //查询用户信息
+            else if (url.StartsWith("/api/getUserInfo"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserInfoAction.getUserInfo(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

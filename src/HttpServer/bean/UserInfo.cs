@@ -65,7 +65,7 @@ namespace HioldMod.src.HttpServer.bean
 
         public string type { get; set; }
 
-        public string level { get; set; }
+        public int level { get; set; }
 
         public string online_time { get; set; }
 
