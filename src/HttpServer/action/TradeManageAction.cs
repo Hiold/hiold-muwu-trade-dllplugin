@@ -87,6 +87,7 @@ namespace HioldMod.src.HttpServer.action
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
 
         }
@@ -174,6 +175,7 @@ namespace HioldMod.src.HttpServer.action
                 LogUtils.Loger(e.StackTrace);
                 LogUtils.Loger(e.ToString());
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
 
         }
@@ -215,6 +217,7 @@ namespace HioldMod.src.HttpServer.action
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
 
         }
@@ -255,6 +258,7 @@ namespace HioldMod.src.HttpServer.action
 
                 Dictionary<string, object> result = ShopTradeService.queryShopItem(request.user,itemname, pageIndex, pageSize, class1, class2, sorttype);
                 ResponseUtils.ResponseSuccessWithData(response, result);
+                return;
             }
             catch (Exception e)
             {
@@ -262,6 +266,7 @@ namespace HioldMod.src.HttpServer.action
                 LogUtils.Loger(e.StackTrace);
                 LogUtils.Loger(e.ToString());
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
     }

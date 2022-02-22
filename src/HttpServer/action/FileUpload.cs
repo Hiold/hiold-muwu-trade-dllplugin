@@ -75,11 +75,13 @@ namespace HioldMod.src.HttpServer.action
                     result.Add(fss[i].Name);
                 }
                 ResponseUtils.ResponseSuccessWithData(response, result);
+                return;
             }
             catch (Exception e)
             {
                 ResponseUtils.ResponseFail(response, "获取文件异常");
                 LogUtils.Loger("读取文件异常:" + e.Message);
+                return;
             }
         }
 

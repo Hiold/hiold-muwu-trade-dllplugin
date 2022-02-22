@@ -107,11 +107,13 @@ namespace HioldMod.src.HttpServer.action
                     extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(require)
                 });
                 ResponseUtils.ResponseSuccessWithData(response, "求购成功!");
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -130,13 +132,56 @@ namespace HioldMod.src.HttpServer.action
                 List<UserRequire> cous = UserRequireService.selectUserRequiresByUserid(id);
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
                 ResponseUtils.ResponseSuccessWithData(response, cous);
-
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
+
+        /// <summary>
+        /// 取消求购
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void cancelRequire(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("id", out string id);
+                UserRequire cous = UserRequireService.selectUserRequireByid(id);
+                cous.Status = UserRequireConfig.DELETE;
+                UserRequireService.UpdateUserRequire(cous);
+                //检查是否为自己的求购
+                if (cous.gameentityid != request.user.gameentityid)
+                {
+
+                    return;
+                }
+
+                //退还积分
+                if (cous.Price > 0)
+                {
+                    database.DataBase.MoneyEditor(request.user, MoneyType.Money, EditType.Add, cous.Price);
+                }
+
+                //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
+                ResponseUtils.ResponseSuccessWithData(response, "取消求购成功!退还" + cous.Price + "积分");
+                return;
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+
     }
 }

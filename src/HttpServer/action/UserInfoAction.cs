@@ -40,16 +40,19 @@ namespace HioldMod.src.HttpServer.action
                     }
 
                     ResponseUtils.ResponseSuccessWithData(response, rest[0]);
+                    return;
                 }
                 else
                 {
                     ResponseUtils.ResponseFail(response, "未找到用户信息");
+                    return;
                 }
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -70,12 +73,13 @@ namespace HioldMod.src.HttpServer.action
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
 
                 ResponseUtils.ResponseSuccessWithData(response, cous);
-
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -113,12 +117,13 @@ namespace HioldMod.src.HttpServer.action
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
 
                 ResponseUtils.ResponseSuccessWithData(response, items);
-
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -158,12 +163,13 @@ namespace HioldMod.src.HttpServer.action
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
 
                 ResponseUtils.ResponseSuccessWithData(response, items);
-
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -256,12 +262,13 @@ namespace HioldMod.src.HttpServer.action
                 UserStorageService.UpdateUserStorage(us);
 
                 ResponseUtils.ResponseSuccessWithData(response, "成功发放" + count * us.num + "个物品");
-
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -310,11 +317,13 @@ namespace HioldMod.src.HttpServer.action
 
                 UserStorageService.UpdateUserStorage(us);
                 ResponseUtils.ResponseSuccessWithData(response, "删除成功!");
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -344,13 +353,14 @@ namespace HioldMod.src.HttpServer.action
                 };
 
                 ResponseUtils.ResponseSuccessWithData(response, lci);
-
+                return;
 
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -396,6 +406,7 @@ namespace HioldMod.src.HttpServer.action
                     cfg.updated_at = DateTime.Now;
                     UserConfigService.updateConfig(cfg);
                     ResponseUtils.ResponseSuccessWithData(response, cfg);
+                    return;
                 }
                 else
                 {
@@ -411,12 +422,14 @@ namespace HioldMod.src.HttpServer.action
                     };
                     UserConfigService.addConfig(cfg);
                     ResponseUtils.ResponseSuccessWithData(response, cfg);
+                    return;
                 }
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
@@ -436,11 +449,13 @@ namespace HioldMod.src.HttpServer.action
                 }
 
                 ResponseUtils.ResponseSuccessWithData(response, rest);
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 
