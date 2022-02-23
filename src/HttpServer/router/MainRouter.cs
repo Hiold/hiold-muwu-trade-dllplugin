@@ -36,6 +36,18 @@ namespace HioldMod.HttpServer.router
             {
                 LoginAction.debug(request, response);
             }
+            //获取当前用户
+            else if (url.Equals("/api/getCurrentUser"))
+            {
+                LoginAction.getCurrentUser(request, response);
+            }
+            //更新用户信息
+            else if (url.Equals("/api/updateUserInfo"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserInfoAction.updateUserInfo(request, response);
+            }
+
             else if (url.Equals("/api/getSystemItem"))
             {
                 GameItemAction.getSystemItem(request, response);

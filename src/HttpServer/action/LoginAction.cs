@@ -81,6 +81,22 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
+        public static void getCurrentUser(HioldRequest request, HttpListenerResponse response)
+        {
+            if (request.user != null)
+            {
+                UserInfo ui = UserService.getUserById(request.user.id + "")[0];
+                ResponseUtils.ResponseSuccessWithData(response, ui);
+                return;
+            }
+            else
+            {
+                ResponseUtils.ResponseFail(response, "未登录");
+                return;
+            }
+        }
+
+
         public class LoginRequest
         {
             public string username { get; set; }

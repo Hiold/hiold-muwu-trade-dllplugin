@@ -460,6 +460,104 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
+
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void updateUserInfo(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
+                if (API.isOnServer)
+                {
+                    basepath = string.Format("{0}/image/", API.AssemblyPath);
+                }
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("shopname", out string shopname);
+                queryRequest.TryGetValue("qq", out string qq);
+                queryRequest.TryGetValue("avatar", out string avatar);
+                //校验关键参数
+                if (string.IsNullOrWhiteSpace(shopname))
+                {
+                    ResponseUtils.ResponseFail(response, "正输入正确的商店名");
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(qq))
+                {
+                    ResponseUtils.ResponseFail(response, "正输入正确的QQ号");
+                    return;
+                }
+
+
+                //写入文件
+                if (!string.IsNullOrEmpty(avatar))
+                {
+                    string extName = "";
+                    if (avatar.Contains("image/png"))
+                    {
+                        extName = "png";
+                    }
+                    else if (avatar.Contains("image/jpg"))
+                    {
+                        extName = "jpg";
+                    }
+                    else if (avatar.Contains("image/jpeg"))
+                    {
+                        extName = "jpeg";
+                    }
+                    else if (avatar.Contains("image/jfif"))
+                    {
+                        extName = "jfif";
+                    }
+                    else if (avatar.Contains("image/gif"))
+                    {
+                        extName = "gif";
+                    }
+                    else
+                    {
+                        ResponseUtils.ResponseFail(response, "文件校验错误，请重新更新信息");
+                        return;
+                    }
+                    byte[] arr = Convert.FromBase64String(avatar.Substring(avatar.IndexOf(",") + 1));
+                    string fileName = request.user.gameentityid + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "." + extName;
+                    using (Stream stream = new MemoryStream(arr))
+                    {
+                        //判断文件是否存在
+
+                        FileStream fs = new FileStream(basepath + fileName, FileMode.Create);
+                        fs.Write(arr, 0, arr.Length);
+                        fs.Flush();
+                        fs.Close();
+                    }
+                    UserInfo us = UserService.getUserById(request.user.id + "")[0];
+                    us.avatar = fileName;
+                    us.qq = qq;
+                    us.shopname = shopname;
+                    UserService.UpdateUserInfo(us);
+                }
+                else
+                {
+                    UserInfo us = UserService.getUserById(request.user.id + "")[0];
+                    us.qq = qq;
+                    us.shopname = shopname;
+                    UserService.UpdateUserInfo(us);
+                }
+                ResponseUtils.ResponseSuccessWithData(response, "更新成功");
+                return;
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+
         public class info
         {
             public string userid { get; set; }

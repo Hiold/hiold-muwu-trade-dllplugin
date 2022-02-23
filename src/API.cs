@@ -129,7 +129,7 @@ namespace HioldMod
                             password = ServerUtils.md5(pwd),
                             qq = "",
                             email = "",
-                            avatar = "",
+                            avatar = _cInfo.PlatformId.ReadablePlatformUserIdentifier + ".png",
                             sign = "",
                             extinfo1 = "",
                             extinfo2 = "",
