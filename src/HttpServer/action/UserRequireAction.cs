@@ -129,7 +129,8 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("id", out string id);
-                List<UserRequire> cous = UserRequireService.selectUserRequiresByUserid(id);
+                queryRequest.TryGetValue("class2", out string class2);
+                List<UserRequire> cous = UserRequireService.selectUserRequiresByUserid(id, class2);
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
                 ResponseUtils.ResponseSuccessWithData(response, cous);
                 return;

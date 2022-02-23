@@ -72,7 +72,7 @@ namespace HioldMod.src.HttpServer.action
 
             //fs.Flush();
             //fs.Close();
-            //response.StatusCode = 200;
+            //response.StatusCode = 200;6
             //response.Close();
             Console.WriteLine(request.sessionid);
             Console.WriteLine(request.user.name);

@@ -36,15 +36,34 @@ namespace HioldMod.src.HttpServer.service
         /// </summary>
         /// <param name="playerid">用户id</param>
         /// <returns></returns>
-        public static List<UserRequire> selectUserRequiresByUserid(string playerid)
+        public static List<UserRequire> selectUserRequiresByUserid(string playerid, string gruopsStrs)
         {
+            string groupStr = "";
+            if (gruopsStrs != null && gruopsStrs.Length > 0)
+            {
+                groupStr += " and (";
+                string[] groups = gruopsStrs.Split('/');
+                for (int i = 0; i < groups.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        groupStr += string.Format(" Itemgroups like '%{0}%' ", groups[i]);
+                    }
+                    else
+                    {
+                        groupStr += string.Format(" or Itemgroups like '%{0}%' ", groups[i]);
+                    }
+                }
+                groupStr += ") ";
+            }
+
             if (string.IsNullOrEmpty(playerid))
             {
-                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' ", UserRequireConfig.NORMAL_REQUIRE)).ToList();
+                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' " + groupStr, UserRequireConfig.NORMAL_REQUIRE)).ToList();
             }
             else
             {
-                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' and gameentityid={1}", UserRequireConfig.NORMAL_REQUIRE, playerid)).ToList();
+                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' and gameentityid={1}" + groupStr, UserRequireConfig.NORMAL_REQUIRE, playerid)).ToList();
             }
         }
 

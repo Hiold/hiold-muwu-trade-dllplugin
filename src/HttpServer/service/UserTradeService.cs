@@ -81,8 +81,14 @@ namespace HioldMod.src.HttpServer.service
                     mainTypeStr += " and currency='2' ";
                 }
             }
+            //判断是否要加上用户判断
+            string isStr = "";
+            if (!string.IsNullOrEmpty(playerid))
+            {
+                isStr += " and gameentityid = '" + playerid + "'";
+            }
 
-            List<UserTrade> ls = DataBase.db.Queryable<UserTrade>().Where(string.Format("gameentityid = '{0}' and stock > 0 and (name like '%{1}%' or translate like '%{1}%') and deleteTime ='0001-01-01 00:00:00' and itemStatus='1' " + groupStr + mainTypeStr, playerid, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
+            List<UserTrade> ls = DataBase.db.Queryable<UserTrade>().Where(string.Format(" stock > 0 and (name like '%{1}%' or translate like '%{1}%') and deleteTime ='0001-01-01 00:00:00' and itemStatus='1' " + isStr + groupStr + mainTypeStr, playerid, itemname)).ToPageList(pageIndex, pageSize, ref totalCount);
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("data", ls);
             result.Add("count", totalCount);
