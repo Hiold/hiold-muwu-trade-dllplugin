@@ -35,7 +35,7 @@ namespace HioldMod.src.HttpServer.action
                     //查询用户请求购买的物品
                     TradeManageItem item = ShopTradeService.getShopItemById(int.Parse(_buy.id))[0];
 
-                    UserInfo ui = UserService.getUserById(request.user.id+"")[0];
+                    UserInfo ui = UserService.getUserById(request.user.id + "")[0];
 
                     //限购检查
                     if (item.xgdatelimit.Equals("2"))
@@ -660,6 +660,182 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+
+        /// <summary>
+        /// 购买玩家交易物品
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void buyTradeItem(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                buy _buy = new buy();
+                _buy = (buy)SimpleJson2.SimpleJson2.DeserializeObject(postData, _buy.GetType());
+                //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
+                //ResponseUtils.ResponseSuccessWithData(response, ui);
+                //根据id获取
+                if (request.user != null)
+                {
+                    //查询用户请求购买的物品
+                    UserTrade ut = UserTradeService.selectUserTradeByid(_buy.id);
+
+                    UserInfo ui = UserService.getUserById(request.user.id + "")[0];
+
+                    //检查请求购买物品的库存数量
+                    if (ut.gameentityid.Equals(ui.gameentityid))
+                    {
+                        //库存量不足
+                        ResponseUtils.ResponseFail(response, "禁止自产自销");
+                        return;
+                    }
+
+
+
+                    //首先计算总价格
+                    double priceAll;
+                    if (int.TryParse(_buy.count, out int intCount))
+                    {
+                        priceAll = ut.price * intCount;
+                    }
+                    else
+                    {
+                        ResponseUtils.ResponseFail(response, "购买数量异常，请检查数量");
+                        return;
+                    }
+
+                    //检查请求购买物品的库存数量
+                    if (ut.stock < intCount)
+                    {
+                        //库存量不足
+                        ResponseUtils.ResponseFail(response, "此物品已售罄，无法购买");
+                        return;
+                    }
+
+
+                    UserStorage userStorate = new UserStorage()
+                    {
+                        //id
+                        itemtype = ut.itemtype,
+                        name = ut.name,
+                        translate = ut.translate,
+                        itemicon = ut.itemicon,
+                        itemtint = ut.itemtint,
+                        quality = ut.quality,
+                        num = ut.num,
+                        class1 = ut.class1,
+                        class2 = ut.class2,
+                        classmod = ut.classmod,
+                        desc = ut.desc,
+                        couCurrType = ut.couCurrType,
+                        couPrice = ut.couPrice,
+                        couCond = ut.couCond,
+                        coudatelimit = ut.coudatelimit,
+                        couDateStart = ut.couDateStart,
+                        couDateEnd = ut.couDateEnd,
+                        count = ut.count,
+                        currency = ut.currency,
+                        price = ut.price,
+                        discount = ut.discount,
+                        prefer = ut.prefer,
+                        selltype = ut.selltype,
+                        hot = ut.hot,
+                        hotset = ut.hotset,
+                        show = ut.show,
+                        stock = ut.stock,
+                        collect = ut.collect,
+                        selloutcount = ut.selloutcount,
+                        follow = ut.follow,
+                        xglevel = ut.xglevel,
+                        xglevelset = ut.xglevelset,
+                        xgday = ut.xgday,
+                        xgdayset = ut.xgdayset,
+                        xgall = ut.xgall,
+                        xgallset = ut.xgallset,
+                        xgdatelimit = ut.xgdatelimit,
+                        dateStart = ut.dateStart,
+                        dateEnd = ut.dateEnd,
+                        collected = ut.collected,
+                        postTime = ut.postTime,
+                        deleteTime = ut.deleteTime,
+                        //非继承属性
+                        username = request.user.name,
+                        platformid = request.user.platformid,
+                        gameentityid = request.user.gameentityid,
+                        collectTime = DateTime.Now,
+                        storageCount = int.Parse(_buy.count),
+                        itemGetChenal = UserStorageGetChanel.SHOP_BUY,
+                        itemStatus = UserStorageStatus.NORMAL_STORAGED,
+                        //拓展属性
+                        extinfo1 = ut.extinfo1,
+                        extinfo2 = ut.extinfo2,
+                        extinfo3 = ut.extinfo3,
+                        extinfo4 = ut.extinfo4,
+                        extinfo5 = ut.extinfo5,
+                        itemdata = ut.itemdata,
+                    };
+
+                    //获取出售方信息
+                    UserInfo seller = UserService.getUserBySteamid(ut.gameentityid)[0];
+
+                    //购买方扣钱
+                    if (!database.DataBase.MoneyEditor(request.user, MoneyType.Money, EditType.Sub, priceAll))
+                    {
+                        ResponseUtils.ResponseFail(response, "积分不足。购买失败！");
+                        return;
+                    }
+
+                    //出售方加钱
+                    database.DataBase.MoneyEditor(seller, MoneyType.Money, EditType.Add, priceAll);
+
+
+
+                    //添加数据到数据库
+                    UserStorageService.addUserStorage(userStorate);
+                    //更新数据库存
+                    ut.stock -= intCount;
+                    if (ut.stock <= 0)
+                    {
+                        ut.itemStatus = UserTradeConfig.SELLED;
+                    }
+                    UserTradeService.UpdateUserTrade(ut);
+
+
+                    //更新交易信息数据
+                    UserService.UpdateAmount(request.user, UserInfoCountType.BUY_COUNT, intCount);
+                    UserService.UpdateAmount(request.user, UserInfoCountType.BUY_MONEY, priceAll);
+
+
+                    UserService.UpdateAmount(seller, UserInfoCountType.TRADE_COUNT, intCount);
+                    UserService.UpdateAmount(seller, UserInfoCountType.TRADE_MONEY, priceAll);
+
+                    //记录用户购买数据
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.BuyUserTrade,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = _buy.id,
+                        extinfo2 = ut.gameentityid,
+                        extinfo3 = _buy.count,
+                        extinfo4 = priceAll + ""
+                    });
+                    ResponseUtils.ResponseSuccess(response);
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "没登录，请登录后再试");
+                    return;
+                }
+
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
 
 
         public class info

@@ -53,5 +53,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int TackBack = 3;
         //上架求购
         public static int PostRequire = 4;
+        //购买玩家交易物品
+        public static int BuyUserTrade = 4;
+
     }
 }

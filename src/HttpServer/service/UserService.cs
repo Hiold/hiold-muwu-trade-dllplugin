@@ -117,7 +117,7 @@ namespace HioldMod.src.HttpServer.service
                         UserService.UpdateUserInfo(_target);
                     }
                 }
-                if (actType == UserInfoCountType.BUY_MONEY)
+                if (actType == UserInfoCountType.TRADE_MONEY)
                 {
                     _target.trade_money += actCount;
                     UserService.UpdateUserInfo(_target);

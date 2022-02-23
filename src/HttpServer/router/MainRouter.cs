@@ -193,6 +193,12 @@ namespace HioldMod.HttpServer.router
                 if (Filters.UserLoginFilter(request, response))
                     UserRequireAction.cancelRequire(request, response);
             }
+            //购买玩家交易物品
+            else if (url.StartsWith("/api/buyTradeItem"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserTradeAction.buyTradeItem(request, response);
+            }
             //没有匹配的router 返回404
             else
             {
