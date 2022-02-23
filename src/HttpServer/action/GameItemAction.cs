@@ -114,7 +114,7 @@ namespace HioldMod.src.HttpServer.action
 
 
                 ResponseUtils.ResponseSuccessWithData(response, SimpleJson2.SimpleJson2.SerializeObject(items));
-
+                return;
 
 
             }
@@ -124,6 +124,7 @@ namespace HioldMod.src.HttpServer.action
                 LogUtils.Loger(e.Message);
                 LogUtils.Loger(e.StackTrace);
                 LogUtils.Loger(e.Source);
+                return;
             }
         }
 
@@ -438,7 +439,7 @@ namespace HioldMod.src.HttpServer.action
 
 
                 ResponseUtils.ResponseSuccessWithData(response, SimpleJson2.SimpleJson2.SerializeObject(items));
-
+                return;
 
 
             }
@@ -448,6 +449,7 @@ namespace HioldMod.src.HttpServer.action
                 LogUtils.Loger(e.Message);
                 LogUtils.Loger(e.StackTrace);
                 LogUtils.Loger(e.Source);
+                return;
             }
         }
     }

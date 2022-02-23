@@ -175,6 +175,12 @@ namespace HioldMod.HttpServer.router
                 if (Filters.UserLoginFilter(request, response))
                     UserInfoAction.getUserInfo(request, response);
             }
+            //取消求购
+            else if (url.StartsWith("/api/cancelRequire"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserRequireAction.cancelRequire(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

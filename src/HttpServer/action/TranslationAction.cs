@@ -38,11 +38,13 @@ namespace HioldMod.src.HttpServer.action
                 result["selectedLanguage"] = Localization.language;
                 result["allLanguage"] = Localization.knownLanguages;
                 ResponseUtils.ResponseSuccessWithData(response, SimpleJson2.SimpleJson2.SerializeObject(result));
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
     }

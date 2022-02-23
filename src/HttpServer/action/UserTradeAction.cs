@@ -536,6 +536,7 @@ namespace HioldMod.src.HttpServer.action
                 });
                 UserTradeService.addUserTrade(userTrade);
                 ResponseUtils.ResponseSuccessWithData(response, "出售成功!");
+                return;
             }
             catch (Exception e)
             {
@@ -649,11 +650,13 @@ namespace HioldMod.src.HttpServer.action
                 });
                 UserStorageService.addUserStorage(userStorate);
                 ResponseUtils.ResponseSuccessWithData(response, "下架成功!");
+                return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
 

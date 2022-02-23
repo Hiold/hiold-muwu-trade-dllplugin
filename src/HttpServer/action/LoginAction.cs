@@ -43,16 +43,19 @@ namespace HioldMod.src.HttpServer.action
                         Server.userCookies.Add(request.sessionid, ui);
                     }
                     ResponseUtils.ResponseSuccessWithData(response, ui);
+                    return;
                 }
                 else
                 {
                     ResponseUtils.ResponseFail(response, "账号或密码错误");
+                    return;
                 }
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
             }
         }
         /// <summary>
