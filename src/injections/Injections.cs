@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using HioldMod;
 using HioldMod.src.UserTools;
 using Noemax.GZip;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
+using static ConfigTools.LoadMainConfig;
 
 public static class Injections
 {
@@ -135,9 +137,46 @@ public static class Injections
                     /*下面是网页链接*/
                     //label2.SetAttribute("text", "https://td.hiold.net/");
                     //生成动态码
-                    string ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
-                    int port = GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11;
-                    string host = GamePrefs.GetString(EnumGamePrefs.ServerIP);
+                    string ncode = "";
+
+                    if (Server.userToken.ContainsValue(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
+                    {
+                        foreach (string keytemp in Server.userToken.Keys)
+                        {
+                            if (Server.userToken[keytemp].Equals(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
+                            {
+                                ncode = keytemp;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
+                        Server.userToken.Add(ncode, _cInfo.PlatformId.ReadablePlatformUserIdentifier);
+                    }
+
+                    int port = 26911;
+                    string host = "localhost";
+
+                    if (MainConfig.Host.Equals("auto"))
+                    {
+                        host = GamePrefs.GetString(EnumGamePrefs.ServerIP);
+
+                    }
+                    else
+                    {
+                        host = MainConfig.Host;
+                    }
+
+                    if (MainConfig.Port.Equals("auto"))
+                    {
+                        port = GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11;
+                    }
+                    else
+                    {
+                        int.TryParse(MainConfig.Port, out port);
+                    }
+
                     label2.SetAttribute("text", "http://" + host + ":" + port + "/#/login?ncode=" + ncode);
                     label2.SetAttribute("justify", "left");
                     label2.SetAttribute("style", "press,hover");

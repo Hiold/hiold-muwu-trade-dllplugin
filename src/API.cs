@@ -8,12 +8,15 @@ using HioldMod.src.HttpServer.service;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.HttpServer.common;
 using ServerTools;
+using ConfigTools;
+using static ConfigTools.LoadMainConfig;
 
 namespace HioldMod
 {
     public class API : IModApi
     {
         //当前dll运行路径
+        public static string ConfigPath = string.Format("{0}/config/", getModDir());
         public static string AssemblyPath = string.Format("{0}\\", getModDir());
         public static bool isOnServer = false;
         public static bool isDebug = true;
@@ -40,6 +43,16 @@ namespace HioldMod
         /// </summary>
         private static void GameStartDone()
         {
+            //检查文件夹
+            if (!Directory.Exists(API.ConfigPath))
+            {
+                Directory.CreateDirectory(API.ConfigPath);
+            }
+            //加载配置文件
+            LoadMainConfig.Load();
+
+            Log.Out("Host:" + MainConfig.Host + "  Port" + MainConfig.Port);
+
             isOnServer = true;
             DataBase.InitDataBase();
             Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);

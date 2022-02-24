@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\API.cs" />
+    <Compile Include="src\ConfigTools\LoadMainConfig.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />

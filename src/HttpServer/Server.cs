@@ -16,6 +16,8 @@ namespace HioldMod
 
         //用户会话信息
         public static Dictionary<string, UserInfo> userCookies = new Dictionary<string, UserInfo>();
+        //用户Token信息
+        public static Dictionary<string, string> userToken = new Dictionary<string, string>();
         public static void RunServer(int port)
         {
 
