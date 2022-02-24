@@ -63,6 +63,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int USERDELETED = 3;
         //用户自行卖出
         public static int USERSELLED = 4;
+        //用户自行卖出
+        public static int SUPPLYED = 5;
     }
 
     //物品获取途径
@@ -72,6 +74,10 @@ namespace HioldMod.src.HttpServer.bean
         public static int SHOP_BUY = 1;
         //下架物品
         public static int TACK_BACK = 2;
+        //从系统中获得
+        public static int TRADE_BUY = 3;
+        //从供货获得
+        public static int SUPPLY = 4;
     }
 
     //物品最终用途
@@ -79,5 +85,7 @@ namespace HioldMod.src.HttpServer.bean
     {
         //已发放到游戏内
         public static int OBTAIN_TO_GAME = 1;
+        //供货
+        public static int SUPPLY_TO_OTHERS = 1;
     }
 }

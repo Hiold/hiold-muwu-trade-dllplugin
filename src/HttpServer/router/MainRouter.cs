@@ -199,6 +199,12 @@ namespace HioldMod.HttpServer.router
                 if (Filters.UserLoginFilter(request, response))
                     UserTradeAction.buyTradeItem(request, response);
             }
+            //供货
+            else if (url.StartsWith("/api/supplyItem"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    UserTradeAction.supplyItem(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

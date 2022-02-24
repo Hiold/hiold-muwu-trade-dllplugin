@@ -691,6 +691,13 @@ namespace HioldMod.src.HttpServer.action
                         return;
                     }
 
+                    //检查请求购买物品的库存数量
+                    if (ut.itemStatus != UserTradeConfig.NORMAL_ON_TRADE)
+                    {
+                        //库存量不足
+                        ResponseUtils.ResponseFail(response, "该物品无法交易");
+                        return;
+                    }
 
 
                     //首先计算总价格
@@ -765,7 +772,7 @@ namespace HioldMod.src.HttpServer.action
                         gameentityid = request.user.gameentityid,
                         collectTime = DateTime.Now,
                         storageCount = int.Parse(_buy.count),
-                        itemGetChenal = UserStorageGetChanel.SHOP_BUY,
+                        itemGetChenal = UserStorageGetChanel.TRADE_BUY,
                         itemStatus = UserStorageStatus.NORMAL_STORAGED,
                         //拓展属性
                         extinfo1 = ut.extinfo1,
@@ -837,6 +844,165 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 供货
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void supplyItem(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+
+                queryRequest.TryGetValue("id", out string id);
+                UserRequire ur = UserRequireService.selectUserRequireByid(id);
+
+
+                if (ur == null)
+                {
+                    ResponseUtils.ResponseFail(response, "未找到对应物品，供货失败");
+                    return;
+                }
+                //检查物品属性
+                if (request.user.gameentityid.Equals(ur.gameentityid))
+                {
+                    ResponseUtils.ResponseFail(response, "不能给自己供货");
+                    return;
+                }
+
+
+                UserStorage us = UserStorageService.selectSupplyableItem(request.user.gameentityid, ur.Itemname, ur.Itemquality, ur.Itemcount + "");
+                if (us == null)
+                {
+                    ResponseUtils.ResponseFail(response, "未找到可以供货的物品");
+                    return;
+                }
+                if (us.storageCount < ur.Itemcount)
+                {
+                    ResponseUtils.ResponseFail(response, "数量不足");
+                    return;
+                }
+
+                //更新求购数据
+                ur.Status = UserRequireConfig.SUPPLYED;
+                ur.supplygameentityid = request.user.gameentityid;
+                ur.supplyplatformid = request.user.platformid;
+                ur.supplyusername = request.user.name;
+                ur.Supplytime = DateTime.Now;
+                UserRequireService.UpdateUserRequire(ur);
+
+                //更新供货人数据
+                us.storageCount -= ur.Itemcount;
+                if (us.storageCount <= 0)
+                {
+                    us.itemUsedChenal = UserStorageUsedChanel.SUPPLY_TO_OTHERS;
+                    us.itemStatus = UserStorageStatus.SUPPLYED;
+                }
+                UserStorageService.UpdateUserStorage(us);
+                //供货方加钱
+                database.DataBase.MoneyEditor(request.user, MoneyType.Money, EditType.Add, ur.Price);
+                UserService.UpdateAmount(request.user, UserInfoCountType.TRADE_COUNT, ur.Itemcount);
+                UserService.UpdateAmount(request.user, UserInfoCountType.TRADE_MONEY, ur.Price);
+
+                //更新求购人数据
+                //获取求购人信息
+                UserInfo supplyer = UserService.getUserBySteamid(ur.gameentityid)[0];
+                UserService.UpdateAmount(supplyer, UserInfoCountType.BUY_COUNT, ur.Itemcount);
+                UserService.UpdateAmount(supplyer, UserInfoCountType.BUY_MONEY, ur.Price);
+
+
+
+
+                int intquality = 0;
+                int.TryParse(ur.Itemquality, out intquality);
+                //将物品保存到用户库存信息中
+                UserStorage userStorate = new UserStorage()
+                {
+                    //id
+                    itemtype = us.itemtype,
+                    name = us.name,
+                    translate = us.translate,
+                    itemicon = us.itemicon,
+                    itemtint = us.itemtint,
+                    quality = us.quality,
+                    num = us.num,
+                    class1 = us.class1,
+                    class2 = us.class2,
+                    classmod = us.classmod,
+                    desc = us.desc,
+                    couCurrType = us.couCurrType,
+                    couPrice = us.couPrice,
+                    couCond = us.couCond,
+                    coudatelimit = us.coudatelimit,
+                    couDateStart = us.couDateStart,
+                    couDateEnd = us.couDateEnd,
+                    count = us.count,
+                    currency = us.currency,
+                    price = us.price,
+                    discount = us.discount,
+                    prefer = us.prefer,
+                    selltype = us.selltype,
+                    hot = us.hot,
+                    hotset = us.hotset,
+                    show = us.show,
+                    stock = us.stock,
+                    collect = us.collect,
+                    selloutcount = us.selloutcount,
+                    follow = us.follow,
+                    xglevel = us.xglevel,
+                    xglevelset = us.xglevelset,
+                    xgday = us.xgday,
+                    xgdayset = us.xgdayset,
+                    xgall = us.xgall,
+                    xgallset = us.xgallset,
+                    xgdatelimit = us.xgdatelimit,
+                    dateStart = us.dateStart,
+                    dateEnd = us.dateEnd,
+                    collected = us.collected,
+                    postTime = us.postTime,
+                    deleteTime = us.deleteTime,
+                    //非继承属性
+                    username = ur.username,
+                    platformid = ur.platformid,
+                    gameentityid = ur.gameentityid,
+                    collectTime = DateTime.Now,
+                    storageCount = ur.Itemcount,
+                    itemGetChenal = UserStorageGetChanel.TRADE_BUY,
+                    itemStatus = UserStorageStatus.NORMAL_STORAGED,
+                    //拓展属性
+                    extinfo1 = us.extinfo1,
+                    extinfo2 = us.extinfo2,
+                    extinfo3 = us.extinfo3,
+                    extinfo4 = us.extinfo4,
+                    extinfo5 = us.extinfo5,
+                    itemdata = us.itemdata,
+                };
+                //记录用户购买数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.SupplyItem,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = ur.id + "",
+                    extinfo2 = ur.Itemchinese,
+                    extinfo3 = ur.username,
+                    extinfo5 = ur.Itemcount + ""
+                });
+                UserStorageService.addUserStorage(userStorate);
+                ResponseUtils.ResponseSuccessWithData(response, "供货成功!");
+                return;
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+
+        }
 
         public class info
         {

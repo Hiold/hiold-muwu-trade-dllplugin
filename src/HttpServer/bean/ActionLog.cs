@@ -54,7 +54,9 @@ namespace HioldMod.src.HttpServer.bean
         //上架求购
         public static int PostRequire = 4;
         //购买玩家交易物品
-        public static int BuyUserTrade = 4;
+        public static int BuyUserTrade = 5;
+        //供货
+        public static int SupplyItem = 6;
 
     }
 }

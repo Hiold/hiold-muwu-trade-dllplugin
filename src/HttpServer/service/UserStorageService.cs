@@ -43,6 +43,16 @@ namespace HioldMod.src.HttpServer.service
 
 
         /// <summary>
+        /// 根据用户id获取优惠券
+        /// </summary>
+        /// <param name="playerid">用户id</param>
+        /// <returns></returns>
+        public static UserStorage selectSupplyableItem(string playerid, string itemname, string quality, string count)
+        {
+            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount >= {1} and itemStatus='1' and itemtype='1' and name='{2}' and cast(quality as int)>{3}", playerid, count, itemname, count)).First();
+        }
+
+        /// <summary>
         /// 根据用户id获取玩家库存
         /// </summary>
         /// <param name="playerid">用户id</param>
