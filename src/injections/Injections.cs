@@ -138,7 +138,7 @@ public static class Injections
                     string ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
                     int port = GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11;
                     string host = GamePrefs.GetString(EnumGamePrefs.ServerIP);
-                    label2.SetAttribute("text", "http://" + host + ":" + port + "/?ncode=" + ncode);
+                    label2.SetAttribute("text", "http://" + host + ":" + port + "/#/login?ncode=" + ncode);
                     label2.SetAttribute("justify", "left");
                     label2.SetAttribute("style", "press,hover");
                     label2.SetAttribute("font_size", "30");
