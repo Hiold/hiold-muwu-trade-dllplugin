@@ -58,6 +58,63 @@ namespace HioldMod.src.HttpServer.action
                 return;
             }
         }
+
+
+        /// <summary>
+        /// 用户登录action
+        /// </summary>
+        /// <param name="request">请求</param>
+        /// <param name="response">响应</param>
+        public static void ncodeLogin(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                string ncode = "";
+                queryRequest.TryGetValue("ncode", out ncode);
+
+                if (Server.userToken.TryGetValue(ncode, out string steamid))
+                {
+                    List<UserInfo> us = UserService.getUserBySteamid(steamid);
+                    if (us != null && us.Count > 0)
+                    {
+                        UserInfo ui = us[0];
+                        ui.password = "[masked]";
+                        if (Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
+                        {
+                            Server.userCookies[request.sessionid] = uis;
+                        }
+                        else
+                        {
+                            Server.userCookies.Add(request.sessionid, ui);
+                        }
+                        ResponseUtils.ResponseSuccessWithData(response, ui);
+                        return;
+                    }
+                    else
+                    {
+                        ResponseUtils.ResponseFail(response, "没找到你的用户信息，快捷登录失败");
+                        return;
+                    }
+
+
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "Ncode错误，快捷登录失败");
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+
         /// <summary>
         /// 测试
         /// </summary>

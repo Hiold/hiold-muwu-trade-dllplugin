@@ -31,6 +31,10 @@
       <HintPath>D:\SteamLibrary\steamapps\common\7 Days To Die\7DaysToDie_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="AstarPathfindingProject, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\AstarPathfindingProject.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\7dtd-binaries\mscorlib.dll</HintPath>
       <Private>False</Private>
@@ -135,6 +139,7 @@
     <Content Include="bin-lib\0Harmony.dll" />
     <Content Include="bin-lib\Assembly-CSharp-firstpass.dll" />
     <Content Include="bin-lib\Assembly-CSharp.dll" />
+    <Content Include="bin-lib\AstarPathfindingProject.dll" />
     <Content Include="bin-lib\LiteDB.dll" />
     <Content Include="bin-lib\LogLibrary.dll" />
     <Content Include="bin-lib\Newtonsoft.Json.dll" />

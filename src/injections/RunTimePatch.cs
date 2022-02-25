@@ -51,6 +51,7 @@ namespace ServerTools
                 //}
 
                 Harmony harmony = new Harmony("net.hiold.patch");
+                //xml发送拦截
                 MethodInfo original = AccessTools.Method(typeof(WorldStaticData), "SendXmlsToClient");
                 if (original == null)
                 {
@@ -66,6 +67,27 @@ namespace ServerTools
                     }
                     harmony.Patch(original, new HarmonyMethod(prefix), null);
                 }
+
+                //寻路异常拦截
+                MethodInfo original2 = AccessTools.Method(typeof(Pathfinding.AstarData), "FindGraphTypes");
+                if (original2 == null)
+                {
+                    Log.Out(string.Format("[HioldMod] 注入失败: WorldStaticData.SendXmlsToClient 未找到"));
+                }
+                else
+                {
+                    MethodInfo prefix2 = typeof(Injections).GetMethod("FindGraphTypes_postfix");
+                    if (prefix2 == null)
+                    {
+                        Log.Out(string.Format("[HioldMod] 注入失败: Injections.SendXmlsToClient_postfix"));
+                        return;
+                    }
+                    harmony.Patch(original2, new HarmonyMethod(prefix2), null);
+                }
+
+
+
+
 
             }
             catch (Exception e)

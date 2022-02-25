@@ -2,9 +2,11 @@
 using HioldMod;
 using HioldMod.src.UserTools;
 using Noemax.GZip;
+using Pathfinding;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using static ConfigTools.LoadMainConfig;
@@ -311,6 +313,54 @@ public static class Injections
         }
         return true; //继续执行原方法
     }
+
+
+    public static bool FindGraphTypes_postfix()
+    {
+        List<Type> list = new List<Type>();
+        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        int c = 0;
+        for (int i = 0; i < assemblies.Length; i++)
+        {
+            try
+            {
+                foreach (Type type in assemblies[i].GetTypes())
+                {
+                    Type baseType = type.BaseType;
+                    while (baseType != null)
+                    {
+                        if (object.Equals(baseType, typeof(NavGraph)))
+                        {
+                            list.Add(type);
+                            break;
+                        }
+                        baseType = baseType.BaseType;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                c++;
+            }
+        }
+        Log.Out("[Hiold Injection]：本次共跳过" + c + "个异常Assembly");
+
+
+
+
+        //为Types赋值
+        Traverse.Create(AstarPath.active.data).Field("graphTypes").SetValue(list.ToArray());
+
+
+        //拦截原方法执行
+        return false;
+    }
+
+
+    //public static NavGraph AddGraph(Type type)
+    //{
+
+    //}
 
     /// <summary>
     /// steam转byte[]

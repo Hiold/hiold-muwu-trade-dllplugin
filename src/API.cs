@@ -27,6 +27,10 @@ namespace HioldMod
         /// <param name="_modInstance">A20新增形参</param>
         public void InitMod(Mod _modInstance)
         {
+            //注入hook
+            RunTimePatch.PatchAll();
+
+
             //Assembly assembly1 = Assembly.Load(string.Format(@"{0}System.Web.dll", AssemblyPath));
             //Assembly assembly2 = Assembly.Load(string.Format(@"{0}LiteDB.dll", AssemblyPath));
             //Log.Warning(assembly1.Location);
@@ -43,6 +47,8 @@ namespace HioldMod
         /// </summary>
         private static void GameStartDone()
         {
+
+
             //检查文件夹
             if (!Directory.Exists(API.ConfigPath))
             {
@@ -56,8 +62,6 @@ namespace HioldMod
             isOnServer = true;
             DataBase.InitDataBase();
             Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);
-            //注入hook
-            RunTimePatch.PatchAll();
         }
 
         public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,

@@ -41,6 +41,11 @@ namespace HioldMod.HttpServer.router
             {
                 LoginAction.getCurrentUser(request, response);
             }
+            //node登录
+            else if (url.Equals("/api/ncodeLogin"))
+            {
+                LoginAction.ncodeLogin(request, response);
+            }
             //更新用户信息
             else if (url.Equals("/api/updateUserInfo"))
             {

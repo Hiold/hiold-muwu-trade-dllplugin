@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.HttpServer.common
 {
-    class ServerUtils
+    public class ServerUtils
     {
         public static string GetRandomString(int length)
         {
