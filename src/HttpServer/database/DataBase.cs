@@ -25,10 +25,10 @@ namespace HioldMod.src.HttpServer.database
         {
             
             ////创建数据库链接
-            if (API.isOnServer)
+            if (HioldMod.API.isOnServer)
             {
                 //在服务器端运行获取服务器路径
-                string modDBDir = string.Format("{0}database/", API.AssemblyPath);
+                string modDBDir = string.Format("{0}database/", HioldMod.API.AssemblyPath);
                 //判断是否存在路径
                 if (!Directory.Exists(modDBDir))
                 {

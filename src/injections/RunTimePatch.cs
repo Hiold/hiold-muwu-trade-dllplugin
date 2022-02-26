@@ -1,5 +1,6 @@
 ﻿//using HarmonyLib;
 using HarmonyLib;
+using Pathfinding;
 using System;
 using System.Reflection;
 
@@ -68,7 +69,9 @@ namespace ServerTools
                     harmony.Patch(original, new HarmonyMethod(prefix), null);
                 }
 
-                //寻路异常拦截
+                //Harmony.CreateAndPatchAll(typeof(PostPrefix));
+                Log.Out("[HioldMod] Hook初始化完毕");
+                ////寻路异常拦截
                 MethodInfo original2 = AccessTools.Method(typeof(Pathfinding.AstarData), "FindGraphTypes");
                 if (original2 == null)
                 {
@@ -84,6 +87,26 @@ namespace ServerTools
                     }
                     harmony.Patch(original2, new HarmonyMethod(prefix2), null);
                 }
+
+
+                ////寻路
+                //MethodInfo original3 = AccessTools.Method(typeof(Pathfinding.AstarData), "AddGraph");
+                //if (original3 == null)
+                //{
+                //    Log.Out(string.Format("[HioldMod] 注入失败: WorldStaticData.SendXmlsToClient 未找到"));
+                //}
+                //else
+                //{
+                //    MethodInfo prefix3 = typeof(Injections).GetMethod("AddGraph_PostFix");
+                //    if (prefix3 == null)
+                //    {
+                //        Log.Out(string.Format("[HioldMod] 注入失败: Injections.SendXmlsToClient_postfix"));
+                //        return;
+                //    }
+                //    harmony.Patch(original3, new HarmonyMethod(prefix3), null);
+                //}
+
+
 
 
 

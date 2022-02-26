@@ -9,7 +9,7 @@ using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.bean;
 
-namespace HioldMod
+namespace HioldModServer
 {
 
     public class Server

@@ -34,13 +34,13 @@ namespace HioldMod.src.HttpServer.action
                 {
                     UserInfo ui = resultList[0];
                     ui.password = "[masked]";
-                    if (Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
+                    if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                     {
-                        Server.userCookies[request.sessionid] = uis;
+                        HioldModServer.Server.userCookies[request.sessionid] = uis;
                     }
                     else
                     {
-                        Server.userCookies.Add(request.sessionid, ui);
+                        HioldModServer.Server.userCookies.Add(request.sessionid, ui);
                     }
                     ResponseUtils.ResponseSuccessWithData(response, ui);
                     return;
@@ -74,20 +74,20 @@ namespace HioldMod.src.HttpServer.action
                 string ncode = "";
                 queryRequest.TryGetValue("ncode", out ncode);
 
-                if (Server.userToken.TryGetValue(ncode, out string steamid))
+                if (HioldModServer.Server.userToken.TryGetValue(ncode, out string steamid))
                 {
                     List<UserInfo> us = UserService.getUserBySteamid(steamid);
                     if (us != null && us.Count > 0)
                     {
                         UserInfo ui = us[0];
                         ui.password = "[masked]";
-                        if (Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
+                        if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                         {
-                            Server.userCookies[request.sessionid] = uis;
+                            HioldModServer.Server.userCookies[request.sessionid] = uis;
                         }
                         else
                         {
-                            Server.userCookies.Add(request.sessionid, ui);
+                            HioldModServer.Server.userCookies.Add(request.sessionid, ui);
                         }
                         ResponseUtils.ResponseSuccessWithData(response, ui);
                         return;

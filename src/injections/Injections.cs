@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
+using UnityEngine;
 using static ConfigTools.LoadMainConfig;
 
 public static class Injections
@@ -141,11 +142,11 @@ public static class Injections
                     //生成动态码
                     string ncode = "";
 
-                    if (Server.userToken.ContainsValue(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
+                    if (HioldModServer.Server.userToken.ContainsValue(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
                     {
-                        foreach (string keytemp in Server.userToken.Keys)
+                        foreach (string keytemp in HioldModServer.Server.userToken.Keys)
                         {
-                            if (Server.userToken[keytemp].Equals(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
+                            if (HioldModServer.Server.userToken[keytemp].Equals(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
                             {
                                 ncode = keytemp;
                             }
@@ -154,7 +155,7 @@ public static class Injections
                     else
                     {
                         ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
-                        Server.userToken.Add(ncode, _cInfo.PlatformId.ReadablePlatformUserIdentifier);
+                        HioldModServer.Server.userToken.Add(ncode, _cInfo.PlatformId.ReadablePlatformUserIdentifier);
                     }
 
                     int port = 26911;
@@ -314,47 +315,57 @@ public static class Injections
         return true; //继续执行原方法
     }
 
-
-    public static bool FindGraphTypes_postfix()
+    public static List<Type> list = new List<Type>();
+    public static bool FindGraphTypes_postfix(AstarData __instance)
     {
-        List<Type> list = new List<Type>();
-        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-        int c = 0;
-        for (int i = 0; i < assemblies.Length; i++)
+        try
         {
-            try
+            list.Clear();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            int c = 0;
+            for (int i = 0; i < assemblies.Length; i++)
             {
-                foreach (Type type in assemblies[i].GetTypes())
+                try
                 {
-                    Type baseType = type.BaseType;
-                    while (baseType != null)
+                    foreach (Type type in assemblies[i].GetTypes())
                     {
-                        if (object.Equals(baseType, typeof(NavGraph)))
+                        Type baseType = type.BaseType;
+                        while (baseType != null)
                         {
-                            list.Add(type);
-                            break;
+                            if (object.Equals(baseType, typeof(NavGraph)))
+                            {
+                                list.Add(type);
+                                break;
+                            }
+                            baseType = baseType.BaseType;
                         }
-                        baseType = baseType.BaseType;
                     }
                 }
+                catch (Exception)
+                {
+                    c++;
+                }
             }
-            catch (Exception)
-            {
-                c++;
-            }
+            Log.Out("[Hiold Injection]：本次共跳过" + c + "个异常Assembly");
+            Traverse.Create(__instance).Field("graphTypes").SetValue(list.ToArray());
+            MethodInfo mi = AccessTools.PropertySetter(__instance.GetType(), "graphTypes");
+            AccessTools.MethodDelegate<Action<Type[]>>(mi, __instance).Invoke(list.ToArray());
         }
-        Log.Out("[Hiold Injection]：本次共跳过" + c + "个异常Assembly");
-
-
-
-
-        //为Types赋值
-        Traverse.Create(AstarPath.active.data).Field("graphTypes").SetValue(list.ToArray());
-
-
+        catch (Exception e)
+        {
+            Log.Out("[Hiold Injection]：处理发生错误" + e.Message + e.StackTrace);
+        }
         //拦截原方法执行
         return false;
     }
+
+    public static Type[] getGrath_PostFix()
+    {
+        Log.Out("调用了get的方法");
+        return list.ToArray();
+    }
+
+
 
 
     //public static NavGraph AddGraph(Type type)

@@ -10,185 +10,230 @@ using HioldMod.HttpServer.common;
 using ServerTools;
 using ConfigTools;
 using static ConfigTools.LoadMainConfig;
+using HarmonyLib;
+using Pathfinding;
 
 namespace HioldMod
 {
-    public class API : IModApi
+    public class HioldMod
     {
-        //当前dll运行路径
-        public static string ConfigPath = string.Format("{0}/config/", getModDir());
-        public static string AssemblyPath = string.Format("{0}\\", getModDir());
-        public static bool isOnServer = false;
-        public static bool isDebug = true;
-
-        /// <summary>
-        /// 初始化mod
-        /// </summary>
-        /// <param name="_modInstance">A20新增形参</param>
-        public void InitMod(Mod _modInstance)
+        public class API : IModApi
         {
-            //注入hook
-            RunTimePatch.PatchAll();
+            //当前dll运行路径
+            public static string ConfigPath = string.Format("{0}/config/", getModDir());
+            public static string AssemblyPath = string.Format("{0}\\", getModDir());
+            public static bool isOnServer = false;
+            public static bool isDebug = true;
 
 
-            //Assembly assembly1 = Assembly.Load(string.Format(@"{0}System.Web.dll", AssemblyPath));
-            //Assembly assembly2 = Assembly.Load(string.Format(@"{0}LiteDB.dll", AssemblyPath));
-            //Log.Warning(assembly1.Location);
-            //Log.Warning(assembly2.Location);
-            //注册事件
-            ModEvents.GameStartDone.RegisterHandler(GameStartDone);
-            ModEvents.PlayerSpawnedInWorld.RegisterHandler(PlayerSpawnedInWorld);
-            ModEvents.ChatMessage.RegisterHandler(ChatMessage);
-            ModEvents.GameUpdate.RegisterHandler(GameUpdate);
-        }
-
-        /// <summary>
-        /// 游戏服务器初始化完成触发事件
-        /// </summary>
-        private static void GameStartDone()
-        {
-
-
-            //检查文件夹
-            if (!Directory.Exists(API.ConfigPath))
-            {
-                Directory.CreateDirectory(API.ConfigPath);
-            }
-            //加载配置文件
-            LoadMainConfig.Load();
-
-            Log.Out("Host:" + MainConfig.Host + "  Port" + MainConfig.Port);
-
-            isOnServer = true;
-            DataBase.InitDataBase();
-            Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);
-        }
-
-        public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,
-             bool _localizeMain, List<int> _recipientEntityIds)
-        {
-
-            //监听[/sa]命令
-            if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
-            {
-                Log.Out("正在执行shop");
-                if (_cInfo != null)
-                {
-                    _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageConsoleCmdClient>().Setup("xui open HioldshopWindows", true));
-                }
-                else
-                {
-                    Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
-                }
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// 执行update主线程任务
-        /// </summary>
-        private static void GameUpdate()
-        {
-            DeliverItemTools.TryDeliverItem();
-            DeliverItemTools.TryExecuteCommand();
-            DeliverItemTools.TryDeleverItemWithData();
-
-            //处理调度任务
-            //if (chatInstance != null)
+            //[HarmonyPrefix]
+            //[HarmonyPatch(typeof(AstarData), "FindGraphTypes")]
+            //public static bool FindGraphTypes_Prefix(AstarData __instance)
             //{
-            //    chatInstance.PullMessages(OnChatMessage);
+            //    Log.Out("进入了FindGraphTypes");
+            //    List<Type> list = new List<Type>();
+            //    Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            //    int c = 0;
+            //    for (int i = 0; i < assemblies.Length; i++)
+            //    {
+            //        try
+            //        {
+            //            foreach (Type type in assemblies[i].GetTypes())
+            //            {
+            //                Type baseType = type.BaseType;
+            //                while (baseType != null)
+            //                {
+            //                    if (object.Equals(baseType, typeof(NavGraph)))
+            //                    {
+            //                        list.Add(type);
+            //                        break;
+            //                    }
+            //                    baseType = baseType.BaseType;
+            //                }
+            //            }
+            //        }
+            //        catch (Exception)
+            //        {
+            //            c++;
+            //        }
+            //    }
+            //    Traverse.Create(__instance).Field<Type[]>("graphTypes").Value = list.ToArray();
+            //    Log.Out("[Hiold Injection]：New本次共跳过" + c + "个异常Assembly");
+
+            //    return false;
             //}
-        }
 
 
-        /// <summary>
-        /// 获取当前mod运行路径
-        /// </summary>
-        /// <returns>路径</returns>
-        public static string getModDir()
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);
-        }
-
-        /// <summary>
-        /// 用户登录系自动注册
-        /// </summary>
-        /// <param name="_cInfo"></param>
-        /// <param name="_respawnReason"></param>
-        /// <param name="_pos"></param>
-        private static void PlayerSpawnedInWorld(ClientInfo _cInfo, RespawnType _respawnReason, Vector3i _pos)
-        {
-            if (_respawnReason == RespawnType.EnterMultiplayer || _respawnReason == RespawnType.JoinMultiplayer)
+            /// <summary>
+            /// 初始化mod
+            /// </summary>
+            /// <param name="_modInstance">A20新增形参</param>
+            public void InitMod(Mod _modInstance)
             {
-                //string regParam = "{\"steamid\":\"" + _cInfo.PlatformId.PlatformIdentifierString + "\",\"name\":\"" + _cInfo.playerName + "\"}";
-                try
+                //Harmony harmony = new Harmony(base.GetType().ToString());
+                //harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+                //注入hook
+                RunTimePatch.PatchAll();
+
+
+                //Assembly assembly1 = Assembly.Load(string.Format(@"{0}System.Web.dll", AssemblyPath));
+                //Assembly assembly2 = Assembly.Load(string.Format(@"{0}LiteDB.dll", AssemblyPath));
+                //Log.Warning(assembly1.Location);
+                //Log.Warning(assembly2.Location);
+                //注册事件
+                ModEvents.GameStartDone.RegisterHandler(GameStartDone);
+                ModEvents.PlayerSpawnedInWorld.RegisterHandler(PlayerSpawnedInWorld);
+                ModEvents.ChatMessage.RegisterHandler(ChatMessage);
+                ModEvents.GameUpdate.RegisterHandler(GameUpdate);
+            }
+
+            /// <summary>
+            /// 游戏服务器初始化完成触发事件
+            /// </summary>
+            private static void GameStartDone()
+            {
+                //检查文件夹
+                if (!Directory.Exists(API.ConfigPath))
                 {
-                    string pwd = ServerUtils.GetRandomPwd(6);
-                    //根据SteamID获取已注册用户信息
-                    List<UserInfo> exists = UserService.getUserBySteamid(_cInfo.PlatformId.ReadablePlatformUserIdentifier);
+                    Directory.CreateDirectory(API.ConfigPath);
+                }
+                //加载配置文件
+                LoadMainConfig.Load();
 
-                    if (exists == null || exists.Count <= 0)
+                Log.Out("Host:" + MainConfig.Host + "  Port" + MainConfig.Port);
+
+                isOnServer = true;
+                DataBase.InitDataBase();
+                HioldModServer.Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);
+            }
+
+            public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,
+                 bool _localizeMain, List<int> _recipientEntityIds)
+            {
+
+                //监听[/sa]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
+                {
+                    Log.Out("正在执行shop");
+                    if (_cInfo != null)
                     {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageConsoleCmdClient>().Setup("xui open HioldshopWindows", true));
+                    }
+                    else
+                    {
+                        Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
+                    }
+                    return false;
+                }
+                return true;
+            }
 
-                        int id = UserService.userRegister(new UserInfo()
+            /// <summary>
+            /// 执行update主线程任务
+            /// </summary>
+            private static void GameUpdate()
+            {
+                DeliverItemTools.TryDeliverItem();
+                DeliverItemTools.TryExecuteCommand();
+                DeliverItemTools.TryDeleverItemWithData();
+
+                //处理调度任务
+                //if (chatInstance != null)
+                //{
+                //    chatInstance.PullMessages(OnChatMessage);
+                //}
+            }
+
+
+            /// <summary>
+            /// 获取当前mod运行路径
+            /// </summary>
+            /// <returns>路径</returns>
+            public static string getModDir()
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return System.IO.Path.GetDirectoryName(path);
+            }
+
+            /// <summary>
+            /// 用户登录系自动注册
+            /// </summary>
+            /// <param name="_cInfo"></param>
+            /// <param name="_respawnReason"></param>
+            /// <param name="_pos"></param>
+            private static void PlayerSpawnedInWorld(ClientInfo _cInfo, RespawnType _respawnReason, Vector3i _pos)
+            {
+                if (_respawnReason == RespawnType.EnterMultiplayer || _respawnReason == RespawnType.JoinMultiplayer)
+                {
+                    //string regParam = "{\"steamid\":\"" + _cInfo.PlatformId.PlatformIdentifierString + "\",\"name\":\"" + _cInfo.playerName + "\"}";
+                    try
+                    {
+                        string pwd = ServerUtils.GetRandomPwd(6);
+                        //根据SteamID获取已注册用户信息
+                        List<UserInfo> exists = UserService.getUserBySteamid(_cInfo.PlatformId.ReadablePlatformUserIdentifier);
+
+                        if (exists == null || exists.Count <= 0)
                         {
-                            created_at = DateTime.Now,
-                            name = _cInfo.playerName,
-                            gameentityid = _cInfo.PlatformId.ReadablePlatformUserIdentifier,
-                            platformid = _cInfo.CrossplatformId.ReadablePlatformUserIdentifier,
-                            money = 0,
-                            credit = 0,
-                            status = 1,
-                            password = ServerUtils.md5(pwd),
-                            qq = "",
-                            email = "",
-                            avatar = _cInfo.PlatformId.ReadablePlatformUserIdentifier + ".png",
-                            sign = "",
-                            extinfo1 = "",
-                            extinfo2 = "",
-                            extinfo3 = "",
-                            extinfo4 = "",
-                            extinfo5 = "",
-                            extinfo6 = "",
-                            trade_count = "0",
-                            store_count = "0",
-                            require_count = "0",
-                            type = "0",
-                            level = 0,
-                            online_time = "0",
-                            zombie_kills = "0",
-                            player_kills = "0",
-                            total_crafted = "0",
-                            vipdiscount = 0,
-                            creditcharge = 0,
-                            creditcost = 0,
-                            moneycharge = 0,
-                            moneycost = 0,
-                            signdays = 0,
-                            likecount = 0,
-                            trade_money = 0,
-                            require_money = 0,
-                            buy_count = "0",
-                            shopname = _cInfo.playerName + "的小店",
-                        });
-                        if (id >= 0)
-                        {
-                            _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "您的初始密码为：" + pwd, "[87CEFA]交易系统", false, null));
-                        }
-                        else
-                        {
-                            _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "注册失败，请联系管理员", "[87CEFA]交易系统", false, null));
+
+                            int id = UserService.userRegister(new UserInfo()
+                            {
+                                created_at = DateTime.Now,
+                                name = _cInfo.playerName,
+                                gameentityid = _cInfo.PlatformId.ReadablePlatformUserIdentifier,
+                                platformid = _cInfo.CrossplatformId.ReadablePlatformUserIdentifier,
+                                money = 0,
+                                credit = 0,
+                                status = 1,
+                                password = ServerUtils.md5(pwd),
+                                qq = "",
+                                email = "",
+                                avatar = _cInfo.PlatformId.ReadablePlatformUserIdentifier + ".png",
+                                sign = "",
+                                extinfo1 = "",
+                                extinfo2 = "",
+                                extinfo3 = "",
+                                extinfo4 = "",
+                                extinfo5 = "",
+                                extinfo6 = "",
+                                trade_count = "0",
+                                store_count = "0",
+                                require_count = "0",
+                                type = "0",
+                                level = 0,
+                                online_time = "0",
+                                zombie_kills = "0",
+                                player_kills = "0",
+                                total_crafted = "0",
+                                vipdiscount = 0,
+                                creditcharge = 0,
+                                creditcost = 0,
+                                moneycharge = 0,
+                                moneycost = 0,
+                                signdays = 0,
+                                likecount = 0,
+                                trade_money = 0,
+                                require_money = 0,
+                                buy_count = "0",
+                                shopname = _cInfo.playerName + "的小店",
+                            });
+                            if (id >= 0)
+                            {
+                                _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "您的初始密码为：" + pwd, "[87CEFA]交易系统", false, null));
+                            }
+                            else
+                            {
+                                _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "注册失败，请联系管理员", "[87CEFA]交易系统", false, null));
+                            }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e.Message);
-                    _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[FF0000]注册失败:" + "系统内部错误,请联系管理员", "[87CEFA]交易系统", false, null));
+                    catch (Exception e)
+                    {
+                        Log.Error(e.Message);
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[FF0000]注册失败:" + "系统内部错误,请联系管理员", "[87CEFA]交易系统", false, null));
+                    }
                 }
             }
         }

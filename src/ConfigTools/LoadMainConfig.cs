@@ -12,8 +12,8 @@ namespace ConfigTools
         public static string Server_Response_Name = "[FFCC00]HioldMod";
         public static string Chat_Response_Color = "[00FF00]";
         private const string configFile = "MainConfig.xml";
-        public static string configFilePath = string.Format("{0}/{1}", API.ConfigPath, configFile);
-        public static FileSystemWatcher fileWatcher = new FileSystemWatcher(API.ConfigPath, configFile);
+        public static string configFilePath = string.Format("{0}/{1}", HioldMod.HioldMod.API.ConfigPath, configFile);
+        public static FileSystemWatcher fileWatcher = new FileSystemWatcher(HioldMod.HioldMod.API.ConfigPath, configFile);
         public static string OldXmlDirectory = "";
 
 

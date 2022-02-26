@@ -471,9 +471,9 @@ namespace HioldMod.src.HttpServer.action
             try
             {
                 string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
-                if (API.isOnServer)
+                if (HioldMod.API.isOnServer)
                 {
-                    basepath = string.Format("{0}/image/", API.AssemblyPath);
+                    basepath = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));

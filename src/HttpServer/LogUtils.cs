@@ -10,9 +10,9 @@ namespace HioldMod.HttpServer
     {
         public static void Loger(string msg)
         {
-            if (API.isDebug)
+            if (HioldMod.API.isDebug)
             {
-                if (API.isOnServer) { 
+                if (HioldMod.API.isOnServer) { 
                 Log.Out(msg);
                 }
                 else

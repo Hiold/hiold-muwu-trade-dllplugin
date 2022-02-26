@@ -135,17 +135,17 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="response">响应</param>
         public static void getImage(HioldRequest request, HttpListenerResponse response)
         {
-            DirectoryInfo di = new DirectoryInfo(API.AssemblyPath);
+            DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Data/ItemIcons/";
             string basepath2 = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             string url = request.request.RawUrl.Replace("/api/image/", "");
             response.ContentType = "image/png";
             try
             {
-                if (API.isOnServer)
+                if (HioldMod.API.isOnServer)
                 {
                     basepath = di.Parent.Parent.FullName + "/Data/ItemIcons/";
-                    basepath2 = string.Format("{0}/image/", API.AssemblyPath);
+                    basepath2 = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
 
                 //判断两个路径是否存在文件，均不存在返回404
@@ -197,9 +197,9 @@ namespace HioldMod.src.HttpServer.action
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             try
             {
-                if (API.isOnServer)
+                if (HioldMod.API.isOnServer)
                 {
-                    basepath = string.Format("{0}/image/", API.AssemblyPath);
+                    basepath = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
 
 
@@ -234,9 +234,9 @@ namespace HioldMod.src.HttpServer.action
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/web";
             try
             {
-                if (API.isOnServer)
+                if (HioldMod.API.isOnServer)
                 {
-                    basepath = string.Format("{0}/web", API.AssemblyPath);
+                    basepath = string.Format("{0}/web", HioldMod.API.AssemblyPath);
                 }
 
                 //application/javascript

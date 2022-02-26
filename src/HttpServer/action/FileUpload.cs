@@ -25,9 +25,9 @@ namespace HioldMod.src.HttpServer.action
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             try
             {
-                if (API.isOnServer)
+                if (HioldMod.API.isOnServer)
                 {
-                    basepath = string.Format("{0}/image/", API.AssemblyPath);
+                    basepath = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
                 FileUploadUtils fuu = new FileUploadUtils(request.request, Encoding.UTF8);
                 List<MultipartFormItem> files = fuu.ParseIntoElementList();
@@ -62,9 +62,9 @@ namespace HioldMod.src.HttpServer.action
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             try
             {
-                if (API.isOnServer)
+                if (HioldMod.API.isOnServer)
                 {
-                    basepath = string.Format("{0}/image/", API.AssemblyPath);
+                    basepath = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
                 DirectoryInfo flooder = new DirectoryInfo(basepath);
                 FileInfo[] fss = flooder.GetFiles();
