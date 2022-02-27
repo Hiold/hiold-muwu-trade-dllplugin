@@ -210,6 +210,16 @@ namespace HioldMod.HttpServer.router
                 if (Filters.UserLoginFilter(request, response))
                     UserTradeAction.supplyItem(request, response);
             }
+
+
+            //供货
+            else if (url.StartsWith("/api/loadContainerListAround"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    GameChunckContainerAction.loadContainerListAround(request, response);
+            }
+
+
             //没有匹配的router 返回404
             else
             {

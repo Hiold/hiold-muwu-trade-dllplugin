@@ -40,6 +40,8 @@ namespace HioldMod.src.HttpServer.action
                     }
                     else
                     {
+                        LogUtils.Loger(request.sessionid);
+                        LogUtils.Loger(ui.ToString());
                         HioldModServer.Server.userCookies.Add(request.sessionid, ui);
                     }
                     ResponseUtils.ResponseSuccessWithData(response, ui);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Platform.Steam;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,7 @@ namespace HioldMod.src.UserTools
                 if (deliverQueue.TryDequeue(out DeliverItem item))
                 {
                     //获取客户端信息
-                    PlatformUserIdentifierAbs identify = PlatformUserIdentifierAbs.FromPlatformAndId("Steam", item.steamid);
+                    PlatformUserIdentifierAbs identify = new UserIdentifierSteam(item.steamid);
                     ClientInfo _cInfo = ConnectionManager.Instance.Clients.ForUserId(identify);
                     if (_cInfo != null)
                     {
@@ -72,7 +73,7 @@ namespace HioldMod.src.UserTools
                 if (deliverDataItemQueue.TryDequeue(out DeliverItemWithData item))
                 {
                     //获取客户端信息
-                    PlatformUserIdentifierAbs identify = PlatformUserIdentifierAbs.FromPlatformAndId("Steam", item.steamid);
+                    PlatformUserIdentifierAbs identify = new UserIdentifierSteam(item.steamid);
                     ClientInfo _cInfo = ConnectionManager.Instance.Clients.ForUserId(identify);
                     deliverItemWithData(_cInfo, item);
                     Log.Out("发放物品给: " + item.steamid);

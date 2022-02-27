@@ -12,6 +12,7 @@ using ConfigTools;
 using static ConfigTools.LoadMainConfig;
 using HarmonyLib;
 using Pathfinding;
+using HioldMod.src.Reflection;
 
 namespace HioldMod
 {
@@ -25,51 +26,19 @@ namespace HioldMod
             public static bool isOnServer = false;
             public static bool isDebug = true;
 
-
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(AstarData), "FindGraphTypes")]
-            //public static bool FindGraphTypes_Prefix(AstarData __instance)
-            //{
-            //    Log.Out("进入了FindGraphTypes");
-            //    List<Type> list = new List<Type>();
-            //    Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            //    int c = 0;
-            //    for (int i = 0; i < assemblies.Length; i++)
-            //    {
-            //        try
-            //        {
-            //            foreach (Type type in assemblies[i].GetTypes())
-            //            {
-            //                Type baseType = type.BaseType;
-            //                while (baseType != null)
-            //                {
-            //                    if (object.Equals(baseType, typeof(NavGraph)))
-            //                    {
-            //                        list.Add(type);
-            //                        break;
-            //                    }
-            //                    baseType = baseType.BaseType;
-            //                }
-            //            }
-            //        }
-            //        catch (Exception)
-            //        {
-            //            c++;
-            //        }
-            //    }
-            //    Traverse.Create(__instance).Field<Type[]>("graphTypes").Value = list.ToArray();
-            //    Log.Out("[Hiold Injection]：New本次共跳过" + c + "个异常Assembly");
-
-            //    return false;
-            //}
-
-
             /// <summary>
             /// 初始化mod
             /// </summary>
             /// <param name="_modInstance">A20新增形参</param>
             public void InitMod(Mod _modInstance)
             {
+                //检查日志文件是否存在
+                //检查文件夹
+                if (!Directory.Exists(string.Format("{0}/Logs/", API.ConfigPath)))
+                {
+                    Directory.CreateDirectory(string.Format("{0}/Logs/", API.ConfigPath));
+                }
+
                 //Harmony harmony = new Harmony(base.GetType().ToString());
                 //harmony.PatchAll(Assembly.GetExecutingAssembly());
 
@@ -93,6 +62,10 @@ namespace HioldMod
             /// </summary>
             private static void GameStartDone()
             {
+                //反射获取已上锁Tile
+                bool isReflected = LockedEntity.doReflection();
+                Log.Out("反射获取数据情况: {0}", isReflected);
+
                 //检查文件夹
                 if (!Directory.Exists(API.ConfigPath))
                 {
@@ -105,7 +78,18 @@ namespace HioldMod
 
                 isOnServer = true;
                 DataBase.InitDataBase();
-                HioldModServer.Server.RunServer(GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11);
+                int port = 26911;
+                if (MainConfig.Port.Equals("auto"))
+                {
+                    port = GamePrefs.GetInt(EnumGamePrefs.ServerPort) + 11;
+                }
+                else
+                {
+                    int.TryParse(MainConfig.Port, out port);
+                }
+
+                HioldModServer.Server.RunServer(port);
+                Log.Out("[HioldMod：Init执行完毕]");
             }
 
             public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,

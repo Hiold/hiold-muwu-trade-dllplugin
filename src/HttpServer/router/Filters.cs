@@ -1,4 +1,5 @@
-﻿using HioldMod.src.HttpServer.bean;
+﻿using HioldMod.HttpServer;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace HioldMod.src.HttpServer.router
             //Console.WriteLine(request.user);
             if (request.user==null)
             {
+                LogUtils.Loger(request.sessionid);
                 ResponseUtils.ResponseFail(response, "未登录，无法进行操作");
                 return false;
             }

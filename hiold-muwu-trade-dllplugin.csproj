@@ -93,10 +93,13 @@
   <ItemGroup>
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\API.cs" />
+    <Compile Include="src\Commons\HioldsCommons.cs" />
+    <Compile Include="src\Commons\Language.cs" />
     <Compile Include="src\ConfigTools\LoadMainConfig.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
+    <Compile Include="src\HttpServer\action\GameChunckContainerAction.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
     <Compile Include="src\HttpServer\action\UserRequireAction.cs" />
     <Compile Include="src\HttpServer\action\UserInfoAction.cs" />
@@ -131,8 +134,13 @@
     <Compile Include="src\HttpServer\service\UserStorageService.cs" />
     <Compile Include="src\HttpTools.cs" />
     <Compile Include="src\injections\Injections.cs" />
+    <Compile Include="src\injections\LockedEntity.cs" />
     <Compile Include="src\injections\RunTimePatch.cs" />
+    <Compile Include="src\Serialize\ItemStackSerializable.cs" />
+    <Compile Include="src\Serialize\JsonUtils.cs" />
     <Compile Include="src\UserTools\DeliverItemTools.cs" />
+    <Compile Include="src\Utils\ChunkLoader.cs" />
+    <Compile Include="src\Utils\UserAndItemCheck.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
