@@ -14,14 +14,14 @@ namespace HioldMod.src.ChunckLoader
 {
     class ChunkLoader
     {
-        public static List<Dictionary<string, object>> loadContainerListAround(string steamid)
+        public static List<Dictionary<string, object>> loadContainerListAround(string eosid)
         {
             List<Dictionary<string, object>> loots = new List<Dictionary<string, object>>();
             ChunkManager.ChunkObserver co = null;
             //区块信息
             //获取玩家领地信息
-            Log.Out("访问的steamid为："+ steamid);
-            PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataBySteamId(steamid);
+            Log.Out("访问的steamid为：" + eosid);
+            PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataByEOS(eosid);
             Log.Out("获取到的pdd：" + ppdd);
             List<Vector3i> AllLppoition = new List<Vector3i>();
             if (ppdd != null && ppdd.LPBlocks != null)
@@ -94,9 +94,8 @@ namespace HioldMod.src.ChunckLoader
                                     {
                                         if (lpbPos.z - (landProtectSize / 2) < vec3i.z && lpbPos.z + (landProtectSize / 2) > vec3i.z)
                                         {
-
                                             Dictionary<string, object> lt = new Dictionary<string, object>();
-                                            lt.Add("name", SecureLoot.blockValue.ToItemValue().ItemClass.Name);
+                                            lt.Add("name", LocalizationUtils.getTranslate(SecureLoot.blockValue.ToItemValue().ItemClass.Name));
                                             lt.Add("icon", SecureLoot.blockValue.ToItemValue().ItemClass.CustomIcon);
                                             lt.Add("x", vec3i.x);
                                             lt.Add("y", vec3i.y);
@@ -124,7 +123,7 @@ namespace HioldMod.src.ChunckLoader
                                                     lt.Add("locked", "0");
                                                 }
                                                 //容器所属
-                                                lt.Add("owner", lockable.GetOwner());
+                                                lt.Add("owner", lockable.GetOwner().CombinedString);
 
 
                                             }
@@ -340,13 +339,13 @@ namespace HioldMod.src.ChunckLoader
 
 
 
-        public static List<Dictionary<string, object>> loadContainerListAroundJustSelf(string steamid)
+        public static List<Dictionary<string, object>> loadContainerListAroundJustSelf(string eos)
         {
             List<Dictionary<string, object>> loots = new List<Dictionary<string, object>>();
             ChunkManager.ChunkObserver co = null;
             //区块信息
             //获取玩家领地信息
-            PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataBySteamId(steamid);
+            PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataByEOS(eos);
             List<Vector3i> AllLppoition = new List<Vector3i>();
             if (ppdd != null && ppdd.LPBlocks != null)
             {
@@ -428,7 +427,7 @@ namespace HioldMod.src.ChunckLoader
                                             {
                                                 ILockable lockable = (ILockable)_tile;
                                                 //只加载自己的容器
-                                                if (lockable.GetOwner().Equals(steamid))
+                                                if (lockable.GetOwner().Equals(eos))
                                                 {
 
 
@@ -497,13 +496,13 @@ namespace HioldMod.src.ChunckLoader
         }
 
 
-        public static ContainerInfo getContainerItems(Vector3i vec3i, int _clridx, string steamid, string password)
+        public static ContainerInfo getContainerItems(Vector3i vec3i, int _clridx, string eos, string password)
         {
             //获取客户端信息
             ChunkManager.ChunkObserver co = null;
             //加载所有区块
             //获取玩家领地信息
-            PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataBySteamId(steamid);
+            PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataByEOS(eos);
             List<Vector3i> AllLppoition = new List<Vector3i>();
             AllLppoition.AddRange(loadPosSurround(ppdd.LPBlocks));
             if (ppdd.ACL != null)
@@ -563,7 +562,7 @@ namespace HioldMod.src.ChunckLoader
                 {
                     ILockable lockable = (ILockable)GameManager.Instance.World.GetTileEntity(_clridx, vec3i);
                     //是否为自己的箱子 自己的箱子不执行密码保护检测
-                    if (!lockable.GetOwner().Equals(steamid))
+                    if (!lockable.GetOwner().Equals(eos))
                     {
                         //是否密码保护
                         if (lockable.HasPassword())
@@ -608,7 +607,7 @@ namespace HioldMod.src.ChunckLoader
                     {
                         ItemDataSerializable _serializedItemStack = new ItemDataSerializable();
                         _serializedItemStack.name = "";
-                        _serializedItemStack.steamid = steamid;
+                        _serializedItemStack.steamid = eos;
                         if (_item.itemValue.ItemClass.CustomIcon != null)
                         {
                             _serializedItemStack.CustomIcon = _item.itemValue.ItemClass.CustomIcon.Value;
@@ -675,7 +674,7 @@ namespace HioldMod.src.ChunckLoader
             };
         }
 
-        public static ItemInfo TakeItem(Vector3i vec3i, int _clridx, string steamid, int itemidx, string itemdata, int itemcount, string pw, string price)
+        public static ItemInfo TakeItem(Vector3i vec3i, int _clridx, string eos, int itemidx, string itemdata, int itemcount, string pw, string price)
         {
 
             /*解析参数*/
@@ -686,7 +685,7 @@ namespace HioldMod.src.ChunckLoader
             //获取玩家领地信息
             try
             {
-                PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataBySteamId(steamid);
+                PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataByEOS(eos);
                 List<Vector3i> AllLppoition = new List<Vector3i>();
                 AllLppoition.AddRange(loadPosSurround(ppdd.LPBlocks));
                 if (ppdd.ACL != null)
@@ -746,7 +745,7 @@ namespace HioldMod.src.ChunckLoader
                     {
                         ILockable lockable = (ILockable)GameManager.Instance.World.GetTileEntity(_clridx, vec3i);
                         //是否为自己的箱子 自己的箱子不执行密码保护检测
-                        if (!lockable.GetOwner().Equals(steamid))
+                        if (!lockable.GetOwner().Equals(eos))
                         {
                             //是否密码保护
                             if (lockable.HasPassword())
@@ -868,7 +867,7 @@ namespace HioldMod.src.ChunckLoader
                     //    }
                     //}
 
-                    CheckResult userResult = UserAndItemCheck.CheckUser(steamid);
+                    CheckResult userResult = UserAndItemCheck.CheckUser(eos);
                     CheckResult itemResult = UserAndItemCheck.CheckItem(_item.itemValue.ItemClass.GetItemName());
 
                     if (!userResult.validate)
@@ -969,7 +968,7 @@ namespace HioldMod.src.ChunckLoader
                                 };
                             }
                             _serializedItemStack.name = "";
-                            _serializedItemStack.steamid = steamid;
+                            _serializedItemStack.steamid = eos;
                             if (_item.itemValue.ItemClass.CustomIcon != null)
                             {
                                 _serializedItemStack.CustomIcon = _item.itemValue.ItemClass.CustomIcon.Value;
@@ -1042,7 +1041,7 @@ namespace HioldMod.src.ChunckLoader
                                 };
                             }
                             _serializedItemStack.name = "";
-                            _serializedItemStack.steamid = steamid;
+                            _serializedItemStack.steamid = eos;
                             if (_item.itemValue.ItemClass.CustomIcon != null)
                             {
                                 _serializedItemStack.CustomIcon = _item.itemValue.ItemClass.CustomIcon.Value;

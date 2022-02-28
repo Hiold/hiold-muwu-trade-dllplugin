@@ -139,6 +139,7 @@
     <Compile Include="src\Serialize\ItemStackSerializable.cs" />
     <Compile Include="src\Serialize\JsonUtils.cs" />
     <Compile Include="src\UserTools\DeliverItemTools.cs" />
+    <Compile Include="src\UserTools\LocalizationUtils.cs" />
     <Compile Include="src\Utils\ChunkLoader.cs" />
     <Compile Include="src\Utils\UserAndItemCheck.cs" />
   </ItemGroup>

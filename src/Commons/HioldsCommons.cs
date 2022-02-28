@@ -71,18 +71,30 @@ namespace HioldMod.src.Commons
         /// </summary>
         /// <param name="_playerId"></param>
         /// <returns></returns>
-        public static PersistentPlayerData GetPersistentPlayerDataBySteamId(string _playerId)
+        public static PersistentPlayerData GetPersistentPlayerDataByEOS(string _playerId)
         {
             PersistentPlayerList _persistentPlayerList = GameManager.Instance.persistentPlayers;
-            if (_persistentPlayerList != null)
+            Log.Out("[HioldMod]服务器中总玩家数为:" + _persistentPlayerList.Players.Count);
+            foreach (KeyValuePair<PlatformUserIdentifierAbs, PersistentPlayerData> pls in _persistentPlayerList.Players)
             {
-                PersistentPlayerData _persistentPlayerData = _persistentPlayerList.GetPlayerData(new UserIdentifierSteam(_playerId));
-                if (_persistentPlayerData != null)
+                Log.Out("[HioldMod]Identify=" + pls.Key.CombinedString);
+                if (pls.Key.CombinedString.Equals("EOS_"+_playerId))
                 {
-                    return _persistentPlayerData;
+                    return pls.Value;
                 }
             }
             return null;
+
+
+            //if (_persistentPlayerList != null)
+            //{
+            //    PersistentPlayerData _persistentPlayerData = _persistentPlayerList.GetPlayerData(PlatformUserIdentifierAbs.FromCombinedString("Steam_" + _playerId, true));
+            //    if (_persistentPlayerData != null)
+            //    {
+            //        return _persistentPlayerData;
+            //    }
+            //}
+            //return null;
         }
 
         /// <summary>

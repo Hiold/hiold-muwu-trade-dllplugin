@@ -16,7 +16,7 @@ namespace HioldMod.src.HttpServer.action
         {
             try
             {
-                List<Dictionary<string, object>> result = ChunckLoader.ChunkLoader.loadContainerListAround(request.user.gameentityid);
+                List<Dictionary<string, object>> result = ChunckLoader.ChunkLoader.loadContainerListAround(request.user.platformid);
                 if (result != null && result.Count > 0)
                 {
                     ResponseUtils.ResponseSuccessWithData(response, result);
