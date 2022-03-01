@@ -74,11 +74,11 @@ namespace HioldMod.src.Commons
         public static PersistentPlayerData GetPersistentPlayerDataByEOS(string _playerId)
         {
             PersistentPlayerList _persistentPlayerList = GameManager.Instance.persistentPlayers;
-            Log.Out("[HioldMod]服务器中总玩家数为:" + _persistentPlayerList.Players.Count);
+            //Log.Out("[HioldMod]服务器中总玩家数为:" + _persistentPlayerList.Players.Count);
             foreach (KeyValuePair<PlatformUserIdentifierAbs, PersistentPlayerData> pls in _persistentPlayerList.Players)
             {
-                Log.Out("[HioldMod]Identify=" + pls.Key.CombinedString);
-                if (pls.Key.CombinedString.Equals("EOS_"+_playerId))
+                //Log.Out("[HioldMod]Identify=" + pls.Key.CombinedString);
+                if (pls.Key.CombinedString.Equals("EOS_" + _playerId))
                 {
                     return pls.Value;
                 }

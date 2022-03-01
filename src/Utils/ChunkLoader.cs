@@ -9,26 +9,35 @@ using System.IO;
 using System.Threading;
 using static HioldMod.HioldMod;
 using static HioldMod.src.CommonUtils.UserAndItemCheck;
+using HioldMod.src.HttpServer.service;
+using HioldMod.src.HttpServer.bean;
 
 namespace HioldMod.src.ChunckLoader
 {
-    class ChunkLoader
+    public class ChunkLoader
     {
+        #region 根据EOSID获取玩家领地内容器
+        /// <summary>
+        /// 根据EOSID获取玩家领地内容器
+        /// </summary>
+        /// <param name="eosid"></param>
+        /// <returns></returns>
+        /// 
         public static List<Dictionary<string, object>> loadContainerListAround(string eosid)
         {
             List<Dictionary<string, object>> loots = new List<Dictionary<string, object>>();
             ChunkManager.ChunkObserver co = null;
             //区块信息
             //获取玩家领地信息
-            Log.Out("访问的steamid为：" + eosid);
+            //Log.Out("访问的steamid为：" + eosid);
             PersistentPlayerData ppdd = HioldsCommons.GetPersistentPlayerDataByEOS(eosid);
-            Log.Out("获取到的pdd：" + ppdd);
+            //Log.Out("获取到的pdd：" + ppdd);
             List<Vector3i> AllLppoition = new List<Vector3i>();
             if (ppdd != null && ppdd.LPBlocks != null)
             {
                 AllLppoition.AddRange(ppdd.LPBlocks);
             }
-            Log.Out("ACL数量：" + AllLppoition.Count);
+            //Log.Out("ACL数量：" + AllLppoition.Count);
 
             //获取ACL 友军相关信息
             if (ppdd.ACL != null)
@@ -42,7 +51,7 @@ namespace HioldMod.src.ChunckLoader
                     }
                 }
             }
-            Log.Out("领地石个数：" + AllLppoition.Count);
+            //Log.Out("领地石个数：" + AllLppoition.Count);
 
             try
             {
@@ -95,7 +104,8 @@ namespace HioldMod.src.ChunckLoader
                                         if (lpbPos.z - (landProtectSize / 2) < vec3i.z && lpbPos.z + (landProtectSize / 2) > vec3i.z)
                                         {
                                             Dictionary<string, object> lt = new Dictionary<string, object>();
-                                            lt.Add("name", LocalizationUtils.getTranslate(SecureLoot.blockValue.ToItemValue().ItemClass.Name));
+                                            lt.Add("name", SecureLoot.blockValue.ToItemValue().ItemClass.Name);
+                                            lt.Add("nametranslate", LocalizationUtils.getTranslate(SecureLoot.blockValue.ToItemValue().ItemClass.Name));
                                             lt.Add("icon", SecureLoot.blockValue.ToItemValue().ItemClass.CustomIcon);
                                             lt.Add("x", vec3i.x);
                                             lt.Add("y", vec3i.y);
@@ -123,8 +133,7 @@ namespace HioldMod.src.ChunckLoader
                                                     lt.Add("locked", "0");
                                                 }
                                                 //容器所属
-                                                lt.Add("owner", lockable.GetOwner().CombinedString);
-
+                                                lt.Add("owner", UserService.getUserByEOS(lockable.GetOwner().ReadablePlatformUserIdentifier));
 
                                             }
                                             catch (Exception)
@@ -174,11 +183,14 @@ namespace HioldMod.src.ChunckLoader
             }
             return loots;
         }
+        #endregion
 
-
-
-
-
+        #region 根据玩家ClientInfo将玩家领地内容器保存到文件
+        /// <summary>
+        /// 根据玩家ClientInfo将玩家领地内容器保存到文件
+        /// </summary>
+        /// <param name="_cInfo"></param>
+        /// <returns></returns>
         public static List<Dictionary<string, object>> loadContainerListAroundToFile(ClientInfo _cInfo)
         {
             List<Dictionary<string, object>> loots = new List<Dictionary<string, object>>();
@@ -335,10 +347,14 @@ namespace HioldMod.src.ChunckLoader
             }
             return loots;
         }
+        #endregion
 
-
-
-
+        #region 根据eos获取玩家领地内容器（只加载自己容器）
+        /// <summary>
+        /// 根据eos获取玩家领地内容器（只加载自己容器）
+        /// </summary>
+        /// <param name="eos"></param>
+        /// <returns></returns>
         public static List<Dictionary<string, object>> loadContainerListAroundJustSelf(string eos)
         {
             List<Dictionary<string, object>> loots = new List<Dictionary<string, object>>();
@@ -427,7 +443,7 @@ namespace HioldMod.src.ChunckLoader
                                             {
                                                 ILockable lockable = (ILockable)_tile;
                                                 //只加载自己的容器
-                                                if (lockable.GetOwner().Equals(eos))
+                                                if (lockable.GetOwner().ReadablePlatformUserIdentifier.Equals(eos))
                                                 {
 
 
@@ -494,8 +510,17 @@ namespace HioldMod.src.ChunckLoader
             }
             return loots;
         }
+        #endregion
 
-
+        #region 加载指定位置的容器内物品数据
+        /// <summary>
+        /// 加载指定位置的容器内物品数据
+        /// </summary>
+        /// <param name="vec3i">容器位置坐标</param>
+        /// <param name="_clridx">容器再区块内的顺序号</param>
+        /// <param name="eos">用户id</param>
+        /// <param name="password">访问密码</param>
+        /// <returns></returns>
         public static ContainerInfo getContainerItems(Vector3i vec3i, int _clridx, string eos, string password)
         {
             //获取客户端信息
@@ -562,7 +587,7 @@ namespace HioldMod.src.ChunckLoader
                 {
                     ILockable lockable = (ILockable)GameManager.Instance.World.GetTileEntity(_clridx, vec3i);
                     //是否为自己的箱子 自己的箱子不执行密码保护检测
-                    if (!lockable.GetOwner().Equals(eos))
+                    if (!lockable.GetOwner().ReadablePlatformUserIdentifier.Equals(eos))
                     {
                         //是否密码保护
                         if (lockable.HasPassword())
@@ -620,6 +645,7 @@ namespace HioldMod.src.ChunckLoader
                         }
                         _serializedItemStack.itemCount = _item.count + "";
                         _serializedItemStack.itemName = _item.itemValue.ItemClass.GetItemName();
+                        _serializedItemStack.translate = LocalizationUtils.getTranslate(_item.itemValue.ItemClass.GetItemName());
                         _serializedItemStack.itemUseTime = _item.itemValue.UseTimes + "";
                         _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                         _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";
@@ -673,7 +699,21 @@ namespace HioldMod.src.ChunckLoader
                 Data = containerItem
             };
         }
+        #endregion
 
+        #region 取走物品
+        /// <summary>
+        /// 取走物品
+        /// </summary>
+        /// <param name="vec3i">容器坐标</param>
+        /// <param name="_clridx">容器顺序</param>
+        /// <param name="eos">玩家eosid</param>
+        /// <param name="itemidx">物品下表</param>
+        /// <param name="itemdata">物品数据</param>
+        /// <param name="itemcount">提取数量</param>
+        /// <param name="pw">访问密码</param>
+        /// <param name="price">价格</param>
+        /// <returns></returns>
         public static ItemInfo TakeItem(Vector3i vec3i, int _clridx, string eos, int itemidx, string itemdata, int itemcount, string pw, string price)
         {
 
@@ -745,7 +785,7 @@ namespace HioldMod.src.ChunckLoader
                     {
                         ILockable lockable = (ILockable)GameManager.Instance.World.GetTileEntity(_clridx, vec3i);
                         //是否为自己的箱子 自己的箱子不执行密码保护检测
-                        if (!lockable.GetOwner().Equals(eos))
+                        if (!lockable.GetOwner().ReadablePlatformUserIdentifier.Equals(eos))
                         {
                             //是否密码保护
                             if (lockable.HasPassword())
@@ -1122,6 +1162,14 @@ namespace HioldMod.src.ChunckLoader
             }
             return null;
         }
+        #endregion
+
+        #region 坐标计算
+        /// <summary>
+        /// 计算附近容器坐标
+        /// </summary>
+        /// <param name="basePosList"></param>
+        /// <returns></returns>
         public static List<Vector3i> loadPosSurround(List<Vector3i> basePosList)
         {
             List<Vector3i> result = new List<Vector3i>();
@@ -1139,6 +1187,7 @@ namespace HioldMod.src.ChunckLoader
             }
             return result;
         }
+        #endregion
     }
     public class ContainerInfo
     {

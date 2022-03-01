@@ -9,16 +9,25 @@ namespace HioldMod.src.UserTools
 {
     public class LocalizationUtils
     {
+        public static Dictionary<string, string[]> TranslateCache = new Dictionary<string, string[]>();
         public static string getTranslate(string key)
         {
             //AccessTools.Field<>(typeof(Localization), "mDictionary");
-            Dictionary<string, string[]> trs = Traverse.Create(typeof(Localization)).Field<Dictionary<string, string[]>>("mDictionary").Value;
-            trs.TryGetValue(key, out string[] ttl);
-            if (ttl!=null&&ttl.Length >= 17)
+            //读取缓存
+            if (TranslateCache.TryGetValue(key, out string[] cacheHit))
             {
-                return ttl[16];
+                return cacheHit[16];
             }
 
+            //没有缓存从系统中进行查找
+            Dictionary<string, string[]> trs = Traverse.Create(typeof(Localization)).Field<Dictionary<string, string[]>>("mDictionary").Value;
+            trs.TryGetValue(key, out string[] ttl);
+            if (ttl != null && ttl.Length >= 17)
+            {
+                //存放缓存
+                TranslateCache.Add(key, ttl);
+                return ttl[16];
+            }
             return key;
         }
     }

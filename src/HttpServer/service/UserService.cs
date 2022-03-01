@@ -69,7 +69,17 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> getUserByEOS(string eos)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(string.Format("platformid = '{0}' ", eos)).ToList(); ;
+            if (string.IsNullOrWhiteSpace(eos))
+            {
+                return null;
+            }
+
+            List<UserInfo> result = DataBase.db.Queryable<UserInfo>().Where(string.Format("platformid = '{0}' ", eos)).ToList();
+            foreach (UserInfo ui in result)
+            {
+                ui.password = "[masked]";
+            }
+            return result;
         }
 
         /// <summary>
