@@ -36,14 +36,12 @@ namespace HioldMod.src.HttpServer.action
                     ui.password = "[masked]";
                     if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                     {
-                        HioldModServer.Server.userCookies[request.sessionid] = uis;
+                        //HioldModServer.Server.userCookies[request.sessionid] = uis;
+                        HioldModServer.Server.userCookies.Remove(request.sessionid);
                     }
-                    else
-                    {
-                        LogUtils.Loger(request.sessionid);
-                        LogUtils.Loger(ui.ToString());
-                        HioldModServer.Server.userCookies.Add(request.sessionid, ui);
-                    }
+
+                    HioldModServer.Server.userCookies.Add(request.sessionid, ui);
+
                     ResponseUtils.ResponseSuccessWithData(response, ui);
                     return;
                 }
@@ -85,12 +83,11 @@ namespace HioldMod.src.HttpServer.action
                         ui.password = "[masked]";
                         if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                         {
-                            HioldModServer.Server.userCookies[request.sessionid] = uis;
+                            //HioldModServer.Server.userCookies[request.sessionid] = uis;
+                            HioldModServer.Server.userCookies.Remove(request.sessionid);
                         }
-                        else
-                        {
-                            HioldModServer.Server.userCookies.Add(request.sessionid, ui);
-                        }
+                        HioldModServer.Server.userCookies.Add(request.sessionid, ui);
+
                         ResponseUtils.ResponseSuccessWithData(response, ui);
                         return;
                     }

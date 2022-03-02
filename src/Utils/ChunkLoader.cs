@@ -35,7 +35,7 @@ namespace HioldMod.src.ChunckLoader
             List<Vector3i> AllLppoition = new List<Vector3i>();
             if (ppdd != null && ppdd.LPBlocks != null)
             {
-                AllLppoition.AddRange(ppdd.LPBlocks);
+                AllLppoition.AddRange(loadPosSurround(ppdd.LPBlocks));
             }
             //Log.Out("ACL数量：" + AllLppoition.Count);
 
@@ -47,7 +47,7 @@ namespace HioldMod.src.ChunckLoader
                     PersistentPlayerData tempPdd = HioldsCommons.GetPersistentPlayerDataBySteamId(sts);
                     if (tempPdd != null && tempPdd.LPBlocks != null)
                     {
-                        AllLppoition.AddRange(tempPdd.LPBlocks);
+                        AllLppoition.AddRange(loadPosSurround(ppdd.LPBlocks));
                     }
                 }
             }
