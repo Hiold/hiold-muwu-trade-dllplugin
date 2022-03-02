@@ -649,6 +649,7 @@ namespace HioldMod.src.ChunckLoader
                         _serializedItemStack.itemUseTime = _item.itemValue.UseTimes + "";
                         _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                         _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";
+                        _serializedItemStack.desc = LocalizationUtils.getDesc(_item.itemValue.ItemClass.GetItemName()+ "Desc");
                         ItemStack[] wtItem = new ItemStack[1];
                         wtItem[0] = _item;
                         var itemString = JsonUtils.ByteStringFromItem(wtItem);
@@ -1025,6 +1026,7 @@ namespace HioldMod.src.ChunckLoader
                             _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                             _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";
                             _serializedItemStack.itemData = itemString;
+                            _serializedItemStack.desc = LocalizationUtils.getDesc(_item.itemValue.ItemClass.GetItemName() + "Desc");
                             //物品内模组信息
                             List<string> modList = new List<string>();
                             foreach (ItemValue mod in _item.itemValue.Modifications)
@@ -1098,6 +1100,7 @@ namespace HioldMod.src.ChunckLoader
                             _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                             _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";
                             _serializedItemStack.itemData = itemString;
+                            _serializedItemStack.desc = LocalizationUtils.getDesc(_item.itemValue.ItemClass.GetItemName() + "Desc");
                             //物品内模组信息
                             List<string> modList = new List<string>();
                             foreach (ItemValue mod in _item.itemValue.Modifications)

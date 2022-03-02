@@ -118,86 +118,80 @@ namespace HioldMod.src.HttpServer.action
                 ItemInfo ii = ChunckLoader.ChunkLoader.TakeItem(new Vector3i(fx, fy, fz), int.Parse(clridx), request.user.platformid, int.Parse(itemidx), itemdata, int.Parse(itemcount), password, price);
 
                 //保存玩家物品到交易系统内
-                UserStorage userStorate = new UserStorage()
+                if (ii.Code == 1)
                 {
-                    //id
-                    itemtype = "1",
-                    name = ii.Data.itemName,
-                    translate = ii.Data.translate,
-                    itemicon = (ii.Data.CustomIcon == null ? ii.Data.itemName : ii.Data.CustomIcon) + ".png",
-                    itemtint = ii.Data.CustomIconTint == null ? "" : ii.Data.CustomIconTint,
-                    quality = parseInt(ii.Data.itemQuality),
-                    num = 0,
-                    class1 = parseGroup(ii.Data.Groups),
-                    class2 = parseGroup(ii.Data.Groups),
-                    classmod = "",
-                    desc = "",
-                    couCurrType = "",
-                    couPrice = "",
-                    couCond = "",
-                    coudatelimit = "",
-                    couDateStart = DateTime.MinValue,
-                    couDateEnd = DateTime.MinValue,
-                    count = "",
-                    currency = "",
-                    price = 0,
-                    discount = 0,
-                    prefer = 0,
-                    selltype = 0,
-                    hot = "",
-                    hotset = 0,
-                    show = "",
-                    stock = 0,
-                    collect = 0,
-                    selloutcount = "",
-                    follow = "",
-                    xglevel = "",
-                    xglevelset = "",
-                    xgday = "",
-                    xgdayset = "",
-                    xgall = "",
-                    xgallset = "",
-                    xgdatelimit = "",
-                    dateStart = DateTime.MinValue,
-                    dateEnd = DateTime.MinValue,
-                    collected = "",
-                    postTime = DateTime.MinValue,
-                    deleteTime = DateTime.MinValue,
-                    //非继承属性
-                    username = request.user.name,
-                    platformid = request.user.platformid,
-                    gameentityid = request.user.gameentityid,
-                    collectTime = DateTime.Now,
-                    storageCount = int.Parse(itemcount),
-                    itemGetChenal = UserStorageGetChanel.GAME_STORAGE,
-                    itemStatus = UserStorageStatus.NORMAL_STORAGED,
-                    //拓展属性
-                    extinfo1 = "",
-                    extinfo2 = "",
-                    extinfo3 = "",
-                    extinfo4 = "",
-                    extinfo5 = "",
-                    itemdata = ii.Data.itemData,
-                };
+                    UserStorage userStorate = new UserStorage()
+                    {
+                        //id
+                        itemtype = "1",
+                        name = ii.Data.itemName,
+                        translate = ii.Data.translate,
+                        itemicon = (ii.Data.CustomIcon == null ? ii.Data.itemName : ii.Data.CustomIcon) + ".png",
+                        itemtint = ii.Data.CustomIconTint == null ? "" : ii.Data.CustomIconTint,
+                        quality = parseInt(ii.Data.itemQuality),
+                        num = 0,
+                        class1 = parseGroup(ii.Data.Groups),
+                        class2 = parseGroup(ii.Data.Groups),
+                        classmod = "",
+                        desc = ii.Data.desc,
+                        couCurrType = "",
+                        couPrice = "",
+                        couCond = "",
+                        coudatelimit = "",
+                        couDateStart = DateTime.MinValue,
+                        couDateEnd = DateTime.MinValue,
+                        count = "",
+                        currency = "",
+                        price = 0,
+                        discount = 0,
+                        prefer = 0,
+                        selltype = 0,
+                        hot = "",
+                        hotset = 0,
+                        show = "",
+                        stock = 0,
+                        collect = 0,
+                        selloutcount = "",
+                        follow = "",
+                        xglevel = "",
+                        xglevelset = "",
+                        xgday = "",
+                        xgdayset = "",
+                        xgall = "",
+                        xgallset = "",
+                        xgdatelimit = "",
+                        dateStart = DateTime.MinValue,
+                        dateEnd = DateTime.MinValue,
+                        collected = "",
+                        postTime = DateTime.MinValue,
+                        deleteTime = DateTime.MinValue,
+                        //非继承属性
+                        username = request.user.name,
+                        platformid = request.user.platformid,
+                        gameentityid = request.user.gameentityid,
+                        collectTime = DateTime.Now,
+                        storageCount = int.Parse(itemcount),
+                        itemGetChenal = UserStorageGetChanel.GAME_STORAGE,
+                        itemStatus = UserStorageStatus.NORMAL_STORAGED,
+                        //拓展属性
+                        extinfo1 = "",
+                        extinfo2 = "",
+                        extinfo3 = "",
+                        extinfo4 = "",
+                        extinfo5 = "",
+                        itemdata = ii.Data.itemData,
+                    };
 
 
 
-                //添加数据到数据库
-                UserStorageService.addUserStorage(userStorate);
-
-
-
-
-                if (ii.Code == 0)
-                {
-                    ResponseUtils.ResponseFail(response, ii.Msg);
+                    //添加数据到数据库
+                    UserStorageService.addUserStorage(userStorate);
+                    ResponseUtils.ResponseSuccessWithData(response, ii.Data);
                 }
                 else
                 {
-                    ResponseUtils.ResponseSuccessWithData(response, ii.Data);
+                    ResponseUtils.ResponseFail(response, ii.Msg);
                 }
-
-
             }
             catch (Exception e)
             {

@@ -11,7 +11,7 @@ namespace ServerTools
         {  
         }
 
-        public ItemDataSerializable(string steamid, string name, string tradeid, int price, string customIcon, string customIconTint, List<string> groups, List<string> modifications, string itemName, string itemUseTime, string itemMaxUseTime, string itemCount, string itemQuality, string itemData,string translate)
+        public ItemDataSerializable(string steamid, string name, string tradeid, int price, string customIcon, string customIconTint, List<string> groups, List<string> modifications, string itemName, string itemUseTime, string itemMaxUseTime, string itemCount, string itemQuality, string itemData,string translate,string desc)
         {
             this.steamid = steamid;
             this.name = name;
@@ -28,6 +28,7 @@ namespace ServerTools
             this.itemQuality = itemQuality;
             this.itemData = itemData;
             this.translate = translate;
+            this.desc = desc;
         }
 
 
@@ -61,8 +62,10 @@ namespace ServerTools
         public string itemQuality;
         //物品数据
         public string itemData;
-        //
+        //翻译
         public string translate;
+        //描述
+        public string desc;
 
 
     }

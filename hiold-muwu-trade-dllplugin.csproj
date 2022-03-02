@@ -121,6 +121,7 @@
     <Compile Include="src\HttpServer\common\ResponseUtils.cs" />
     <Compile Include="src\HttpServer\common\ServerUtils.cs" />
     <Compile Include="src\HttpServer\database\DataBase.cs" />
+    <Compile Include="src\HttpServer\HanderThreadPool.cs" />
     <Compile Include="src\HttpServer\LogUtils.cs" />
     <Compile Include="src\HttpServer\router\Filters.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />

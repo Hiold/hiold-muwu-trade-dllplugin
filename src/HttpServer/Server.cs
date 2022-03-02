@@ -23,17 +23,6 @@ namespace HioldModServer
         {
 
 
-
-
-
-
-
-
-
-
-
-
-
             //在新线程中开启任务防止阻塞主线程
             new Thread(new ThreadStart(delegate
             {
@@ -51,58 +40,69 @@ namespace HioldModServer
                             {
                                 try
                                 {
-
+                                    //listener.GetContext();会阻塞函数执行
                                     HttpListenerContext context = listener.GetContext();
-                                    HttpListenerRequest request = context.Request;
-                                    HttpListenerResponse response = context.Response;
-                                    //尝试获取用户是cookie
-                                    //组装自定义请求对象
-                                    HioldRequest hioldRequest = new HioldRequest();
-                                    hioldRequest.request = request;
+                                    //开启并行处理线程
+                                    Task.Run(() =>
+                                    {
+                                        //LogUtils.Loger("当前Thread：" + Thread.CurrentThread.ManagedThreadId);
+                                        try
+                                        {
+                                            HttpListenerRequest request = context.Request;
+                                            HttpListenerResponse response = context.Response;
+                                            //尝试获取用户是cookie
+                                            //组装自定义请求对象
+                                            HioldRequest hioldRequest = new HioldRequest();
+                                            hioldRequest.request = request;
 
-                                    string sessionId = null;
-                                    for (int i = 0; i < request.Cookies.Count; i++)
-                                    {
-                                        Cookie ck = request.Cookies[i];
-                                        if (ck.Name.Equals("SESSION_ID") && !ck.Expired)
-                                        {
-                                            sessionId = ck.Value;
+                                            string sessionId = null;
+                                            for (int i = 0; i < request.Cookies.Count; i++)
+                                            {
+                                                Cookie ck = request.Cookies[i];
+                                                if (ck.Name.Equals("SESSION_ID") && !ck.Expired)
+                                                {
+                                                    sessionId = ck.Value;
+                                                }
+                                            }
+                                            //如果Session为空为用户生成Session
+                                            if (sessionId == null)
+                                            {
+                                                Cookie ce = new Cookie();
+                                                ce.Name = "SESSION_ID";
+                                                ce.Value = ServerUtils.GetRandomString(32);
+                                                ce.Expires = DateTime.Now.AddDays(1);
+                                                ce.Path = "/";
+                                                response.Cookies.Add(ce);
+                                                hioldRequest.sessionid = ce.Value;
+                                            }
+                                            else
+                                            {
+                                                hioldRequest.sessionid = sessionId;
+                                                if (userCookies.TryGetValue(sessionId, out UserInfo ui))
+                                                {
+                                                    hioldRequest.user = ui;
+                                                }
+                                            }
+                                            //使用分发器处理请求
+                                            try
+                                            {
+                                                HioldMod.HttpServer.router.MainRouter.DispacherRouter(hioldRequest, response);
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                LogUtils.Loger("api handler error");
+                                            }
                                         }
-                                    }
-                                    //如果Session为空为用户生成Session
-                                    if (sessionId == null)
-                                    {
-                                        Cookie ce = new Cookie();
-                                        ce.Name = "SESSION_ID";
-                                        ce.Value = ServerUtils.GetRandomString(32);
-                                        ce.Expires = DateTime.Now.AddDays(1);
-                                        ce.Path = "/";
-                                        response.Cookies.Add(ce);
-                                        hioldRequest.sessionid = ce.Value;
-                                    }
-                                    else
-                                    {
-                                        hioldRequest.sessionid = sessionId;
-                                        if (userCookies.TryGetValue(sessionId, out UserInfo ui))
+                                        catch (Exception e)
                                         {
-                                            hioldRequest.user = ui;
+                                            LogUtils.Loger(e.StackTrace);
                                         }
-                                    }
-                                    //使用分发器处理请求
-                                    try
-                                    {
-                                        HioldMod.HttpServer.router.MainRouter.DispacherRouter(hioldRequest, response);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        LogUtils.Loger("api handler error");
-                                    }
+                                    });
                                 }
                                 catch (Exception e)
                                 {
                                     LogUtils.Loger(e.StackTrace);
                                 }
-
                             }
                         })).Start();
                         LogUtils.Loger("Hi_oldMod：服务器重启完成，监听正常");
