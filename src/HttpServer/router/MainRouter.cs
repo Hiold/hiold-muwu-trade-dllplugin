@@ -222,6 +222,12 @@ namespace HioldMod.HttpServer.router
                 if (Filters.UserLoginFilter(request, response))
                     GameChunckContainerAction.getContainerItems(request, response);
             }
+            //提取物品到交易系统
+            else if (url.StartsWith("/api/TakeItem"))
+            {
+                if (Filters.UserLoginFilter(request, response))
+                    GameChunckContainerAction.TakeItem(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

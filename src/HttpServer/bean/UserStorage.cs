@@ -78,6 +78,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int TRADE_BUY = 3;
         //从供货获得
         public static int SUPPLY = 4;
+        //从游戏中获得
+        public static int GAME_STORAGE = 5;
     }
 
     //物品最终用途
