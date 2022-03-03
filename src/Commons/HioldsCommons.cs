@@ -115,5 +115,29 @@ namespace HioldMod.src.Commons
                 return true;
             return false;
         }
+
+
+
+
+        /// <summary>
+        /// 获取玩家ClientInfo数据
+        /// </summary>
+        /// <param name="_playerId"></param>
+        /// <returns></returns>
+        public static ClientInfo GetClientInfoByEOSorSteamid(string _playerId)
+        {
+            ClientInfoCollection cic = ConnectionManager.Instance.Clients;
+            //Log.Out("[HioldMod]服务器中总玩家数为:" + _persistentPlayerList.Players.Count);
+            foreach (ClientInfo clientInfo in cic.List)
+            {
+                //Log.Out("[HioldMod]Identify=" + pls.Key.CombinedString);
+                if (clientInfo.PlatformId.ReadablePlatformUserIdentifier.Equals(_playerId) || clientInfo.CrossplatformId.ReadablePlatformUserIdentifier.Equals(_playerId))
+                {
+                    return clientInfo;
+                }
+            }
+            return null;
+        }
+
     }
 }

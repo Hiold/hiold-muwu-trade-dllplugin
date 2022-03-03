@@ -17,7 +17,7 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="item">物品</param>
         public static void addLog(ActionLog log)
         {
-            DataBase.db.Insertable<ActionLog>(log).ExecuteCommand();
+            DataBase.logdb.Insertable<ActionLog>(log).ExecuteCommand();
         }
 
 
@@ -26,11 +26,11 @@ namespace HioldMod.src.HttpServer.service
             DataRow[] dt = null;
             if (startTime == null && endTime == null)
             {
-                dt = DataBase.db.Ado.GetDataTable(string.Format("select sum(extinfo3) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' ", id, itemid, logtype)).Select();
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo3) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' ", id, itemid, logtype)).Select();
             }
             else
             {
-                dt = DataBase.db.Ado.GetDataTable(string.Format("select sum(extinfo3) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", id, itemid, logtype, startTime, endTime)).Select();
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo3) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", id, itemid, logtype, startTime, endTime)).Select();
             }
             //Console.WriteLine(dt);
             foreach (DataRow row in dt)

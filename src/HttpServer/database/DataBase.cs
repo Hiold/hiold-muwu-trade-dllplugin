@@ -9,14 +9,17 @@ namespace HioldMod.src.HttpServer.database
 {
     public class DataBase
     {
-        //数据库文件路径
-        private static string dbFilePath;
+        //业务数据库路径
+        private static string maindbPath;
+        //日志数据库路径
+        private static string logdbPath;
         //数据库客户端
 
         //调试使用的数据库文件存储路径
         public static string relatedPath = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
         public static string debugDbfilePath = @"C:\Users\Administrator\Source\Repos\hiold-muwu-trade-dllplugin\db\";
         public static SqlSugarClient db = null;
+        public static SqlSugarClient logdb = null;
 
         /// <summary>
         /// 初始化数据库
@@ -34,7 +37,8 @@ namespace HioldMod.src.HttpServer.database
                 {
                     Directory.CreateDirectory(modDBDir);
                 }
-                dbFilePath = string.Format("DataSource={0}TradeManageDB.db", modDBDir);
+                maindbPath = string.Format("DataSource={0}TradeManageDB.db", modDBDir);
+                logdbPath = string.Format("DataSource={0}Log.db", modDBDir);
 
             }
             else
@@ -53,7 +57,8 @@ namespace HioldMod.src.HttpServer.database
                 {
                     Directory.CreateDirectory(debugDbfilePath);
                 }
-                dbFilePath = string.Format("DataSource={0}TradeManageDB.db", debugDbfilePath);
+                maindbPath = string.Format("DataSource={0}TradeManageDB.db", debugDbfilePath);
+                logdbPath = string.Format("DataSource={0}Log.db", debugDbfilePath);
             }
 
             ////创建litedb实例
@@ -61,7 +66,14 @@ namespace HioldMod.src.HttpServer.database
             //string connectionString = string.Format("DataSource={0}TradeManageDB.db", @dbFilePath);
             db = new SqlSugarClient(new ConnectionConfig()
             {
-                ConnectionString = dbFilePath,
+                ConnectionString = maindbPath,
+                DbType = SqlSugar.DbType.Sqlite,
+                IsAutoCloseConnection = true,//自动释放
+            });
+            //初始化logdb 日志存储数据库
+            logdb = new SqlSugarClient(new ConnectionConfig()
+            {
+                ConnectionString = logdbPath,
                 DbType = SqlSugar.DbType.Sqlite,
                 IsAutoCloseConnection = true,//自动释放
             });

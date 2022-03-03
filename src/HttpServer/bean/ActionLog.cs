@@ -39,6 +39,8 @@ namespace HioldMod.src.HttpServer.bean
         public string extinfo9 { get; set; }
         [SugarColumn(IsNullable = true)]
         public string extinfo10 { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public string desc { get; set; }
     }
 
     public class LogType
@@ -57,6 +59,29 @@ namespace HioldMod.src.HttpServer.bean
         public static int BuyUserTrade = 5;
         //供货
         public static int SupplyItem = 6;
+        //图片上传
+        public static int imageUpload = 7;
+        //从游戏内容器提取物品到交易提醒
+        public static int takeItemToTradeSys = 8;
+        //添加系统售卖物品
+        public static int addShopItem = 9;
+        //更新了系统售卖物品信息
+        public static int updateShopItem = 10;
+        //删除系统售卖物品
+        public static int deleteShopItem = 11;
+        //库存提取到游戏中
+        public static int dispachToGame = 12;
+        //玩家自主删除物品 无补偿
+        public static int deleteItem = 13;
+        //添加收藏物品
+        public static int collect = 14;
+        //取消收藏物品
+        public static int discollect = 15;
+        //更新玩家基础信息
+        public static int updateUserinfo = 16;
+        //取消求购
+        public static int DeleteRequire = 17;
+
 
     }
 }

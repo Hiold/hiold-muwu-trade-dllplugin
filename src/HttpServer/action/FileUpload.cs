@@ -2,6 +2,7 @@
 using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
+using HioldMod.src.HttpServer.service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,14 @@ namespace HioldMod.src.HttpServer.action
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             try
             {
+                //非管理员拒绝链接
+                if (!request.user.type.Equals("1"))
+                {
+                    response.StatusCode = 400;
+                    response.OutputStream.Flush();
+                    response.OutputStream.Close();
+                    return;
+                }
                 if (HioldMod.API.isOnServer)
                 {
                     basepath = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
@@ -38,6 +47,16 @@ namespace HioldMod.src.HttpServer.action
                     fs.Flush();
                     fs.Close();
                 }
+
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.imageUpload,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    desc = "上传了图片"
+                });
+
                 response.StatusCode = 200;
                 response.OutputStream.Flush();
                 response.OutputStream.Close();

@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.Commons;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -194,6 +195,34 @@ namespace HioldMod.src.HttpServer.action
                 }
                 queryRequest.TryGetValue("id", out string id);
                 UserStorage us = UserStorageService.selectUserStorageByid(id);
+
+                //获取客户端信息
+                ClientInfo _cInfo = HioldsCommons.GetClientInfoByEOSorSteamid(us.gameentityid);
+
+                if (_cInfo == null)
+                {
+                    Log.Out("玩家 " + us.gameentityid + " 不在线");
+                    ResponseUtils.ResponseFail(response, "提取失败,玩家不在线");
+                    return;
+                }
+
+                EntityPlayer _entity = (EntityPlayer)GameManager.Instance.World.GetEntity(_cInfo.entityId);
+                if (_entity == null || !_entity.IsSpawned())
+                {
+                    Log.Out("玩家 " + us.gameentityid + " 正在加载");
+                    ResponseUtils.ResponseFail(response, "提取失败，玩家正在加载，请耐心等待进入游戏再操作");
+                    return;
+                }
+
+                //if (!Auction.IsEnable)
+                //{
+                //    Log.Out("玩家 {0} 提取物品，服务器未开启拍卖系统，无法发放", _cInfo.playerId);
+                //    _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[FF0000]服务器未开启拍卖系统，物品发放失败！", "[87CEFA]交易系统", false, null));
+                //    ResponseUtils.ResponseFail(response, "未开启拍卖系统");
+                //    return ;
+                //}
+
+
                 //检查物品属性
                 if (!request.user.gameentityid.Equals(us.gameentityid))
                 {
@@ -261,6 +290,18 @@ namespace HioldMod.src.HttpServer.action
                 us.obtainTime = DateTime.Now;
                 UserStorageService.UpdateUserStorage(us);
 
+
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.dispachToGame,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(us),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    desc = string.Format("提取了{0}个{1}到游戏中", (count * us.num), us.translate)
+                });
+
                 ResponseUtils.ResponseSuccessWithData(response, "成功发放" + count * us.num + "个物品");
                 return;
             }
@@ -314,6 +355,17 @@ namespace HioldMod.src.HttpServer.action
                     us.storageCount -= count;
                 }
 
+
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.deleteItem,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(us),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    desc = string.Format("丢弃了{0}个{1}（此操作不可逆无补偿）", count, us.translate)
+                });
 
                 UserStorageService.UpdateUserStorage(us);
                 ResponseUtils.ResponseSuccessWithData(response, "删除成功!");
@@ -405,6 +457,30 @@ namespace HioldMod.src.HttpServer.action
                     cfg.available = value;
                     cfg.updated_at = DateTime.Now;
                     UserConfigService.updateConfig(cfg);
+
+                    //记录日志数据
+                    if (value.Equals("1"))
+                    {
+                        ActionLogService.addLog(new ActionLog()
+                        {
+                            actTime = DateTime.Now,
+                            actType = LogType.collect,
+                            atcPlayerEntityId = request.user.gameentityid,
+                            extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                            desc = string.Format("添加了新的收藏物品")
+                        });
+                    }
+                    else
+                    {
+                        ActionLogService.addLog(new ActionLog()
+                        {
+                            actTime = DateTime.Now,
+                            actType = LogType.discollect,
+                            atcPlayerEntityId = request.user.gameentityid,
+                            extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                            desc = string.Format("删除了收藏物品")
+                        });
+                    }
                     ResponseUtils.ResponseSuccessWithData(response, cfg);
                     return;
                 }
@@ -420,6 +496,17 @@ namespace HioldMod.src.HttpServer.action
                         configValue = id,
                         available = "1"
                     };
+
+                    //记录日志数据
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.collect,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                        desc = string.Format("添加了新的收藏物品")
+                    });
+
                     UserConfigService.addConfig(cfg);
                     ResponseUtils.ResponseSuccessWithData(response, cfg);
                     return;
@@ -537,6 +624,17 @@ namespace HioldMod.src.HttpServer.action
                     us.avatar = fileName;
                     us.qq = qq;
                     us.shopname = shopname;
+                    //生成字符串前清除过长的图片信息
+                    queryRequest["avatar"] = "图片：" + basepath + fileName;
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.updateUserinfo,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                        extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(us),
+                        desc = string.Format("更新了基础信息(含头像)")
+                    });
                     UserService.UpdateUserInfo(us);
                 }
                 else
@@ -545,6 +643,16 @@ namespace HioldMod.src.HttpServer.action
                     us.qq = qq;
                     us.shopname = shopname;
                     UserService.UpdateUserInfo(us);
+
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.updateUserinfo,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                        extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(us),
+                        desc = string.Format("更新了基础信息(不包含头像)")
+                    });
                 }
                 ResponseUtils.ResponseSuccessWithData(response, "更新成功");
                 return;

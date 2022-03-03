@@ -49,7 +49,7 @@ namespace HioldMod.HttpServer.router
             //更新用户信息
             else if (url.Equals("/api/updateUserInfo"))
             {
-                if (Filters.UserLoginFilter(request, response))
+                if (Filters.isAdminFilter(request, response))
                     UserInfoAction.updateUserInfo(request, response);
             }
 
@@ -83,7 +83,8 @@ namespace HioldMod.HttpServer.router
             }
             else if (url.StartsWith("/api/addShopItem"))
             {
-                TradeManageAction.addShopItem(request, response);
+                if (Filters.isAdminFilter(request, response))
+                    TradeManageAction.addShopItem(request, response);
             }
             else if (url.StartsWith("/api/queryShopItem"))
             {
@@ -91,15 +92,18 @@ namespace HioldMod.HttpServer.router
             }
             else if (url.StartsWith("/api/updateShopItem"))
             {
-                TradeManageAction.updateShopItem(request, response);
+                if (Filters.isAdminFilter(request, response))
+                    TradeManageAction.updateShopItem(request, response);
             }
             else if (url.StartsWith("/api/deleteShopItem"))
             {
-                TradeManageAction.deleteShopItem(request, response);
+                if (Filters.isAdminFilter(request, response))
+                    TradeManageAction.deleteShopItem(request, response);
             }
             else if (url.StartsWith("/api/uploadFile"))
             {
-                FileUpload.uploadFile(request, response);
+                if (Filters.isAdminFilter(request, response))
+                    FileUpload.uploadFile(request, response);
             }
             else if (url.StartsWith("/api/getIconFile"))
             {

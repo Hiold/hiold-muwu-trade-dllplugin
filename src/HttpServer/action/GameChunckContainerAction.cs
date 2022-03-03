@@ -129,7 +129,7 @@ namespace HioldMod.src.HttpServer.action
                         itemicon = (ii.Data.CustomIcon == null ? ii.Data.itemName : ii.Data.CustomIcon) + ".png",
                         itemtint = ii.Data.CustomIconTint == null ? "" : ii.Data.CustomIconTint,
                         quality = parseInt(ii.Data.itemQuality),
-                        num = 0,
+                        num = 1,
                         class1 = parseGroup(ii.Data.Groups),
                         class2 = parseGroup(ii.Data.Groups),
                         classmod = "",
@@ -182,7 +182,17 @@ namespace HioldMod.src.HttpServer.action
                         itemdata = ii.Data.itemData,
                     };
 
-
+                    //记录日志数据
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.takeItemToTradeSys,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                        extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(ii),
+                        extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(userStorate),
+                        desc = string.Format("从位于（{0},{1},{2} 的容器中提取{3}个{4}到交易系统个人仓库）", x, y, z, itemcount, ii.Data.translate)
+                    });
 
                     //添加数据到数据库
                     UserStorageService.addUserStorage(userStorate);

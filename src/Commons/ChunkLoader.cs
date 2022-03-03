@@ -1022,6 +1022,7 @@ namespace HioldMod.src.ChunckLoader
                             }
                             _serializedItemStack.itemCount = _item.count + "";
                             _serializedItemStack.itemName = _item.itemValue.ItemClass.GetItemName();
+                            _serializedItemStack.translate = LocalizationUtils.getTranslate(_item.itemValue.ItemClass.GetItemName());
                             _serializedItemStack.itemUseTime = _item.itemValue.UseTimes + "";
                             _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                             _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";
@@ -1096,6 +1097,7 @@ namespace HioldMod.src.ChunckLoader
                             }
                             _serializedItemStack.itemCount = _item.count + "";
                             _serializedItemStack.itemName = _item.itemValue.ItemClass.GetItemName();
+                            _serializedItemStack.translate = LocalizationUtils.getTranslate(_item.itemValue.ItemClass.GetItemName());
                             _serializedItemStack.itemUseTime = _item.itemValue.UseTimes + "";
                             _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                             _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";

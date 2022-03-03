@@ -79,6 +79,17 @@ namespace HioldMod.src.HttpServer.action
                     xgdayset = addRequest.xgdayset,
                 };
 
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.addShopItem,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(shopItem),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(addRequest),
+                    desc = string.Format("上架了{0}个{1}，售价{2}", addRequest.stock, addRequest.translate, addRequest.price)
+                });
+
 
                 ShopTradeService.addShopItem(shopItem);
                 ResponseUtils.ResponseSuccess(response);
@@ -120,6 +131,7 @@ namespace HioldMod.src.HttpServer.action
 
                 //游戏内物品
                 TradeManageItem shopItem = olditem[0];
+                string oldItemData = SimpleJson2.SimpleJson2.SerializeObject(shopItem);
 
                 //Console.WriteLine("热卖:" + hot);
 
@@ -166,6 +178,19 @@ namespace HioldMod.src.HttpServer.action
                     shopItem.translate = addRequest.couCurrType;
                 }
 
+
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.updateShopItem,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(shopItem),
+                    extinfo2 = oldItemData,
+                    extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(addRequest),
+                    desc = string.Format("修改了商品信息", addRequest.stock, addRequest.translate, addRequest.price)
+                });
+
                 ShopTradeService.updateShopItem(shopItem);
                 ResponseUtils.ResponseSuccess(response);
             }
@@ -209,6 +234,18 @@ namespace HioldMod.src.HttpServer.action
                 TradeManageItem shopItem = olditem[0];
                 shopItem.id = id;
                 shopItem.deleteTime = DateTime.Now;
+
+
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.deleteShopItem,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(shopItem),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(addRequest),
+                    desc = string.Format("删除了商品", addRequest.stock, addRequest.translate, addRequest.price)
+                });
 
                 ShopTradeService.updateShopItem(shopItem);
                 ResponseUtils.ResponseSuccess(response);
@@ -256,7 +293,7 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("sorttype", out string sorttype);
 
 
-                Dictionary<string, object> result = ShopTradeService.queryShopItem(request.user,itemname, pageIndex, pageSize, class1, class2, sorttype);
+                Dictionary<string, object> result = ShopTradeService.queryShopItem(request.user, itemname, pageIndex, pageSize, class1, class2, sorttype);
                 ResponseUtils.ResponseSuccessWithData(response, result);
                 return;
             }

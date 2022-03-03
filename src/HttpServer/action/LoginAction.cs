@@ -42,6 +42,15 @@ namespace HioldMod.src.HttpServer.action
 
                     HioldModServer.Server.userCookies.Add(request.sessionid, ui);
 
+                    //记录日志数据
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.PlayerLogin,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        desc = "使用账号密码登录了交易系统，登录ip：" + request.request.RemoteEndPoint.Address
+                    });
+
                     ResponseUtils.ResponseSuccessWithData(response, ui);
                     return;
                 }
@@ -87,6 +96,15 @@ namespace HioldMod.src.HttpServer.action
                             HioldModServer.Server.userCookies.Remove(request.sessionid);
                         }
                         HioldModServer.Server.userCookies.Add(request.sessionid, ui);
+
+                        //记录日志数据
+                        ActionLogService.addLog(new ActionLog()
+                        {
+                            actTime = DateTime.Now,
+                            actType = LogType.PlayerLogin,
+                            atcPlayerEntityId = request.user.gameentityid,
+                            desc = "使用cnode免密登录了交易系统，登录ip：" + request.request.RemoteEndPoint.Address
+                        });
 
                         ResponseUtils.ResponseSuccessWithData(response, ui);
                         return;

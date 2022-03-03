@@ -21,10 +21,32 @@ namespace HioldMod.src.HttpServer.router
         public static bool UserLoginFilter(HioldRequest request, HttpListenerResponse response)
         {
             //Console.WriteLine(request.user);
-            if (request.user==null)
+            if (request.user == null)
             {
                 LogUtils.Loger(request.sessionid);
                 ResponseUtils.ResponseFail(response, "未登录，无法进行操作");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+
+        /// <summary>
+        /// 校验用户登录情况
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static bool isAdminFilter(HioldRequest request, HttpListenerResponse response)
+        {
+            //Console.WriteLine(request.user);
+            if (request.user == null || !request.user.type.Equals("1"))
+            {
+                LogUtils.Loger(request.sessionid);
+                ResponseUtils.ResponseFail(response, "无权使用此接口");
                 return false;
             }
             else

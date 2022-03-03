@@ -137,12 +137,12 @@
     <Compile Include="src\injections\Injections.cs" />
     <Compile Include="src\injections\LockedEntity.cs" />
     <Compile Include="src\injections\RunTimePatch.cs" />
-    <Compile Include="src\Serialize\ItemStackSerializable.cs" />
-    <Compile Include="src\Serialize\JsonUtils.cs" />
-    <Compile Include="src\UserTools\DeliverItemTools.cs" />
-    <Compile Include="src\UserTools\LocalizationUtils.cs" />
-    <Compile Include="src\Utils\ChunkLoader.cs" />
-    <Compile Include="src\Utils\UserAndItemCheck.cs" />
+    <Compile Include="src\Commons\ItemStackSerializable.cs" />
+    <Compile Include="src\Commons\JsonUtils.cs" />
+    <Compile Include="src\Commons\DeliverItemTools.cs" />
+    <Compile Include="src\Commons\LocalizationUtils.cs" />
+    <Compile Include="src\Commons\ChunkLoader.cs" />
+    <Compile Include="src\Commons\UserAndItemCheck.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

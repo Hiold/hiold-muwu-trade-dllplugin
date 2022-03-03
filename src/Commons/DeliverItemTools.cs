@@ -1,4 +1,5 @@
-﻿using Platform.Steam;
+﻿using HioldMod.src.Commons;
+using Platform.Steam;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -31,8 +32,8 @@ namespace HioldMod.src.UserTools
                 if (deliverQueue.TryDequeue(out DeliverItem item))
                 {
                     //获取客户端信息
-                    PlatformUserIdentifierAbs identify = new UserIdentifierSteam(item.steamid);
-                    ClientInfo _cInfo = ConnectionManager.Instance.Clients.ForUserId(identify);
+                    //PlatformUserIdentifierAbs identify = new UserIdentifierSteam(item.steamid);
+                    ClientInfo _cInfo = HioldsCommons.GetClientInfoByEOSorSteamid(item.steamid);
                     if (_cInfo != null)
                     {
                         Log.Out("发放物品: " + item.itemName);
@@ -73,8 +74,9 @@ namespace HioldMod.src.UserTools
                 if (deliverDataItemQueue.TryDequeue(out DeliverItemWithData item))
                 {
                     //获取客户端信息
-                    PlatformUserIdentifierAbs identify = new UserIdentifierSteam(item.steamid);
-                    ClientInfo _cInfo = ConnectionManager.Instance.Clients.ForUserId(identify);
+                    //PlatformUserIdentifierAbs identify = new UserIdentifierSteam(item.steamid);
+                    //ClientInfo _cInfo = ConnectionManager.Instance.Clients.ForUserId(identify);
+                    ClientInfo _cInfo = HioldsCommons.GetClientInfoByEOSorSteamid(item.steamid);
                     deliverItemWithData(_cInfo, item);
                     Log.Out("发放物品给: " + item.steamid);
                 }
@@ -172,7 +174,8 @@ namespace HioldMod.src.UserTools
 
         public static bool deliverItemWithData(ClientInfo _cInfo, DeliverItemWithData itemData)
         {
-
+            Log.Out("发放物品Data给: " + _cInfo);
+            Log.Out("发放物品: " + itemData.data);
             ItemStack[] itemStacks = JsonUtils.ItemFromString(itemData.data);
             //发放物品
             if (itemStacks != null && itemStacks.Length > 0)
@@ -201,6 +204,7 @@ namespace HioldMod.src.UserTools
                 world.SpawnEntityInWorld(entityItem);
                 _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
                 world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                Log.Out("发放物品entityItem: " + entityItem);
             }
             return true;
         }
