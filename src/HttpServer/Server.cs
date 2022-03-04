@@ -73,6 +73,8 @@ namespace HioldModServer
                                                 ce.Expires = DateTime.Now.AddDays(1);
                                                 ce.Path = "/";
                                                 response.Cookies.Add(ce);
+                                                //首次请求也带cookie
+                                                request.Cookies.Add(ce);
                                                 hioldRequest.sessionid = ce.Value;
                                             }
                                             else

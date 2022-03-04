@@ -1,6 +1,5 @@
 ﻿using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.service;
-using NaiwaziBot;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -199,17 +198,17 @@ namespace HioldMod.src.HttpServer.database
 
         private static int add(UserInfo info, double c)
         {
-            NaiwaziBot.Naiwazi_Points.PointsAdd_ByUserID(info.gameentityid, (int)c, out int result);
+            NaiwaziServerKitInterface.NaiwaziPointHelper.AddPoint(info.gameentityid, (int)c, out int result);
             return result;
         }
         private static int sub(UserInfo info, double c)
         {
-            NaiwaziBot.Naiwazi_Points.PointsSub_ByUserID(info.gameentityid, (int)c, out int result);
+            NaiwaziServerKitInterface.NaiwaziPointHelper.SubPoint(info.gameentityid, (int)c, out int result);
             return result;
         }
         private static void set(UserInfo info, double c)
         {
-            NaiwaziBot.Naiwazi_Points.PointsSet_ByUserID(info.gameentityid, (int)c);
+            NaiwaziServerKitInterface.NaiwaziPointHelper.SetPoint(info.gameentityid, (int)c);
         }
 
         public enum MoneyType

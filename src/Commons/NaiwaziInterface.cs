@@ -27,24 +27,24 @@ namespace NaiwaziServerKitInterface
     public static class ChatInterface
     {
         public delegate void ChatInfoDelegate(ClientInfo _cinfo, string _msg, EChatType _chattype);
-        
+
         public static int ChatWatcher_Register(ChatInfoDelegate callBack, string name)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             Assembly starter = null;
             for (int i = 0; i < assemblies.Length; i++)
             {
-                if(assemblies[i].GetName().Name.Contains("Naiwazi_Optimize_Internal"))
+                if (assemblies[i].GetName().Name.Contains("Naiwazi_Optimize_Internal"))
                 {
                     starter = assemblies[i];
                 }
             }
 
-            if(starter == null)
+            if (starter == null)
             {
                 return -1;
             }
-            
+
             Type chatWatcher = starter.GetType("ServerKit_Interface.ModImplement", false, true);
 
             if (chatWatcher == null)
@@ -58,7 +58,7 @@ namespace NaiwaziServerKitInterface
             {
                 return -3;
             }
-            
+
             bool ret = (bool)chatWatcher_Register.Invoke(null, new object[] { callBack, name });
 
             if (ret)
@@ -66,7 +66,7 @@ namespace NaiwaziServerKitInterface
             else
                 return -4;
         }
-        
+
     }
 
     public class ChatHider
@@ -74,7 +74,7 @@ namespace NaiwaziServerKitInterface
         private string m_Ip = "127.0.0.1";
         private int m_Port = 0;
         private string m_ApiToken = "";
-        
+
 
         private string HttpGet(string url)
         {
@@ -101,7 +101,7 @@ namespace NaiwaziServerKitInterface
                 return null;
             }
         }
-        
+
         public string Ip
         {
             set { m_Ip = value; }
@@ -120,7 +120,7 @@ namespace NaiwaziServerKitInterface
                 m_ApiToken = result[1];
             }
         }
-        
+
         public bool SetChatHider(string prefix)
         {
             string url = "http://" + m_Ip + ":" + m_Port + "/api/setchathider?admintoken=" + m_ApiToken + "&prefix=" + prefix;
@@ -132,7 +132,7 @@ namespace NaiwaziServerKitInterface
 
             return false;
         }
-        
+
         public ChatHider()
         {
             UpdateApiToken();
@@ -144,7 +144,7 @@ namespace NaiwaziServerKitInterface
     public static class FastRestartNoticeInterface
     {
         public delegate void NoticeDelegate();
-        
+
         public static int Notice_Register(NoticeDelegate callBack, string name)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -184,5 +184,106 @@ namespace NaiwaziServerKitInterface
                 return -4;
         }
 
+    }
+
+    public class NaiwaziPointHelper
+    {
+        private static Assembly nwzbot = null;
+        private static Type nwzpoint = null;
+        public static void InitNaiwaziBotPointHelper()
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                if (assemblies[i].GetName().Name.Contains("NaiwaziEasyBot"))
+                {
+                    nwzbot = assemblies[i];
+                }
+            }
+            //有找到bot
+            if (nwzbot != null)
+            {
+                nwzpoint = nwzbot.GetType("NaiwaziBot.Naiwazi_Points", false, true);
+            }
+
+        }
+
+        /// <summary>
+        /// 反射添加积分
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="points"></param>
+        /// <param name="balance"></param>
+        public static void AddPoint(string userId, int points, out int balance)
+        {
+            MethodInfo Points = nwzpoint.GetMethod("PointsAdd_ByUserID", BindingFlags.Static | BindingFlags.Public);
+            if (Points != null)
+            {
+                object[] args = new object[] { userId, points, null };
+                Points.Invoke(nwzpoint, args);
+                balance = (int)args[2];
+            }
+            else
+            {
+                balance = -1;
+            }
+        }
+
+
+        /// <summary>
+        /// 反射扣除积分
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="points"></param>
+        /// <param name="balance"></param>
+        public static void SubPoint(string userId, int points, out int balance)
+        {
+            MethodInfo Points = nwzpoint.GetMethod("PointsSub_ByUserID", BindingFlags.Static | BindingFlags.Public);
+            if (Points != null)
+            {
+                object[] args = new object[] { userId, points, null };
+                Points.Invoke(nwzpoint, args);
+                balance = (int)args[2];
+            }
+            else
+            {
+                balance = -1;
+            }
+        }
+
+
+        /// <summary>
+        /// 反射设置积分
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="points"></param>
+        /// <param name="balance"></param>
+        public static void SetPoint(string userId, int points)
+        {
+            MethodInfo Points = nwzpoint.GetMethod("PointsSet_ByUserID", BindingFlags.Static | BindingFlags.Public);
+            if (Points != null)
+            {
+                object[] args = new object[] { userId, points };
+                Points.Invoke(nwzpoint, args);
+            }
+        }
+
+
+        /// <summary>
+        /// 获取积分
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static int GetPoint(string userId)
+        {
+            MethodInfo Points = nwzpoint.GetMethod("PointsGet_ByUserID", BindingFlags.Static | BindingFlags.Public);
+            if (Points != null)
+            {
+                object[] args = new object[] { userId };
+                int result = (int)Points.Invoke(nwzpoint, args);
+                return result;
+            }
+            return -1;
+        }
     }
 }

@@ -209,7 +209,7 @@ namespace HioldMod.src.HttpServer.service
                     {
                         LogUtils.Loger("进入naiwazi积分同步");
 
-                        int result = NaiwaziBot.Naiwazi_Points.PointsGet_ByUserID(ui.gameentityid);
+                        int result = NaiwaziServerKitInterface.NaiwaziPointHelper.GetPoint(ui.gameentityid);
                         if (result >= 0)
                         {
                             ui.money = result;
