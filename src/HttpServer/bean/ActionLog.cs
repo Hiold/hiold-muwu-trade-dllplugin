@@ -81,6 +81,10 @@ namespace HioldMod.src.HttpServer.bean
         public static int updateUserinfo = 16;
         //取消求购
         public static int DeleteRequire = 17;
+        //物品被购买
+        public static int ItemSellOuted = 18;
+        //被供货
+        public static int SuppliedItem = 19;
 
 
     }

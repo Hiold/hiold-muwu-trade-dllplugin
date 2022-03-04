@@ -13,6 +13,8 @@ using static ConfigTools.LoadMainConfig;
 using HarmonyLib;
 using Pathfinding;
 using HioldMod.src.Reflection;
+using HioldMod.HttpServer;
+using NaiwaziServerKitInterface;
 
 namespace HioldMod
 {
@@ -23,8 +25,18 @@ namespace HioldMod
             //当前dll运行路径
             public static string ConfigPath = string.Format("{0}/config/", getModDir());
             public static string AssemblyPath = string.Format("{0}\\", getModDir());
+            //运行在服务器
             public static bool isOnServer = false;
             public static bool isDebug = true;
+            //已启用NaiwaziBot
+            public static bool isNaiwaziBot = false;
+            //已启用serverkit
+            public static bool isServerKit = false;
+            //正在快速重启
+            public static bool isFastRestarting = false;
+            //指令隐藏
+            private static ChatHider chatHider = null;
+
 
             /// <summary>
             /// 初始化mod
@@ -39,17 +51,9 @@ namespace HioldMod
                     Directory.CreateDirectory(string.Format("{0}/Logs/", API.ConfigPath));
                 }
 
-                //Harmony harmony = new Harmony(base.GetType().ToString());
-                //harmony.PatchAll(Assembly.GetExecutingAssembly());
-
                 //注入hook
                 RunTimePatch.PatchAll();
 
-
-                //Assembly assembly1 = Assembly.Load(string.Format(@"{0}System.Web.dll", AssemblyPath));
-                //Assembly assembly2 = Assembly.Load(string.Format(@"{0}LiteDB.dll", AssemblyPath));
-                //Log.Warning(assembly1.Location);
-                //Log.Warning(assembly2.Location);
                 //注册事件
                 ModEvents.GameStartDone.RegisterHandler(GameStartDone);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(PlayerSpawnedInWorld);
@@ -62,9 +66,41 @@ namespace HioldMod
             /// </summary>
             private static void GameStartDone()
             {
+                //naiwazi适配部分
+                isServerKit = CommonInterface.IsServerKitEnabled();
+
+                if (isServerKit)
+                {
+                    LogUtils.Loger("检测到ServerKit启用适配");
+
+                    /*
+                     *	ChatHider
+                     */
+                    chatHider = new ChatHider();
+
+                    //If you seperate the gateway and gameserver, that means they have different IPs, so you need to set it manually.
+                    //chatHider.Ip = "x.x.x.x";
+
+                    chatHider.SetChatHider("/xmm");
+
+                    int ret = ChatInterface.ChatWatcher_Register(OnChatMessage, "HioldMuwu");
+                    if (ret != 0)
+                    {
+                        LogUtils.Loger("Register chat watcher failed, err: " + ret.ToString());
+                    }
+
+                    ret = FastRestartNoticeInterface.Notice_Register(OnFastRestartPrepared, "HioldMuwu");
+                    if (ret != 0)
+                    {
+                        LogUtils.Loger("Register fast-restarting notice failed, err: " + ret.ToString());
+                    }
+                }
+
+
+
                 //反射获取已上锁Tile
                 bool isReflected = LockedEntity.doReflection();
-                Log.Out("反射获取数据情况: {0}", isReflected);
+                LogUtils.Loger("反射获取数据情况: " + isReflected);
 
                 //检查文件夹
                 if (!Directory.Exists(API.ConfigPath))
@@ -74,7 +110,7 @@ namespace HioldMod
                 //加载配置文件
                 LoadMainConfig.Load();
 
-                Log.Out("Host:" + MainConfig.Host + "  Port" + MainConfig.Port);
+                LogUtils.Loger("Host:" + MainConfig.Host + "  Port" + MainConfig.Port);
 
                 isOnServer = true;
                 DataBase.InitDataBase();
@@ -89,9 +125,20 @@ namespace HioldMod
                 }
 
                 HioldModServer.Server.RunServer(port);
-                Log.Out("[HioldMod：Init执行完毕]");
+                LogUtils.Loger("Init执行完毕");
             }
 
+            /// <summary>
+            /// 原生聊天信息处理
+            /// </summary>
+            /// <param name="_cInfo"></param>
+            /// <param name="_type"></param>
+            /// <param name="_senderId"></param>
+            /// <param name="_msg"></param>
+            /// <param name="_mainName"></param>
+            /// <param name="_localizeMain"></param>
+            /// <param name="_recipientEntityIds"></param>
+            /// <returns></returns>
             public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,
                  bool _localizeMain, List<int> _recipientEntityIds)
             {
@@ -99,7 +146,7 @@ namespace HioldMod
                 //监听[/sa]命令
                 if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
                 {
-                    Log.Out("正在执行shop");
+                    LogUtils.Loger("正在执行shop");
                     if (_cInfo != null)
                     {
                         _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageConsoleCmdClient>().Setup("xui open HioldshopWindows", true));
@@ -111,6 +158,36 @@ namespace HioldMod
                     return false;
                 }
                 return true;
+            }
+
+            /// <summary>
+            /// serverkit处理的聊天信息
+            /// </summary>
+            /// <param name="_cInfo"></param>
+            /// <param name="_msg"></param>
+            /// <param name="_type"></param>
+            /// <param name=""></param>
+            private static void OnChatMessage(ClientInfo _cInfo, string _msg, /*uint _timeStamp,*/ EChatType _type)
+            {
+                //监听[/sa]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
+                {
+                    LogUtils.Loger("正在执行shop");
+                    if (_cInfo != null)
+                    {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageConsoleCmdClient>().Setup("xui open HioldshopWindows", true));
+                    }
+                    else
+                    {
+                        Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
+                    }
+                }
+            }
+
+            private static void OnFastRestartPrepared()
+            {
+                LogUtils.Loger("收到通知,正在快速重启,暂停所有接口服务");
+                isFastRestarting = true;
             }
 
             /// <summary>

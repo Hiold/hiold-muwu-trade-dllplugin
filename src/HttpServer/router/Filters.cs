@@ -33,6 +33,20 @@ namespace HioldMod.src.HttpServer.router
             }
         }
 
+        public static bool IsServerReady(HioldRequest request, HttpListenerResponse response)
+        {
+            if (HioldMod.API.isFastRestarting == true)
+            {
+                LogUtils.Loger(request.sessionid);
+                ResponseUtils.ResponseFail(response, "服务器正在快速重启，请耐心等待重启完毕");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
 
         /// <summary>
         /// 校验用户登录情况

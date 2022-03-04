@@ -90,7 +90,7 @@ namespace HioldMod.src.HttpServer.action
                     }
 
                     //检查请求购买物品的库存数量
-                    if (item.stock < intCount)
+                    if (item.stock != -1 && item.stock < intCount)
                     {
                         //库存量不足
                         ResponseUtils.ResponseFail(response, "此物品已售罄，无法购买");
@@ -101,7 +101,7 @@ namespace HioldMod.src.HttpServer.action
                     string tdEnd = DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59";
                     Int64 tdCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, item.id + "", LogType.BuyItem, tdStart, tdEnd);
                     Int64 allCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, item.id + "", LogType.BuyItem, null, null);
-                    if (int.TryParse(item.xgdayset, out int intxgdayset))
+                    if ((item.xglevel.Equals("2") || item.xglevel.Equals("3")) && int.TryParse(item.xgdayset, out int intxgdayset))
                     {
                         if (tdCount + intCount > intxgdayset)
                         {
@@ -111,7 +111,7 @@ namespace HioldMod.src.HttpServer.action
                         }
                     }
 
-                    if (int.TryParse(item.xgallset, out int intxgallset))
+                    if (item.xgall.Equals("2") && int.TryParse(item.xgallset, out int intxgallset))
                     {
                         if (allCount + intCount > intxgallset)
                         {
@@ -394,10 +394,10 @@ namespace HioldMod.src.HttpServer.action
                         actTime = DateTime.Now,
                         actType = LogType.BuyItem,
                         atcPlayerEntityId = request.user.gameentityid,
-                        extinfo1 = _buy.id,
-                        extinfo2 = _buy.couid,
-                        extinfo3 = _buy.count,
-                        extinfo4 = priceAll + ""
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(_buy),
+                        extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(userStorate),
+                        extinfo3 = priceAll + "",
+                        desc = string.Format("从系统商店购买{0}个{1}，共消费{2}", _buy.count, item.translate, priceAll)
                     });
                     ResponseUtils.ResponseSuccess(response);
                 }
@@ -531,8 +531,10 @@ namespace HioldMod.src.HttpServer.action
                     actTime = DateTime.Now,
                     actType = LogType.SellItem,
                     atcPlayerEntityId = request.user.gameentityid,
-                    extinfo1 = item.id + "",
-                    extinfo2 = count + "",
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(item),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(userTrade),
+                    extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    desc = string.Format("上架{0}个{1}，售价{2}", count, item.translate, price),
                 });
                 UserTradeService.addUserTrade(userTrade);
                 ResponseUtils.ResponseSuccessWithData(response, "出售成功!");
@@ -646,7 +648,9 @@ namespace HioldMod.src.HttpServer.action
                     actTime = DateTime.Now,
                     actType = LogType.TackBack,
                     atcPlayerEntityId = request.user.gameentityid,
-                    extinfo1 = item.id + "",
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(item),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    desc = string.Format("下架{0}个{1}", item.count, item.translate),
                 });
                 UserStorageService.addUserStorage(userStorate);
                 ResponseUtils.ResponseSuccessWithData(response, "下架成功!");
@@ -817,16 +821,31 @@ namespace HioldMod.src.HttpServer.action
                     UserService.UpdateAmount(seller, UserInfoCountType.TRADE_COUNT, intCount);
                     UserService.UpdateAmount(seller, UserInfoCountType.TRADE_MONEY, priceAll);
 
-                    //记录用户购买数据
+                    //记录日志数据
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.ItemSellOuted,
+                        atcPlayerEntityId = seller.gameentityid,
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(ut),
+                        extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(userStorate),
+                        extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(_buy),
+                        extinfo4 = priceAll + "",
+                        desc = string.Format("玩家：{0} ，购买{1}个你上架的{2}，获得{3}", request.user.name, userStorate.storageCount, userStorate.translate, priceAll),
+                    });
+
+
+                    //记录日志数据
                     ActionLogService.addLog(new ActionLog()
                     {
                         actTime = DateTime.Now,
                         actType = LogType.BuyUserTrade,
                         atcPlayerEntityId = request.user.gameentityid,
-                        extinfo1 = _buy.id,
-                        extinfo2 = ut.gameentityid,
-                        extinfo3 = _buy.count,
-                        extinfo4 = priceAll + ""
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(ut),
+                        extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(userStorate),
+                        extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(_buy),
+                        extinfo4 = priceAll + "",
+                        desc = string.Format("从玩家交易购买{0}个{1}，消费{2}", userStorate.storageCount, userStorate.translate, priceAll),
                     });
                     ResponseUtils.ResponseSuccess(response);
                 }
@@ -980,17 +999,31 @@ namespace HioldMod.src.HttpServer.action
                     extinfo5 = us.extinfo5,
                     itemdata = us.itemdata,
                 };
-                //记录用户购买数据
+
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.SuppliedItem,
+                    atcPlayerEntityId = supplyer.gameentityid,
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(us),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(ur),
+                    extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    desc = string.Format("玩家：{0} 为你供货{1}个{2}", request.user.name, ur.Itemcount, ur.Itemchinese, ur.Price),
+                });
+
+                //记录日志数据
                 ActionLogService.addLog(new ActionLog()
                 {
                     actTime = DateTime.Now,
                     actType = LogType.SupplyItem,
                     atcPlayerEntityId = request.user.gameentityid,
-                    extinfo1 = ur.id + "",
-                    extinfo2 = ur.Itemchinese,
-                    extinfo3 = ur.username,
-                    extinfo5 = ur.Itemcount + ""
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(us),
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(ur),
+                    extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    desc = string.Format("为玩家：{0} 供货{1}个{2}，获得{3}", supplyer.name, ur.Itemcount, ur.Itemchinese, ur.Price),
                 });
+
                 UserStorageService.addUserStorage(userStorate);
                 ResponseUtils.ResponseSuccessWithData(response, "供货成功!");
                 return;

@@ -1,5 +1,6 @@
 ﻿using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.service;
+using NaiwaziBot;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace HioldMod.src.HttpServer.database
         /// </summary>
         public static void InitDataBase()
         {
-            
+
             ////创建数据库链接
             if (HioldMod.API.isOnServer)
             {
@@ -83,7 +84,7 @@ namespace HioldMod.src.HttpServer.database
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(TradeManageItem));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserInfo));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserStorage));
-            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(ActionLog));
+            logdb.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(ActionLog));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserConfig));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserTrade));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserRequire));
@@ -108,7 +109,17 @@ namespace HioldMod.src.HttpServer.database
                 {
                     if (et == EditType.Add)
                     {
-                        _target.money += count;
+                        //运行在服务器 并启用了baiwazibot
+                        if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                        {
+                            int result = add(info, count);
+                            _target.money += result;
+                        }
+                        else
+                        {
+                            _target.money += count;
+                        }
+
                         UserService.UpdateUserInfo(_target);
                         return true;
                     }
@@ -119,13 +130,36 @@ namespace HioldMod.src.HttpServer.database
                         {
                             return false;
                         }
-                        _target.money -= count;
+
+                        //运行在服务器 并启用了baiwazibot
+                        if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                        {
+                            int result = sub(info, count);
+                            _target.money -= result;
+                        }
+                        else
+                        {
+                            _target.money -= count;
+                        }
+
                         UserService.UpdateUserInfo(_target);
                         return true;
                     }
                     if (et == EditType.Set)
                     {
-                        _target.money = count;
+
+                        //运行在服务器 并启用了baiwazibot
+                        if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                        {
+                            set(info, count);
+                            _target.money = count;
+                        }
+                        else
+                        {
+                            _target.money = count;
+                        }
+
+
                         UserService.UpdateUserInfo(_target);
                         return true;
                     }
@@ -161,6 +195,21 @@ namespace HioldMod.src.HttpServer.database
             }
 
             return false;
+        }
+
+        private static int add(UserInfo info, double c)
+        {
+            NaiwaziBot.Naiwazi_Points.PointsAdd_ByUserID(info.gameentityid, (int)c, out int result);
+            return result;
+        }
+        private static int sub(UserInfo info, double c)
+        {
+            NaiwaziBot.Naiwazi_Points.PointsSub_ByUserID(info.gameentityid, (int)c, out int result);
+            return result;
+        }
+        private static void set(UserInfo info, double c)
+        {
+            NaiwaziBot.Naiwazi_Points.PointsSet_ByUserID(info.gameentityid, (int)c);
         }
 
         public enum MoneyType

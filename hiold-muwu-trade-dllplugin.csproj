@@ -39,6 +39,10 @@
       <HintPath>..\7dtd-binaries\mscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="NaiwaziBot, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\NaiwaziBot.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin-lib\Newtonsoft.Json.dll</HintPath>
@@ -95,6 +99,7 @@
     <Compile Include="src\API.cs" />
     <Compile Include="src\Commons\HioldsCommons.cs" />
     <Compile Include="src\Commons\Language.cs" />
+    <Compile Include="src\Commons\NaiwaziInterface.cs" />
     <Compile Include="src\ConfigTools\LoadMainConfig.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
@@ -122,7 +127,7 @@
     <Compile Include="src\HttpServer\common\ServerUtils.cs" />
     <Compile Include="src\HttpServer\database\DataBase.cs" />
     <Compile Include="src\HttpServer\HanderThreadPool.cs" />
-    <Compile Include="src\HttpServer\LogUtils.cs" />
+    <Compile Include="src\Commons\LogUtils.cs" />
     <Compile Include="src\HttpServer\router\Filters.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
@@ -152,6 +157,7 @@
     <Content Include="bin-lib\AstarPathfindingProject.dll" />
     <Content Include="bin-lib\LiteDB.dll" />
     <Content Include="bin-lib\LogLibrary.dll" />
+    <Content Include="bin-lib\NaiwaziBot.dll" />
     <Content Include="bin-lib\Newtonsoft.Json.dll" />
     <Content Include="bin-lib\Noemax.GZip.dll" />
     <Content Include="bin-lib\SQLite.Designer.dll" />

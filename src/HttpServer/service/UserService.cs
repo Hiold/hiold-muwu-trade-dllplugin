@@ -1,4 +1,5 @@
-﻿using HioldMod.HttpServer.common;
+﻿using HioldMod.HttpServer;
+using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.database;
 using System;
@@ -49,6 +50,9 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> userLogin(string username, string password)
         {
+            LogUtils.Loger("进入查询");
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("(name = '{0}' and `password` = '{1}') or (gameentityid = '{0}' and `password` = '{1}') ", username, password)).ToList());
             return DataBase.db.Queryable<UserInfo>().Where(string.Format("(name = '{0}' and `password` = '{1}') or (gameentityid = '{0}' and `password` = '{1}') ", username, password)).ToList();
         }
 
@@ -59,7 +63,9 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> getUserById(string id)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(string.Format("id = '{0}' ", id)).ToList(); ;
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("id = '{0}' ", id)).ToList());
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("id = '{0}' ", id)).ToList();
         }
 
         /// <summary>
@@ -79,6 +85,8 @@ namespace HioldMod.src.HttpServer.service
             {
                 ui.password = "[masked]";
             }
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                return HandleUserListQueryMoney(result);
             return result;
         }
 
@@ -89,7 +97,9 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> getUserBySteamid(string steamid)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList(); ;
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList());
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList();
         }
 
         public static void UpdateUserInfo(UserInfo user)
@@ -184,7 +194,34 @@ namespace HioldMod.src.HttpServer.service
                     sortStr = " order by trade_money desc";
                 }
             }
-            return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToList(); ;
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToList());
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToList();
+        }
+
+        public static List<UserInfo> HandleUserListQueryMoney(List<UserInfo> source)
+        {
+            try
+            {
+                foreach (UserInfo ui in source)
+                {
+                    if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                    {
+                        LogUtils.Loger("进入naiwazi积分同步");
+
+                        int result = NaiwaziBot.Naiwazi_Points.PointsGet_ByUserID(ui.gameentityid);
+                        if (result >= 0)
+                        {
+                            ui.money = result;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger("没有找到NaiwaziBot依赖");
+            }
+            return source;
         }
     }
 }

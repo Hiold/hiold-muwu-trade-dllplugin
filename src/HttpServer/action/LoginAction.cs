@@ -23,6 +23,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="response">响应</param>
         public static void login(HioldRequest request, HttpListenerResponse response)
         {
+            LogUtils.Loger("进入naiwazi积分同步");
             try
             {
                 string postData = ServerUtils.getPostData(request.request);
@@ -30,6 +31,7 @@ namespace HioldMod.src.HttpServer.action
                 LoginRequest loginreq = new LoginRequest();
                 loginreq = (LoginRequest)SimpleJson2.SimpleJson2.DeserializeObject(postData, loginreq.GetType());
                 List<UserInfo> resultList = UserService.userLogin(loginreq.username, ServerUtils.md5(loginreq.password));
+                LogUtils.Loger("查询到结果");
                 if (resultList != null && resultList.Count > 0)
                 {
                     UserInfo ui = resultList[0];
