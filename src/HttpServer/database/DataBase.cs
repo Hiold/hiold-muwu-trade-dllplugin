@@ -198,17 +198,17 @@ namespace HioldMod.src.HttpServer.database
 
         private static int add(UserInfo info, double c)
         {
-            NaiwaziServerKitInterface.NaiwaziPointHelper.AddPoint(info.gameentityid, (int)c, out int result);
+            NaiwaziServerKitInterface.NaiwaziPointHelper.AddPoint("EOS_"+info.platformid, (int)c, out int result);
             return result;
         }
         private static int sub(UserInfo info, double c)
         {
-            NaiwaziServerKitInterface.NaiwaziPointHelper.SubPoint(info.gameentityid, (int)c, out int result);
+            NaiwaziServerKitInterface.NaiwaziPointHelper.SubPoint("EOS_" + info.platformid, (int)c, out int result);
             return result;
         }
         private static void set(UserInfo info, double c)
         {
-            NaiwaziServerKitInterface.NaiwaziPointHelper.SetPoint(info.gameentityid, (int)c);
+            NaiwaziServerKitInterface.NaiwaziPointHelper.SetPoint("EOS_" + info.platformid, (int)c);
         }
 
         public enum MoneyType

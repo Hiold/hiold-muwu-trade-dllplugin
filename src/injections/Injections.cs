@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using HioldMod;
+using HioldMod.src.HttpServer.bean;
+using HioldMod.src.HttpServer.service;
 using HioldMod.src.UserTools;
 using Noemax.GZip;
 using Pathfinding;
@@ -142,21 +144,46 @@ public static class Injections
                     //生成动态码
                     string ncode = "";
 
-                    if (HioldModServer.Server.userToken.ContainsValue(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
+                    //获取并更新数据
+                    List<UserInfo> uis = UserService.getUserBySteamid(_cInfo.PlatformId.ReadablePlatformUserIdentifier);
+                    if (uis != null && uis.Count > 0)
                     {
-                        foreach (string keytemp in HioldModServer.Server.userToken.Keys)
+                        UserInfo ui = uis[0];
+                        if (!string.IsNullOrEmpty(ui.ncode))
                         {
-                            if (HioldModServer.Server.userToken[keytemp].Equals(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
-                            {
-                                ncode = keytemp;
-                            }
+                            ncode = ui.ncode;
                         }
+                        else
+                        {
+                            ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(16);
+                            ui.ncode = ncode;
+                            UserService.UpdateUserInfo(ui);
+                        }
+
                     }
                     else
                     {
-                        ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
+                        //首次登录
+                        ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(16);
                         HioldModServer.Server.userToken.Add(ncode, _cInfo.PlatformId.ReadablePlatformUserIdentifier);
                     }
+
+
+                    //if (HioldModServer.Server.userToken.ContainsValue(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
+                    //{
+                    //    foreach (string keytemp in HioldModServer.Server.userToken.Keys)
+                    //    {
+                    //        if (HioldModServer.Server.userToken[keytemp].Equals(_cInfo.PlatformId.ReadablePlatformUserIdentifier))
+                    //        {
+                    //            ncode = keytemp;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    ncode = HioldMod.HttpServer.common.ServerUtils.GetRandomString(32);
+                    //    HioldModServer.Server.userToken.Add(ncode, _cInfo.PlatformId.ReadablePlatformUserIdentifier);
+                    //}
 
                     int port = 26911;
                     string host = "localhost";

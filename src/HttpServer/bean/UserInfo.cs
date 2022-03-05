@@ -90,6 +90,9 @@ namespace HioldMod.src.HttpServer.bean
         public double likecount { get; set; }
 
         public string shopname { get; set; }
+
+        [SugarColumn(IsNullable = true)]
+        public string ncode { get; set; }
     }
 
     public static class UserInfoCountType

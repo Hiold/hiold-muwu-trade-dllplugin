@@ -25,7 +25,7 @@ namespace HioldMod.HttpServer.router
             {
                 url = request.request.RawUrl;
             }
-            LogUtils.Loger(url);
+            //LogUtils.Loger(url);
             //登录
             if (url.Equals("/api/login"))
             {
@@ -55,8 +55,7 @@ namespace HioldMod.HttpServer.router
             else if (url.Equals("/api/updateUserInfo"))
             {
                 if (Filters.IsServerReady(request, response))
-                    if (Filters.isAdminFilter(request, response))
-                        UserInfoAction.updateUserInfo(request, response);
+                    UserInfoAction.updateUserInfo(request, response);
             }
 
             else if (url.Equals("/api/getSystemItem"))

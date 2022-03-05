@@ -11,6 +11,7 @@ using static HioldMod.HioldMod;
 using static HioldMod.src.CommonUtils.UserAndItemCheck;
 using HioldMod.src.HttpServer.service;
 using HioldMod.src.HttpServer.bean;
+using HioldMod.HttpServer;
 
 namespace HioldMod.src.ChunckLoader
 {
@@ -25,6 +26,8 @@ namespace HioldMod.src.ChunckLoader
         /// 
         public static List<Dictionary<string, object>> loadContainerListAround(string eosid)
         {
+            List<int[]> loadedContainer = new List<int[]>();
+
             List<Dictionary<string, object>> loots = new List<Dictionary<string, object>>();
             ChunkManager.ChunkObserver co = null;
             //区块信息
@@ -37,7 +40,6 @@ namespace HioldMod.src.ChunckLoader
             {
                 AllLppoition.AddRange(loadPosSurround(ppdd.LPBlocks));
             }
-            //Log.Out("ACL数量：" + AllLppoition.Count);
 
             //获取ACL 友军相关信息
             if (ppdd.ACL != null)
@@ -47,11 +49,10 @@ namespace HioldMod.src.ChunckLoader
                     PersistentPlayerData tempPdd = HioldsCommons.GetPersistentPlayerDataBySteamId(sts);
                     if (tempPdd != null && tempPdd.LPBlocks != null)
                     {
-                        AllLppoition.AddRange(loadPosSurround(ppdd.LPBlocks));
+                        AllLppoition.AddRange(loadPosSurround(tempPdd.LPBlocks));
                     }
                 }
             }
-            //Log.Out("领地石个数：" + AllLppoition.Count);
 
             try
             {
@@ -94,6 +95,22 @@ namespace HioldMod.src.ChunckLoader
                                 //有密码容器
                                 TileEntityLootContainer SecureLoot = (TileEntityLootContainer)_tile;
                                 Vector3i vec3i = SecureLoot.ToWorldPos();
+                                //如果已加载过 跳过循环
+                                bool isFindExist = false;
+                                foreach (int[] loaded in loadedContainer)
+                                {
+                                    if (loaded[0] == vec3i.x && loaded[1] == vec3i.y && loaded[2] == vec3i.z)
+                                    {
+                                        isFindExist = true;
+                                    }
+                                }
+
+                                if (isFindExist)
+                                {
+                                    continue;
+                                }
+
+                                loadedContainer.Add(new int[] { vec3i.x, vec3i.y, vec3i.z });
                                 SecureLoot.GetClrIdx();
                                 //检测领地内箱子
                                 //检测附近箱子数量
@@ -649,7 +666,7 @@ namespace HioldMod.src.ChunckLoader
                         _serializedItemStack.itemUseTime = _item.itemValue.UseTimes + "";
                         _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                         _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";
-                        _serializedItemStack.desc = LocalizationUtils.getDesc(_item.itemValue.ItemClass.GetItemName()+ "Desc");
+                        _serializedItemStack.desc = LocalizationUtils.getDesc(_item.itemValue.ItemClass.GetItemName() + "Desc");
                         ItemStack[] wtItem = new ItemStack[1];
                         wtItem[0] = _item;
                         var itemString = JsonUtils.ByteStringFromItem(wtItem);

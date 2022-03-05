@@ -44,6 +44,7 @@ namespace HioldMod
             /// <param name="_modInstance">A20新增形参</param>
             public void InitMod(Mod _modInstance)
             {
+                isOnServer = true;
                 //检查日志文件是否存在
                 //检查文件夹
                 if (!Directory.Exists(string.Format("{0}/Logs/", API.ConfigPath)))
@@ -67,8 +68,8 @@ namespace HioldMod
             private static void GameStartDone()
             {
                 //naiwazi适配部分
+                NaiwaziPointHelper.InitNaiwaziBotPointHelper();
                 isServerKit = CommonInterface.IsServerKitEnabled();
-
                 if (isServerKit)
                 {
                     LogUtils.Loger("检测到ServerKit启用适配");
@@ -111,8 +112,6 @@ namespace HioldMod
                 LoadMainConfig.Load();
 
                 LogUtils.Loger("Host:" + MainConfig.Host + "  Port" + MainConfig.Port);
-
-                isOnServer = true;
                 DataBase.InitDataBase();
                 int port = 26911;
                 if (MainConfig.Port.Equals("auto"))
@@ -279,6 +278,7 @@ namespace HioldMod
                                 require_money = 0,
                                 buy_count = "0",
                                 shopname = _cInfo.playerName + "的小店",
+                                ncode = "",
                             });
                             if (id >= 0)
                             {

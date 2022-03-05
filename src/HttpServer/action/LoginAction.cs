@@ -23,7 +23,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="response">响应</param>
         public static void login(HioldRequest request, HttpListenerResponse response)
         {
-            LogUtils.Loger("进入naiwazi积分同步");
+            //LogUtils.Loger("进入naiwazi积分同步");
             try
             {
                 string postData = ServerUtils.getPostData(request.request);
@@ -31,7 +31,6 @@ namespace HioldMod.src.HttpServer.action
                 LoginRequest loginreq = new LoginRequest();
                 loginreq = (LoginRequest)SimpleJson2.SimpleJson2.DeserializeObject(postData, loginreq.GetType());
                 List<UserInfo> resultList = UserService.userLogin(loginreq.username, ServerUtils.md5(loginreq.password));
-                LogUtils.Loger("查询到结果");
                 if (resultList != null && resultList.Count > 0)
                 {
                     UserInfo ui = resultList[0];
@@ -41,7 +40,6 @@ namespace HioldMod.src.HttpServer.action
                         //HioldModServer.Server.userCookies[request.sessionid] = uis;
                         HioldModServer.Server.userCookies.Remove(request.sessionid);
                     }
-
                     HioldModServer.Server.userCookies.Add(request.sessionid, ui);
 
                     //记录日志数据
@@ -49,7 +47,7 @@ namespace HioldMod.src.HttpServer.action
                     {
                         actTime = DateTime.Now,
                         actType = LogType.PlayerLogin,
-                        atcPlayerEntityId = request.user.gameentityid,
+                        atcPlayerEntityId = ui.gameentityid,
                         desc = "使用账号密码登录了交易系统，登录ip：" + request.request.RemoteEndPoint.Address
                     });
 
@@ -85,37 +83,40 @@ namespace HioldMod.src.HttpServer.action
                 string ncode = "";
                 queryRequest.TryGetValue("ncode", out ncode);
 
-                if (HioldModServer.Server.userToken.TryGetValue(ncode, out string steamid))
+                List<UserInfo> uiss = UserService.getUserByNcode(ncode);
+                if (uiss == null || uiss.Count <= 0)
                 {
-                    List<UserInfo> us = UserService.getUserBySteamid(steamid);
-                    if (us != null && us.Count > 0)
+                    if (HioldModServer.Server.userToken.TryGetValue(ncode, out string es))
                     {
-                        UserInfo ui = us[0];
-                        ui.password = "[masked]";
-                        if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
-                        {
-                            //HioldModServer.Server.userCookies[request.sessionid] = uis;
-                            HioldModServer.Server.userCookies.Remove(request.sessionid);
-                        }
-                        HioldModServer.Server.userCookies.Add(request.sessionid, ui);
-
-                        //记录日志数据
-                        ActionLogService.addLog(new ActionLog()
-                        {
-                            actTime = DateTime.Now,
-                            actType = LogType.PlayerLogin,
-                            atcPlayerEntityId = request.user.gameentityid,
-                            desc = "使用cnode免密登录了交易系统，登录ip：" + request.request.RemoteEndPoint.Address
-                        });
-
-                        ResponseUtils.ResponseSuccessWithData(response, ui);
-                        return;
+                        uiss = UserService.getUserBySteamid(es);
                     }
-                    else
+                }
+
+
+                if (uiss != null && uiss.Count > 0)
+                {
+
+                    UserInfo ui = uiss[0];
+                    ui.password = "[masked]";
+                    if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                     {
-                        ResponseUtils.ResponseFail(response, "没找到你的用户信息，快捷登录失败");
-                        return;
+                        //HioldModServer.Server.userCookies[request.sessionid] = uis;
+                        HioldModServer.Server.userCookies.Remove(request.sessionid);
                     }
+                    HioldModServer.Server.userCookies.Add(request.sessionid, ui);
+
+                    //记录日志数据
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.PlayerLogin,
+                        atcPlayerEntityId = ui.gameentityid,
+                        desc = "使用cnode免密登录了交易系统，登录ip：" + request.request.RemoteEndPoint.Address
+                    });
+
+                    ResponseUtils.ResponseSuccessWithData(response, ui);
+                    return;
+
 
 
                 }

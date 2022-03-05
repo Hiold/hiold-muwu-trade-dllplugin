@@ -4,6 +4,7 @@ using System.Threading;
 using System.Net;
 using System.IO;
 using System.Reflection;
+using HioldMod.HttpServer;
 
 namespace NaiwaziServerKitInterface
 {
@@ -198,6 +199,8 @@ namespace NaiwaziServerKitInterface
                 if (assemblies[i].GetName().Name.Contains("NaiwaziEasyBot"))
                 {
                     nwzbot = assemblies[i];
+                    HioldMod.HioldMod.API.isNaiwaziBot = true;
+                    HioldMod.HttpServer.LogUtils.Loger("检测到NaiwaziBot启用适配");
                 }
             }
             //有找到bot
@@ -216,17 +219,12 @@ namespace NaiwaziServerKitInterface
         /// <param name="balance"></param>
         public static void AddPoint(string userId, int points, out int balance)
         {
-            MethodInfo Points = nwzpoint.GetMethod("PointsAdd_ByUserID", BindingFlags.Static | BindingFlags.Public);
-            if (Points != null)
-            {
-                object[] args = new object[] { userId, points, null };
-                Points.Invoke(nwzpoint, args);
-                balance = (int)args[2];
-            }
-            else
-            {
-                balance = -1;
-            }
+
+
+            object[] args = new object[] { userId, points, null };
+            nwzpoint.InvokeMember("PointsAdd_ByUserID", BindingFlags.Public | BindingFlags.InvokeMethod | BindingFlags.Static, null, null, args);
+            balance = (int)args[2];
+
         }
 
 
@@ -238,17 +236,12 @@ namespace NaiwaziServerKitInterface
         /// <param name="balance"></param>
         public static void SubPoint(string userId, int points, out int balance)
         {
-            MethodInfo Points = nwzpoint.GetMethod("PointsSub_ByUserID", BindingFlags.Static | BindingFlags.Public);
-            if (Points != null)
-            {
-                object[] args = new object[] { userId, points, null };
-                Points.Invoke(nwzpoint, args);
-                balance = (int)args[2];
-            }
-            else
-            {
-                balance = -1;
-            }
+
+            object[] args = new object[] { userId, points, null };
+            nwzpoint.InvokeMember("PointsSub_ByUserID", BindingFlags.Public | BindingFlags.InvokeMethod | BindingFlags.Static, null, null, args);
+            //Points.Invoke(nwzpoint, args);
+            balance = (int)args[2];
+
         }
 
 
@@ -260,12 +253,11 @@ namespace NaiwaziServerKitInterface
         /// <param name="balance"></param>
         public static void SetPoint(string userId, int points)
         {
-            MethodInfo Points = nwzpoint.GetMethod("PointsSet_ByUserID", BindingFlags.Static | BindingFlags.Public);
-            if (Points != null)
-            {
-                object[] args = new object[] { userId, points };
-                Points.Invoke(nwzpoint, args);
-            }
+
+            object[] args = new object[] { userId, points };
+            nwzpoint.InvokeMember("PointsSet_ByUserID", BindingFlags.Public | BindingFlags.InvokeMethod | BindingFlags.Static, null, null, args);
+            //Points.Invoke(nwzpoint, args);
+
         }
 
 

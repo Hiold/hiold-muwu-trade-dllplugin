@@ -50,7 +50,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserInfo> userLogin(string username, string password)
         {
-            LogUtils.Loger("进入查询");
+            //LogUtils.Loger("进入查询");
             if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
                 return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("(name = '{0}' and `password` = '{1}') or (gameentityid = '{0}' and `password` = '{1}') ", username, password)).ToList());
             return DataBase.db.Queryable<UserInfo>().Where(string.Format("(name = '{0}' and `password` = '{1}') or (gameentityid = '{0}' and `password` = '{1}') ", username, password)).ToList();
@@ -66,6 +66,18 @@ namespace HioldMod.src.HttpServer.service
             if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
                 return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("id = '{0}' ", id)).ToList());
             return DataBase.db.Queryable<UserInfo>().Where(string.Format("id = '{0}' ", id)).ToList();
+        }
+
+        /// <summary>
+        /// 根据ID获取玩家数据
+        /// </summary>
+        /// <param name="id">用户名</param>
+        /// <returns></returns>
+        public static List<UserInfo> getUserByNcode(string ncode)
+        {
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("ncode = '{0}' ", ncode)).ToList());
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("ncode = '{0}' ", ncode)).ToList();
         }
 
         /// <summary>
@@ -207,9 +219,7 @@ namespace HioldMod.src.HttpServer.service
                 {
                     if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
                     {
-                        LogUtils.Loger("进入naiwazi积分同步");
-
-                        int result = NaiwaziServerKitInterface.NaiwaziPointHelper.GetPoint(ui.gameentityid);
+                        int result = NaiwaziServerKitInterface.NaiwaziPointHelper.GetPoint("EOS_" + ui.platformid);
                         if (result >= 0)
                         {
                             ui.money = result;
