@@ -666,6 +666,47 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
+        /// <summary>
+        /// 根据玩家gameentityid获取玩家数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getLogs(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("type", out string type);
+                int pageindex = 1;
+                int pagesize = 10;
+                queryRequest.TryGetValue("page", out string page);
+                queryRequest.TryGetValue("size", out string size);
+                int.TryParse(page, out pageindex);
+                int.TryParse(size, out pagesize);
+                Dictionary<string, object> als = ActionLogService.QueryLogs(request.user.gameentityid, type, pageindex, pagesize);
+
+                if (als != null && als.Count > 0)
+                {
+                    ResponseUtils.ResponseSuccessWithData(response, als);
+                    return;
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "未找到操作日志");
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+
         public class info
         {
             public string userid { get; set; }

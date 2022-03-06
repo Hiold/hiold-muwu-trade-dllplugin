@@ -23,7 +23,7 @@ namespace HioldMod.src.HttpServer.router
             //Console.WriteLine(request.user);
             if (request.user == null)
             {
-                LogUtils.Loger(request.sessionid);
+                //LogUtils.Loger(request.sessionid);
                 ResponseUtils.ResponseFail(response, "未登录，无法进行操作");
                 return false;
             }
@@ -37,7 +37,7 @@ namespace HioldMod.src.HttpServer.router
         {
             if (HioldMod.API.isFastRestarting == true)
             {
-                LogUtils.Loger(request.sessionid);
+                //LogUtils.Loger(request.sessionid);
                 ResponseUtils.ResponseFail(response, "服务器正在快速重启，请耐心等待重启完毕");
                 return false;
             }

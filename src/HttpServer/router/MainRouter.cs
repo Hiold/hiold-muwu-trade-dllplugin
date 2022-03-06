@@ -269,6 +269,14 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         GameChunckContainerAction.TakeItem(request, response);
             }
+            //获取日志
+            else if (url.StartsWith("/api/getLogs"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        UserInfoAction.getLogs(request, response);
+
+            }
             //没有匹配的router 返回404
             else
             {

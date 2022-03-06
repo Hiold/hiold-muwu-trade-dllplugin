@@ -20,6 +20,29 @@ namespace HioldMod.src.HttpServer.service
             DataBase.logdb.Insertable<ActionLog>(log).ExecuteCommand();
         }
 
+        /// <summary>
+        /// 查询用户操作日志
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> QueryLogs(string userid, string type, int pageIndex, int pageSize)
+        {
+            int totalCount = 0;
+            if (type.Equals("all"))
+            {
+                Dictionary<string, object> result = new Dictionary<string, object>();
+                List<ActionLog> ls = DataBase.logdb.Queryable<ActionLog>().Where(string.Format("atcPlayerEntityId='{0}' order by actTime desc", userid)).ToPageList(pageIndex, pageSize, ref totalCount);
+                result.Add("data", ls);
+                result.Add("count", totalCount);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         public static Int64 QueryItemLogCount(string id, string itemid, int logtype, string startTime, string endTime)
         {
