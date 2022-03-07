@@ -2,6 +2,7 @@
 using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
+using HioldMod.src.UserTools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -311,132 +312,179 @@ namespace HioldMod.src.HttpServer.action
                 //判断参数是否满足条件
 
 
-                if (itemname != null && itemname != "")
+                //if (itemname != null && itemname != "")
+                //{
+                //    var query = Localization.dictionary.Where(x => x.Value != null && x.Value.Length >= 17 && x.Value[16] != null && x.Value[16].ContainsCaseInsensitive(itemname));
+                //    foreach (var item in query.ToList())
+                //    {
+                //        //数据
+                //        Dictionary<string, object> rs = new Dictionary<string, object>();
+                //        var query2 = ItemClass.list.Where(x => x != null && x.Name != null && x.Name.Equals(item.Key));
+                //        if (query2 != null)
+                //        {
+                //            foreach (ItemClass _item in query2.ToList())
+                //            {
+                //                string groupInfo = "";
+                //                foreach (string temp in _item.Groups)
+                //                {
+                //                    groupInfo += temp + "|";
+                //                }
+                //                if (groupInfo.Length > 0)
+                //                {
+                //                    groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
+                //                }
+
+
+
+                //                //returnResult += string.Format("{0},{1},{2},{3}", _item.Name, _item.CustomIcon, (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b), groupInfo);
+                //                rs.Add("itemname", _item.Name);
+                //                rs.Add("icon", _item.CustomIcon);
+                //                rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
+                //                rs.Add("group", groupInfo);
+                //                rs.Add("translate", item.Value);
+                //                items.Add(rs);
+                //            }
+                //        }
+
+
+                //    }
+                //}
+
+
+
+                //if (itemname != null && itemname != "")
+                //{
+                //    var query3 = ItemClass.list.Where(x => x != null && x.Name.ContainsCaseInsensitive(itemname));
+                //    if (query3 != null)
+                //    {
+                //        foreach (var _item in query3.ToList())
+                //        {
+                //            //数据
+                //            Dictionary<string, object> rs = new Dictionary<string, object>();
+                //            var query2 = Localization.dictionary.Where(x => x.Key.Equals(_item.Name));
+                //            if (query2 != null)
+                //            {
+                //                foreach (var item in query2.ToList())
+                //                {
+                //                    string groupInfo = "";
+                //                    foreach (string temp in _item.Groups)
+                //                    {
+                //                        groupInfo += temp + "|";
+                //                    }
+                //                    if (groupInfo.Length > 0)
+                //                    {
+                //                        groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
+                //                    }
+
+
+
+                //                    //returnResult += string.Format("{0},{1},{2},{3}", _item.Name, _item.CustomIcon, (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b), groupInfo);
+                //                    rs.Add("itemname", _item.Name);
+                //                    rs.Add("icon", _item.CustomIcon);
+                //                    rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
+                //                    rs.Add("group", groupInfo);
+                //                    rs.Add("translate", item.Value);
+                //                    items.Add(rs);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    LogUtils.Loger("总长度为：" + ItemClass.list.Length);
+                //    if (ItemClass.list.Length > (skip + take))
+                //    {
+                //        foreach (var _item in ItemClass.list.ToList().GetRange(skip, take))
+                //        {
+                //            if (_item != null)
+                //            {
+                //                //数据
+                //                Dictionary<string, object> rs = new Dictionary<string, object>();
+                //                try
+                //                {
+                //                    var query2 = Localization.dictionary.Where(x => x.Key.Equals(_item.Name));
+                //                    if (query2 != null)
+                //                    {
+                //                        foreach (var item in query2.ToList())
+                //                        {
+                //                            rs.Add("translate", item.Value);
+                //                        }
+                //                    }
+                //                }
+                //                catch (Exception)
+                //                {
+
+                //                }
+
+                //                string groupInfo = "";
+                //                foreach (string temp in _item.Groups)
+                //                {
+                //                    groupInfo += temp + "|";
+                //                }
+                //                if (groupInfo.Length > 0)
+                //                {
+                //                    groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
+                //                }
+                //                rs.Add("itemname", _item.Name);
+                //                rs.Add("icon", _item.CustomIcon);
+                //                rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
+                //                rs.Add("group", groupInfo);
+                //                items.Add(rs);
+                //            }
+                //        }
+                //    }
+                //}
+                List<string> ms = LocalizationUtils.searchItem(itemname);
+                LogUtils.Loger("查询出结果长度:" + ms.Count);
+                try
                 {
-                    var query = Localization.dictionary.Where(x => x.Value != null && x.Value.Length >= 17 && x.Value[16] != null && x.Value[16].ContainsCaseInsensitive(itemname));
-                    foreach (var item in query.ToList())
+                    ms = ms.GetRange(skip, take);
+                }
+                catch (Exception)
+                {
+
+                }
+
+                foreach (string itemN in ms)
+                {
+                    ItemClass _item = ItemClass.GetItem(itemN).ItemClass;
+                    if (_item != null)
                     {
                         //数据
                         Dictionary<string, object> rs = new Dictionary<string, object>();
-                        var query2 = ItemClass.list.Where(x => x != null && x.Name != null && x.Name.Equals(item.Key));
-                        if (query2 != null)
+                        try
                         {
-                            foreach (ItemClass _item in query2.ToList())
-                            {
-                                string groupInfo = "";
-                                foreach (string temp in _item.Groups)
-                                {
-                                    groupInfo += temp + "|";
-                                }
-                                if (groupInfo.Length > 0)
-                                {
-                                    groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
-                                }
-
-
-
-                                //returnResult += string.Format("{0},{1},{2},{3}", _item.Name, _item.CustomIcon, (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b), groupInfo);
-                                rs.Add("itemname", _item.Name);
-                                rs.Add("icon", _item.CustomIcon);
-                                rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
-                                rs.Add("group", groupInfo);
-                                rs.Add("translate", item.Value);
-                                items.Add(rs);
-                            }
-                        }
-
-
-                    }
-                }
-
-
-
-                if (itemname != null && itemname != "")
-                {
-                    var query3 = ItemClass.list.Where(x => x != null && x.Name.ContainsCaseInsensitive(itemname));
-                    if (query3 != null)
-                    {
-                        foreach (var _item in query3.ToList())
-                        {
-                            //数据
-                            Dictionary<string, object> rs = new Dictionary<string, object>();
                             var query2 = Localization.dictionary.Where(x => x.Key.Equals(_item.Name));
                             if (query2 != null)
                             {
                                 foreach (var item in query2.ToList())
                                 {
-                                    string groupInfo = "";
-                                    foreach (string temp in _item.Groups)
-                                    {
-                                        groupInfo += temp + "|";
-                                    }
-                                    if (groupInfo.Length > 0)
-                                    {
-                                        groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
-                                    }
-
-
-
-                                    //returnResult += string.Format("{0},{1},{2},{3}", _item.Name, _item.CustomIcon, (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b), groupInfo);
-                                    rs.Add("itemname", _item.Name);
-                                    rs.Add("icon", _item.CustomIcon);
-                                    rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
-                                    rs.Add("group", groupInfo);
                                     rs.Add("translate", item.Value);
-                                    items.Add(rs);
                                 }
                             }
                         }
-                    }
-                }
-                else
-                {
-                    LogUtils.Loger("总长度为：" + ItemClass.list.Length);
-                    if (ItemClass.list.Length > (skip + take))
-                    {
-                        foreach (var _item in ItemClass.list.ToList().GetRange(skip, take))
+                        catch (Exception)
                         {
-                            if (_item != null)
-                            {
-                                //数据
-                                Dictionary<string, object> rs = new Dictionary<string, object>();
-                                try
-                                {
-                                    var query2 = Localization.dictionary.Where(x => x.Key.Equals(_item.Name));
-                                    if (query2 != null)
-                                    {
-                                        foreach (var item in query2.ToList())
-                                        {
-                                            rs.Add("translate", item.Value);
-                                        }
-                                    }
-                                }
-                                catch (Exception)
-                                {
 
-                                }
-
-                                string groupInfo = "";
-                                foreach (string temp in _item.Groups)
-                                {
-                                    groupInfo += temp + "|";
-                                }
-                                if (groupInfo.Length > 0)
-                                {
-                                    groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
-                                }
-                                rs.Add("itemname", _item.Name);
-                                rs.Add("icon", _item.CustomIcon);
-                                rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
-                                rs.Add("group", groupInfo);
-                                items.Add(rs);
-                            }
                         }
+
+                        string groupInfo = "";
+                        foreach (string temp in _item.Groups)
+                        {
+                            groupInfo += temp + "|";
+                        }
+                        if (groupInfo.Length > 0)
+                        {
+                            groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
+                        }
+                        rs.Add("itemname", _item.Name);
+                        rs.Add("icon", _item.CustomIcon);
+                        rs.Add("tint", (_item.CustomIconTint.a + "|" + _item.CustomIconTint.r + "|" + _item.CustomIconTint.g + "|" + _item.CustomIconTint.b));
+                        rs.Add("group", groupInfo);
+                        items.Add(rs);
                     }
                 }
-
-
-
 
                 ResponseUtils.ResponseSuccessWithData(response, SimpleJson2.SimpleJson2.SerializeObject(items));
                 return;

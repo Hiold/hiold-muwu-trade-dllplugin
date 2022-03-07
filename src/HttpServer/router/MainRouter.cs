@@ -277,6 +277,12 @@ namespace HioldMod.HttpServer.router
                         UserInfoAction.getLogs(request, response);
 
             }
+            else if (url.StartsWith("/api/getCollectItems"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        UserInfoAction.getCollectItems(request, response);
+            }
             //没有匹配的router 返回404
             else
             {

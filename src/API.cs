@@ -69,6 +69,8 @@ namespace HioldMod
             {
                 //naiwazi适配部分
                 NaiwaziPointHelper.InitNaiwaziBotPointHelper();
+                //翻译转换部分
+                LocalizationUtils.InitReverseTranslate();
                 isServerKit = CommonInterface.IsServerKitEnabled();
                 if (isServerKit)
                 {

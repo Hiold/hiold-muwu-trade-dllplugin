@@ -707,6 +707,51 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
+
+        /// <summary>
+        /// 根据玩家gameentityid获取玩家数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getCollectItems(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+
+                List<UserConfig> ucs = UserConfigService.QueryUserCollect(request.user.gameentityid, ConfigType.Collect);
+
+                if (ucs != null && ucs.Count > 0)
+                {
+                    List<TradeManageItem> result = new List<TradeManageItem>();
+                    foreach (UserConfig tp in ucs)
+                    {
+                        List<TradeManageItem> its = ShopTradeService.getShopItemById(int.Parse(tp.configValue));
+                        if (its != null && its.Count > 0)
+                        {
+                            result.AddRange(its);
+                        }
+                    }
+                    ResponseUtils.ResponseSuccessWithData(response, result);
+                    return;
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "未找到操作日志");
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+
         public class info
         {
             public string userid { get; set; }
