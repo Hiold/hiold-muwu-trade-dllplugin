@@ -24,6 +24,7 @@ namespace HioldMod.src.HttpServer.action
         {
             List<string> result = new List<string>();
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
+
             try
             {
                 //非管理员拒绝链接
@@ -38,6 +39,14 @@ namespace HioldMod.src.HttpServer.action
                 {
                     basepath = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
+
+                //检查路径
+                if (!Directory.Exists(basepath))
+                {
+                    Directory.CreateDirectory(basepath);
+                }
+
+
                 FileUploadUtils fuu = new FileUploadUtils(request.request, Encoding.UTF8);
                 List<MultipartFormItem> files = fuu.ParseIntoElementList();
                 for (int i = 0; i < files.Count; i++)

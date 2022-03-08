@@ -1,4 +1,5 @@
-﻿using HioldMod.src.HttpServer.bean;
+﻿using HioldMod.HttpServer;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.service;
 using SqlSugar;
 using System;
@@ -198,7 +199,7 @@ namespace HioldMod.src.HttpServer.database
 
         private static int add(UserInfo info, double c)
         {
-            NaiwaziServerKitInterface.NaiwaziPointHelper.AddPoint("EOS_"+info.platformid, (int)c, out int result);
+            NaiwaziServerKitInterface.NaiwaziPointHelper.AddPoint("EOS_" + info.platformid, (int)c, out int result);
             return result;
         }
         private static int sub(UserInfo info, double c)

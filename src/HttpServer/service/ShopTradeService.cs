@@ -1,5 +1,7 @@
-﻿using HioldMod.src.HttpServer.bean;
+﻿using HioldMod.HttpServer;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.database;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -155,6 +157,41 @@ namespace HioldMod.src.HttpServer.service
         public static void updateShopItem(TradeManageItem item)
         {
             DataBase.db.Updateable(item).ExecuteCommand(); ;
+        }
+
+        /// <summary>
+        /// 增加collect
+        /// </summary>
+        /// <param name="id"></param>
+        public static void updateCollectAdd(string id)
+        {
+            foreach (TradeManageItem ti in getShopItemById(int.Parse(id)))
+            {
+
+                //字典
+                var dt = new Dictionary<string, object>();
+                dt.Add("id", id);
+                dt.Add("collect", ti.collect + 1);
+                var t66 = DataBase.db.Updateable(dt).AS("shopitem").WhereColumns("id").ExecuteCommand();
+            }
+        }
+
+
+        /// <summary>
+        /// 增加collect
+        /// </summary>
+        /// <param name="id"></param>
+        public static void updateCollectSub(string id)
+        {
+            foreach (TradeManageItem ti in getShopItemById(int.Parse(id)))
+            {
+
+                //字典
+                var dt = new Dictionary<string, object>();
+                dt.Add("id", id);
+                dt.Add("collect", ti.collect - 1);
+                var t66 = DataBase.db.Updateable(dt).AS("shopitem").WhereColumns("id").ExecuteCommand();
+            }
         }
     }
 }

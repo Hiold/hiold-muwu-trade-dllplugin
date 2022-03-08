@@ -469,6 +469,8 @@ namespace HioldMod.src.HttpServer.action
                             extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
                             desc = string.Format("添加了新的收藏物品")
                         });
+
+                        ShopTradeService.updateCollectAdd(id);
                     }
                     else
                     {
@@ -480,6 +482,7 @@ namespace HioldMod.src.HttpServer.action
                             extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
                             desc = string.Format("删除了收藏物品")
                         });
+                        ShopTradeService.updateCollectSub(id);
                     }
                     ResponseUtils.ResponseSuccessWithData(response, cfg);
                     return;
@@ -506,6 +509,8 @@ namespace HioldMod.src.HttpServer.action
                         extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
                         desc = string.Format("添加了新的收藏物品")
                     });
+
+                    ShopTradeService.updateCollectAdd(id);
 
                     UserConfigService.addConfig(cfg);
                     ResponseUtils.ResponseSuccessWithData(response, cfg);
@@ -562,6 +567,13 @@ namespace HioldMod.src.HttpServer.action
                 {
                     basepath = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
+
+                //检查路径
+                if (!Directory.Exists(basepath))
+                {
+                    Directory.CreateDirectory(basepath);
+                }
+
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("shopname", out string shopname);
