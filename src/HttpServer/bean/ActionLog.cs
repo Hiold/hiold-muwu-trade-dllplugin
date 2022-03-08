@@ -87,7 +87,10 @@ namespace HioldMod.src.HttpServer.bean
         public static int SuppliedItem = 19;
         //添加红包
         public static int AddDailyAward = 20;
-
+        //修改红包
+        public static int editDailyAward = 21;
+        //修改红包
+        public static int deleteDailyAward = 22;
 
     }
 }

@@ -289,10 +289,32 @@ namespace HioldMod.HttpServer.router
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
-                        if (Filters.isAdminFilter(request, response)) 
-                        DailyAwardAction.postDailyAward(request, response);
+                        if (Filters.isAdminFilter(request, response))
+                            DailyAwardAction.postDailyAward(request, response);
             }
-
+            //修改红包
+            else if (url.StartsWith("/api/updateDailyAward"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            DailyAwardAction.updateDailyAward(request, response);
+            }
+            //删除红包
+            else if (url.StartsWith("/api/deleteDailyAward"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            DailyAwardAction.deleteDailyAward(request, response);
+            }
+            //删除红包
+            else if (url.StartsWith("/api/getDailyAward"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        DailyAwardAction.getDailyAward(request, response);
+            }
             //没有匹配的router 返回404
             else
             {
