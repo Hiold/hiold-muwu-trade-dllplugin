@@ -99,6 +99,7 @@
     <Compile Include="src\ConfigTools\LoadMainConfig.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
+    <Compile Include="src\HttpServer\action\DailyAwardAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameChunckContainerAction.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="src\HttpServer\action\UserTradeAction.cs" />
     <Compile Include="src\HttpServer\bean\ActionLog.cs" />
     <Compile Include="src\HttpServer\bean\HioldRequest.cs" />
+    <Compile Include="src\HttpServer\bean\DailyAward.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
     <Compile Include="src\HttpServer\bean\UserConfig.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
     <Compile Include="src\HttpServer\service\ActionLogService.cs" />
+    <Compile Include="src\HttpServer\service\DailyAwardService.cs" />
     <Compile Include="src\HttpServer\service\ShopTradeService.cs" />
     <Compile Include="src\HttpServer\service\UserConfigService.cs" />
     <Compile Include="src\HttpServer\service\UserService.cs" />

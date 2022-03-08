@@ -188,7 +188,7 @@ namespace HioldMod.src.HttpServer.action
                     extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(shopItem),
                     extinfo2 = oldItemData,
                     extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(addRequest),
-                    desc = string.Format("修改了商品信息", addRequest.stock, addRequest.translate, addRequest.price)
+                    desc = string.Format("修改了商品信息，数量：{0} 物品：{1} 价格{2}", addRequest.stock, addRequest.translate, addRequest.price)
                 });
 
                 ShopTradeService.updateShopItem(shopItem);
@@ -291,10 +291,21 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("class1", out string class1);
                 queryRequest.TryGetValue("class2", out string class2);
                 queryRequest.TryGetValue("sorttype", out string sorttype);
+                queryRequest.TryGetValue("id", out string id);
 
-
-                Dictionary<string, object> result = ShopTradeService.queryShopItem(request.user, itemname, pageIndex, pageSize, class1, class2, sorttype);
-                ResponseUtils.ResponseSuccessWithData(response, result);
+                if (!string.IsNullOrEmpty(id))
+                {
+                    List<TradeManageItem> ls = ShopTradeService.getShopItemById(int.Parse(id));
+                    Dictionary<string, object> resultForid = new Dictionary<string, object>();
+                    resultForid.Add("data", ls);
+                    resultForid.Add("count", 1);
+                    ResponseUtils.ResponseSuccessWithData(response, resultForid);
+                }
+                else
+                {
+                    Dictionary<string, object> result = ShopTradeService.queryShopItem(request.user, itemname, pageIndex, pageSize, class1, class2, sorttype);
+                    ResponseUtils.ResponseSuccessWithData(response, result);
+                }
                 return;
             }
             catch (Exception e)

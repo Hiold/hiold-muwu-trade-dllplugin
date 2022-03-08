@@ -277,12 +277,22 @@ namespace HioldMod.HttpServer.router
                         UserInfoAction.getLogs(request, response);
 
             }
+            //获取已收藏的物品
             else if (url.StartsWith("/api/getCollectItems"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
                         UserInfoAction.getCollectItems(request, response);
             }
+            //添加新红包
+            else if (url.StartsWith("/api/postDailyAward"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response)) 
+                        DailyAwardAction.postDailyAward(request, response);
+            }
+
             //没有匹配的router 返回404
             else
             {
