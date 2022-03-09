@@ -92,5 +92,12 @@ namespace HioldMod.src.HttpServer.bean
         //修改红包
         public static int deleteDailyAward = 22;
 
+        //添加奖品
+        public static int AddAwardInfo = 23;
+        //修改奖品
+        public static int editAwardInfo = 24;
+        //修改奖品
+        public static int deleteAwardInfo = 25;
+
     }
 }

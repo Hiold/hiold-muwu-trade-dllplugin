@@ -99,6 +99,7 @@
     <Compile Include="src\ConfigTools\LoadMainConfig.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
+    <Compile Include="src\HttpServer\action\AwardInfoAction.cs" />
     <Compile Include="src\HttpServer\action\DailyAwardAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameChunckContainerAction.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
     <Compile Include="src\HttpServer\service\ActionLogService.cs" />
+    <Compile Include="src\HttpServer\service\AwardInfoService.cs" />
     <Compile Include="src\HttpServer\service\DailyAwardService.cs" />
     <Compile Include="src\HttpServer\service\ShopTradeService.cs" />
     <Compile Include="src\HttpServer\service\UserConfigService.cs" />
