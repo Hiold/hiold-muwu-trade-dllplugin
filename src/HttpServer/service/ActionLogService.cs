@@ -72,5 +72,19 @@ namespace HioldMod.src.HttpServer.service
             }
             return 0;
         }
+
+
+        /// <summary>
+        /// 查询用户操作日志
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static List<ActionLog> QueryDailyAwardPull(string userid, string hbid)
+        {
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            List<ActionLog> ls = DataBase.logdb.Queryable<ActionLog>().Where(string.Format("atcPlayerEntityId='{0}' and extinfo1={1} and actType={2} order by actTime desc", userid, hbid,LogType.pullGetDailyAward)).ToList();
+            return ls;
+        }
     }
 }

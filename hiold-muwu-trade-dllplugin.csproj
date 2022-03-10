@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\API.cs" />
+    <Compile Include="src\Commons\AwardDeliverTools.cs" />
     <Compile Include="src\Commons\HioldsCommons.cs" />
     <Compile Include="src\Commons\Language.cs" />
     <Compile Include="src\Commons\NaiwaziInterface.cs" />

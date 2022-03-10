@@ -285,7 +285,7 @@ namespace HioldMod.HttpServer.router
                         UserInfoAction.getCollectItems(request, response);
             }
             //添加新红包
-            else if (url.StartsWith("/api/postDailyAward"))
+            else if (url.Equals("/api/postDailyAward"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
@@ -293,7 +293,7 @@ namespace HioldMod.HttpServer.router
                             DailyAwardAction.postDailyAward(request, response);
             }
             //修改红包
-            else if (url.StartsWith("/api/updateDailyAward"))
+            else if (url.Equals("/api/updateDailyAward"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
@@ -301,7 +301,7 @@ namespace HioldMod.HttpServer.router
                             DailyAwardAction.updateDailyAward(request, response);
             }
             //删除红包
-            else if (url.StartsWith("/api/deleteDailyAward"))
+            else if (url.Equals("/api/deleteDailyAward"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
@@ -309,7 +309,7 @@ namespace HioldMod.HttpServer.router
                             DailyAwardAction.deleteDailyAward(request, response);
             }
             //获取红包
-            else if (url.StartsWith("/api/getDailyAward"))
+            else if (url.Equals("/api/getDailyAward"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
@@ -317,7 +317,7 @@ namespace HioldMod.HttpServer.router
             }
 
             //添加新奖品
-            else if (url.StartsWith("/api/postAwardInfo"))
+            else if (url.Equals("/api/postAwardInfo"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
@@ -325,7 +325,7 @@ namespace HioldMod.HttpServer.router
                             AwardInfoAction.postAwardInfo(request, response);
             }
             //修改奖品
-            else if (url.StartsWith("/api/updateAwardInfo"))
+            else if (url.Equals("/api/updateAwardInfo"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
@@ -333,7 +333,7 @@ namespace HioldMod.HttpServer.router
                             AwardInfoAction.updateAwardInfo(request, response);
             }
             //删除奖品
-            else if (url.StartsWith("/api/deleteAwardInfo"))
+            else if (url.Equals("/api/deleteAwardInfo"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
@@ -341,11 +341,25 @@ namespace HioldMod.HttpServer.router
                             AwardInfoAction.deleteAwardInfo(request, response);
             }
             //获取奖品
-            else if (url.StartsWith("/api/getAwardInfo"))
+            else if (url.Equals("/api/getAwardInfo"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
                         AwardInfoAction.getAwardInfo(request, response);
+            }
+            //领取红包
+            else if (url.Equals("/api/pullDailyAward"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        DailyAwardAction.pullDailyAward(request, response);
+            }
+            //查询红包领取日志
+            else if (url.Equals("/api/getDailyAwardLog"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        DailyAwardAction.getDailyAwardLog(request, response);
             }
 
             //没有匹配的router 返回404

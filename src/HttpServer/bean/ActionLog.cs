@@ -99,5 +99,8 @@ namespace HioldMod.src.HttpServer.bean
         //修改奖品
         public static int deleteAwardInfo = 25;
 
+        //领取红包
+        public static int pullGetDailyAward = 26;
+
     }
 }
