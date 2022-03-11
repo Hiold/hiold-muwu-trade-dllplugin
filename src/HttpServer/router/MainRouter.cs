@@ -362,6 +362,38 @@ namespace HioldMod.HttpServer.router
                         DailyAwardAction.getDailyAwardLog(request, response);
             }
 
+            //添加新活动任务
+            else if (url.Equals("/api/postProgression"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ProgressionTAction.postProgressionT(request, response);
+            }
+            //修改红包
+            else if (url.Equals("/api/updateProgression"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ProgressionTAction.updateProgressionT(request, response);
+            }
+            //删除红包
+            else if (url.Equals("/api/deleteProgression"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ProgressionTAction.deleteProgressionT(request, response);
+            }
+            //获取红包
+            else if (url.Equals("/api/getProgression"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ProgressionTAction.getProgressionT(request, response);
+            }
+
             //没有匹配的router 返回404
             else
             {

@@ -94,13 +94,16 @@
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\API.cs" />
     <Compile Include="src\Commons\AwardDeliverTools.cs" />
+    <Compile Include="src\Commons\HartBeatHandler.cs" />
     <Compile Include="src\Commons\HioldsCommons.cs" />
+    <Compile Include="src\Commons\KillEntityHandler.cs" />
     <Compile Include="src\Commons\Language.cs" />
     <Compile Include="src\Commons\NaiwaziInterface.cs" />
     <Compile Include="src\ConfigTools\LoadMainConfig.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\AwardInfoAction.cs" />
+    <Compile Include="src\HttpServer\action\ProgressionAction.cs" />
     <Compile Include="src\HttpServer\action\DailyAwardAction.cs" />
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameChunckContainerAction.cs" />
@@ -115,6 +118,8 @@
     <Compile Include="src\HttpServer\bean\ActionLog.cs" />
     <Compile Include="src\HttpServer\bean\HioldRequest.cs" />
     <Compile Include="src\HttpServer\bean\DailyAward.cs" />
+    <Compile Include="src\HttpServer\bean\PlayerGameEvent.cs" />
+    <Compile Include="src\HttpServer\bean\ProgressionT.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
     <Compile Include="src\HttpServer\bean\UserConfig.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
@@ -131,6 +136,8 @@
     <Compile Include="src\HttpServer\router\Filters.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
+    <Compile Include="src\HttpServer\service\ProgressionTService.cs" />
+    <Compile Include="src\HttpServer\service\PlayerGameEventService.cs" />
     <Compile Include="src\HttpServer\service\ActionLogService.cs" />
     <Compile Include="src\HttpServer\service\AwardInfoService.cs" />
     <Compile Include="src\HttpServer\service\DailyAwardService.cs" />

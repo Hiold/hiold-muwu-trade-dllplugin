@@ -15,6 +15,8 @@ using Pathfinding;
 using HioldMod.src.Reflection;
 using HioldMod.HttpServer;
 using NaiwaziServerKitInterface;
+using HioldMod.src.Commons;
+using System.Threading;
 
 namespace HioldMod
 {
@@ -60,6 +62,7 @@ namespace HioldMod
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(PlayerSpawnedInWorld);
                 ModEvents.ChatMessage.RegisterHandler(ChatMessage);
                 ModEvents.GameUpdate.RegisterHandler(GameUpdate);
+                ModEvents.EntityKilled.RegisterHandler(KillEntityHandler.EntityKilledHandler);
             }
 
             /// <summary>
@@ -126,6 +129,9 @@ namespace HioldMod
                 }
 
                 HioldModServer.Server.RunServer(port);
+                //定时器发送心跳数据
+                LogUtils.Loger("正在初始化用户基础信息更新定时器");
+                System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback(HartBeatHandler.HandlePlayerHartbeat), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
                 LogUtils.Loger("Init执行完毕");
             }
 

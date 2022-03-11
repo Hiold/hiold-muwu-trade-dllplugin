@@ -14,6 +14,8 @@ namespace HioldMod.src.HttpServer.database
         private static string maindbPath;
         //日志数据库路径
         private static string logdbPath;
+        //游戏进程日志数据库路径
+        private static string gameeventdbPath;
         //数据库客户端
 
         //调试使用的数据库文件存储路径
@@ -21,6 +23,7 @@ namespace HioldMod.src.HttpServer.database
         public static string debugDbfilePath = @"C:\Users\Administrator\Source\Repos\hiold-muwu-trade-dllplugin\db\";
         public static SqlSugarClient db = null;
         public static SqlSugarClient logdb = null;
+        public static SqlSugarClient gameeventdb = null;
 
         /// <summary>
         /// 初始化数据库
@@ -40,6 +43,7 @@ namespace HioldMod.src.HttpServer.database
                 }
                 maindbPath = string.Format("DataSource={0}TradeManageDB.db", modDBDir);
                 logdbPath = string.Format("DataSource={0}Log.db", modDBDir);
+                gameeventdbPath = string.Format("DataSource={0}GameEventLog.db", modDBDir);
 
             }
             else
@@ -60,6 +64,7 @@ namespace HioldMod.src.HttpServer.database
                 }
                 maindbPath = string.Format("DataSource={0}TradeManageDB.db", debugDbfilePath);
                 logdbPath = string.Format("DataSource={0}Log.db", debugDbfilePath);
+                gameeventdbPath = string.Format("DataSource={0}GameEventLog.db", debugDbfilePath);
             }
 
             ////创建litedb实例
@@ -79,6 +84,14 @@ namespace HioldMod.src.HttpServer.database
                 IsAutoCloseConnection = true,//自动释放
             });
 
+            //初始化游戏进程日志存储数据库
+            gameeventdb = new SqlSugarClient(new ConnectionConfig()
+            {
+                ConnectionString = gameeventdbPath,
+                DbType = SqlSugar.DbType.Sqlite,
+                IsAutoCloseConnection = true,//自动释放
+            });
+
             Console.WriteLine("开始同步表结构");
             //初始化表
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(TradeManageItem));
@@ -88,9 +101,12 @@ namespace HioldMod.src.HttpServer.database
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserConfig));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserTrade));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(UserRequire));
+            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(ProgressionT));
             //红包与奖励配置
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(DailyAward));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(AwardInfo));
+            //游戏进程相关数据库表
+            gameeventdb.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(PlayerGameEvent));
         }
 
         /// <summary>
