@@ -379,7 +379,10 @@ namespace HioldMod.src.HttpServer.action
                     //添加数据到数据库
                     UserStorageService.addUserStorage(userStorate);
                     //更新数据库存
-                    item.stock -= intCount;
+                    if (item.stock > 0)
+                    {
+                        item.stock -= intCount;
+                    }
                     int selled = 0;
                     int.TryParse(item.selloutcount, out selled);
                     item.selloutcount = (selled + intCount) + "";

@@ -87,7 +87,7 @@ namespace HioldMod
                     //If you seperate the gateway and gameserver, that means they have different IPs, so you need to set it manually.
                     //chatHider.Ip = "x.x.x.x";
 
-                    chatHider.SetChatHider("/xmm");
+                    chatHider.SetChatHider("/pmreg");
 
                     int ret = ChatInterface.ChatWatcher_Register(OnChatMessage, "HioldMuwu");
                     if (ret != 0)
@@ -164,6 +164,37 @@ namespace HioldMod
                     }
                     return false;
                 }
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/pmreg"))
+                {
+                    string[] command = _msg.Split(' ');
+                    //命令参数不正确
+                    if (command.Length < 2)
+                    {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[ff0000]注册失败,格式错误,正确格式为/pmreg 密码", "[87CEFA]交易系统", false, null));
+                        return false;
+                    }
+                    if (_cInfo != null)
+                    {
+                        //Log.Out("响应玩家的拍卖请求 {0}", _cInfo.playerId);
+                        //HandleCommand.handleRegUser(_cInfo, command[1]);
+                        string newpw = command[1];
+                        List<UserInfo> us = UserService.getUserBySteamid(_cInfo.PlatformId.ReadablePlatformUserIdentifier);
+                        if (us != null)
+                        {
+                            UserInfo ui = us[0];
+                            ui.password = ServerUtils.md5(newpw);
+                            UserService.UpdateUserInfo(ui);
+                            _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]密码修改成功", "[87CEFA]交易系统", false, null));
+                        }
+                    }
+                    else
+                    {
+                        Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
+                    }
+                    return false;
+                }
                 return true;
             }
 
@@ -183,6 +214,35 @@ namespace HioldMod
                     if (_cInfo != null)
                     {
                         _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageConsoleCmdClient>().Setup("xui open HioldshopWindows", true));
+                    }
+                    else
+                    {
+                        Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
+                    }
+                }
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/pmreg"))
+                {
+                    string[] command = _msg.Split(' ');
+                    //命令参数不正确
+                    if (command.Length < 2)
+                    {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[ff0000]注册失败,格式错误,正确格式为/pmreg 密码", "[87CEFA]交易系统", false, null));
+                    }
+                    if (_cInfo != null)
+                    {
+                        //Log.Out("响应玩家的拍卖请求 {0}", _cInfo.playerId);
+                        //HandleCommand.handleRegUser(_cInfo, command[1]);
+                        string newpw = command[1];
+                        List<UserInfo> us = UserService.getUserBySteamid(_cInfo.PlatformId.ReadablePlatformUserIdentifier);
+                        if (us != null)
+                        {
+                            UserInfo ui = us[0];
+                            ui.password = ServerUtils.md5(newpw);
+                            UserService.UpdateUserInfo(ui);
+                            _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]密码修改成功", "[87CEFA]交易系统", false, null));
+                        }
                     }
                     else
                     {
@@ -296,6 +356,14 @@ namespace HioldMod
                             {
                                 _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[00FF00]" + "注册失败，请联系管理员", "[87CEFA]交易系统", false, null));
                             }
+                        }
+                        else
+                        {
+                            UserInfo ui = exists[0];
+                            ui.name = _cInfo.playerName;
+                            ui.gameentityid = _cInfo.PlatformId.ReadablePlatformUserIdentifier;
+                            ui.platformid = _cInfo.CrossplatformId.ReadablePlatformUserIdentifier;
+                            UserService.UpdateUserInfo(ui);
                         }
                     }
                     catch (Exception e)

@@ -25,6 +25,16 @@ namespace HioldMod.HttpServer.router
             {
                 url = request.request.RawUrl;
             }
+
+            //请求静态资源
+            if (!url.StartsWith("/api/"))
+            {
+                Task.Run(() =>
+                {
+                    GameItemAction.getStaticSource(request, response);
+                });
+            }
+
             //LogUtils.Loger(url);
             //登录
             if (url.Equals("/api/login"))
@@ -392,12 +402,6 @@ namespace HioldMod.HttpServer.router
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
                         ProgressionTAction.getProgressionT(request, response);
-            }
-
-            //没有匹配的router 返回404
-            else
-            {
-                GameItemAction.getStaticSource(request, response);
             }
         }
     }
