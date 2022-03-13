@@ -70,7 +70,7 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="playerId">用户id</param>
         /// <param name="value">完成任务阈值</param>
         /// <returns></returns>
-        public static bool IsProgressionComplete(int _ttype, int _ptype, string playerId, int value)
+        public static Int64 IsProgressionComplete(int _ttype, int _ptype, string playerId, int value)
         {
             //本周日期
             string[] weekpair = ServerUtils.getDayOfThisWeek();
@@ -92,11 +92,11 @@ namespace HioldMod.src.HttpServer.service
                                 {
                                     try
                                     {
-                                        return (Int64)data >= value;
+                                        return (Int64)data;
                                     }
                                     catch (Exception)
                                     {
-                                        return false;
+                                        return 0;
                                     }
                                 }
                             }
@@ -110,11 +110,11 @@ namespace HioldMod.src.HttpServer.service
                                 {
                                     try
                                     {
-                                        return (Int64)data >= value;
+                                        return (Int64)data;
                                     }
                                     catch (Exception)
                                     {
-                                        return false;
+                                        return 0;
                                     }
                                 }
                             }
@@ -128,11 +128,11 @@ namespace HioldMod.src.HttpServer.service
                                 {
                                     try
                                     {
-                                        return (Int64)data >= value;
+                                        return (Int64)data;
                                     }
                                     catch (Exception)
                                     {
-                                        return false;
+                                        return 0;
                                     }
                                 }
                             }
@@ -151,11 +151,11 @@ namespace HioldMod.src.HttpServer.service
                                 {
                                     try
                                     {
-                                        return (Int64)data >= value;
+                                        return (Int64)data;
                                     }
                                     catch (Exception)
                                     {
-                                        return false;
+                                        return 0;
                                     }
                                 }
                             }
@@ -169,17 +169,17 @@ namespace HioldMod.src.HttpServer.service
                                 {
                                     try
                                     {
-                                        return (Int64)data >= value;
+                                        return (Int64)data;
                                     }
                                     catch (Exception)
                                     {
-                                        return false;
+                                        return 0;
                                     }
                                 }
                             }
                             break;
                         case HttpServer.bean.ProgressionType.MAIN:
-                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and t.actType='{3}' ", playerId, PlayerGameEventType.KILL_ANIMAL)).Select();
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and t.actType='{1}' ", playerId, PlayerGameEventType.KILL_ANIMAL)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
@@ -187,39 +187,102 @@ namespace HioldMod.src.HttpServer.service
                                 {
                                     try
                                     {
-                                        return (Int64)data >= value;
+                                        return (Int64)data;
                                     }
                                     catch (Exception)
                                     {
-                                        return false;
+                                        return 0;
                                     }
                                 }
                             }
                             break;
                     }
                     break;
+                //点赞
                 case HttpServer.bean.ProgressionPType.LIKE:
                     switch (_ptype)
                     {
                         case HttpServer.bean.ProgressionType.DAILY:
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, daypair[0], daypair[1], PlayerGameEventType.LIKE)).Select();
+                            //Console.WriteLine(dt);
+                            foreach (DataRow row in dt)
+                            {
+                                foreach (object data in row.ItemArray)
+                                {
+                                    try
+                                    {
+                                        return (Int64)data;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        return 0;
+                                    }
+                                }
+                            }
                             break;
                         case HttpServer.bean.ProgressionType.WEEK:
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, weekpair[0], weekpair[1], PlayerGameEventType.LIKE)).Select();
+                            //Console.WriteLine(dt);
+                            foreach (DataRow row in dt)
+                            {
+                                foreach (object data in row.ItemArray)
+                                {
+                                    try
+                                    {
+                                        return (Int64)data;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        return 0;
+                                    }
+                                }
+                            }
                             break;
                         case HttpServer.bean.ProgressionType.MAIN:
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and t.actType='{1}' ", playerId, PlayerGameEventType.LIKE)).Select();
+                            //Console.WriteLine(dt);
+                            foreach (DataRow row in dt)
+                            {
+                                foreach (object data in row.ItemArray)
+                                {
+                                    try
+                                    {
+                                        return (Int64)data;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        return 0;
+                                    }
+                                }
+                            }
                             break;
                     }
                     break;
+                //在线时长
                 case HttpServer.bean.ProgressionPType.ONLINE_TIME:
                     switch (_ptype)
                     {
-                        case HttpServer.bean.ProgressionType.DAILY:
-                            break;
-                        case HttpServer.bean.ProgressionType.WEEK:
-                            break;
                         case HttpServer.bean.ProgressionType.MAIN:
+                            dt = DataBase.db.Ado.GetDataTable(string.Format("SELECT online_time FROM userinfo where gameentityid='{0}' ", playerId)).Select();
+                            //Console.WriteLine(dt);
+                            foreach (DataRow row in dt)
+                            {
+                                foreach (object data in row.ItemArray)
+                                {
+                                    try
+                                    {
+                                        return (Int64)data;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        return 0;
+                                    }
+                                }
+                            }
                             break;
                     }
                     break;
+                    //交易量
                 case HttpServer.bean.ProgressionPType.TRADE_COUNT:
                     switch (_ptype)
                     {
@@ -320,9 +383,9 @@ namespace HioldMod.src.HttpServer.service
                     }
                     break;
                 default:
-                    return false;
+                    return 0;
             }
-            return false;
+            return 0;
         }
 
     }
