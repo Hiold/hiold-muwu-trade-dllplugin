@@ -312,6 +312,35 @@ namespace HioldMod.HttpServer.common
             public byte[] datas;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static string[] getDayOfThisWeek()
+        {
+            string[] weekPair = new string[2];
+            DateTime currentDate = DateTime.Now.Date.AddDays(1);
+            //int dayOfWeek = (int)currentDate.DayOfWeek;
+            // 以星期日为第一天时，第一天为
+            int daydiff = (int)currentDate.DayOfWeek - 1 < 0 ? 6 : (int)currentDate.DayOfWeek - 1;
+            DateTime firstDay = currentDate.AddDays(-daydiff);
+            // 最后一天
+            DateTime lastDay = firstDay.AddDays(6);
+            weekPair[0] = firstDay.ToString("yyyy-MM-dd HH:mm:ss");
+            weekPair[1] = lastDay.ToString("yyyy-MM-dd HH:mm:ss");
+            return weekPair;
+        }
+        
+        public static string[] getDayOfToday()
+        {
+            DateTime currentDate = DateTime.Now.Date;
+            string[] daypair = new string[2];
+            daypair[0] = currentDate.ToString("yyyy-MM-dd") + " 00:00:00";
+            daypair[1] = currentDate.ToString("yyyy-MM-dd") + " 23:59:59";
+            return daypair;
+        }
+
+
         public static string UrlDecode(string str)
         {
             return UrlDecode(str, Encoding.UTF8);

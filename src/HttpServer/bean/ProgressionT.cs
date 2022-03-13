@@ -28,28 +28,28 @@ namespace HioldMod.src.HttpServer.bean
     public static class ProgressionType
     {
         //主线任务
-        public static int MAIN = 1;
+        public const int MAIN = 1;
         //每日任务
-        public static int DAILY = 2;
+        public const int DAILY = 2;
         //每周任务
-        public static int WEEK = 3;
+        public const int WEEK = 3;
 
     }
     public static class ProgressionPType
     {
-        public static int ZOMBIE_KILL = 1;
-        public static int ANIMAL_KILL = 2;
-        public static int LIKE = 3;
-        public static int ONLINE_TIME = 4;
-        public static int TRADE_COUNT = 5;
-        public static int TRADE_AMOUNT = 6;
-        public static int REQUIRE_COUNT = 7;
-        public static int REQUIRE_AMOUNT = 8;
-        public static int SUPPLY_COUNT = 9;
-        public static int SUPPLY_AMOUNT = 10;
-        public static int DAILY_SIGN = 11;
-        public static int LEVEL = 12;
-        public static int CRAFTED = 13;
+        public const int ZOMBIE_KILL = 1;
+        public const int ANIMAL_KILL = 2;
+        public const int LIKE = 3;
+        public const int ONLINE_TIME = 4;
+        public const int TRADE_COUNT = 5;
+        public const int TRADE_AMOUNT = 6;
+        public const int REQUIRE_COUNT = 7;
+        public const int REQUIRE_AMOUNT = 8;
+        public const int SUPPLY_COUNT = 9;
+        public const int SUPPLY_AMOUNT = 10;
+        public const int DAILY_SIGN = 11;
+        public const int LEVEL = 12;
+        public const int CRAFTED = 13;
 
     }
 }
