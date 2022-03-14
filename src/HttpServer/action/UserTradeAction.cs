@@ -1024,6 +1024,7 @@ namespace HioldMod.src.HttpServer.action
                     extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(us),
                     extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(ur),
                     extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    extinfo4 = ur.Price + "",
                     desc = string.Format("为玩家：{0} 供货{1}个{2}，获得{3}", supplyer.name, ur.Itemcount, ur.Itemchinese, ur.Price),
                 });
 

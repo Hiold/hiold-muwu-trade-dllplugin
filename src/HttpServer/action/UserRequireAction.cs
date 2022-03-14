@@ -115,6 +115,7 @@ namespace HioldMod.src.HttpServer.action
                     atcPlayerEntityId = request.user.gameentityid,
                     extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(require),
                     extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    extinfo4 = price + "",
                     desc = string.Format("发布求购{0}个{1}，求购金额{2}", count, Itemchinese, price)
                 });
 
@@ -193,7 +194,7 @@ namespace HioldMod.src.HttpServer.action
                     atcPlayerEntityId = request.user.gameentityid,
                     extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(cous),
                     extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
-                    desc = string.Format("取消发布{0}，退还积分{1}", cous.Itemchinese,cous.Price)
+                    desc = string.Format("取消发布{0}，退还积分{1}", cous.Itemchinese, cous.Price)
                 });
 
                 ResponseUtils.ResponseSuccessWithData(response, "取消求购成功!退还" + cous.Price + "积分");
