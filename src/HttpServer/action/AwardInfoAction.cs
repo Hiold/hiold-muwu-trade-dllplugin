@@ -23,6 +23,7 @@ namespace HioldMod.src.HttpServer.action
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("type", out string type);
                 queryRequest.TryGetValue("containerid", out string containerid);
+                queryRequest.TryGetValue("funcid", out string funcid);
                 queryRequest.TryGetValue("count", out string count);
                 queryRequest.TryGetValue("itemname", out string itemname);
                 queryRequest.TryGetValue("itemquality", out string itemquality);
@@ -49,7 +50,8 @@ namespace HioldMod.src.HttpServer.action
                     extinfo3 = "",
                     extinfo4 = "",
                     extinfo5 = "",
-                    extinfo6 = ""
+                    extinfo6 = "",
+                    funcid = int.Parse(funcid)
                 });
 
                 //记录日志数据
@@ -82,7 +84,8 @@ namespace HioldMod.src.HttpServer.action
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("id", out string id);
                 queryRequest.TryGetValue("type", out string type);
-                queryRequest.TryGetValue("containerid", out string containerid);
+                queryRequest.TryGetValue("containerid", out string containerid); 
+                queryRequest.TryGetValue("funcid", out string funcid);
                 queryRequest.TryGetValue("count", out string count);
                 queryRequest.TryGetValue("itemname", out string itemname);
                 queryRequest.TryGetValue("itemquality", out string itemquality);
@@ -103,6 +106,7 @@ namespace HioldMod.src.HttpServer.action
                     target.itemicon = itemicon;
                     target.itemtint = itemtint;
                     target.command = command;
+                    target.funcid = int.Parse(funcid);
                 }
 
                 AwardInfoService.UpdateAwardInfo(target);
@@ -172,7 +176,8 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("containerid", out string containerid);
-                ResponseUtils.ResponseSuccessWithData(response, AwardInfoService.getAwardInfos(containerid));
+                queryRequest.TryGetValue("funcid", out string funcid);
+                ResponseUtils.ResponseSuccessWithData(response, AwardInfoService.getAwardInfos(containerid, funcid));
             }
             catch (Exception e)
             {

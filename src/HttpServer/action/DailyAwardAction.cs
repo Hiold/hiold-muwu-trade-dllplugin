@@ -254,7 +254,7 @@ namespace HioldMod.src.HttpServer.action
                     if (hbAvaliable)
                     {
                         //获取奖励信息
-                        List<AwardInfo> awards = AwardInfoService.getAwardInfos(target.id + "");
+                        List<AwardInfo> awards = AwardInfoService.getAwardInfos(target.id + "",AwardInfoTypeConfig.DAILY_AWARD);
                         if (awards != null && awards.Count > 0)
                         {
                             //不同类型奖品分发方式不同

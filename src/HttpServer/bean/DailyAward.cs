@@ -34,6 +34,7 @@ namespace HioldMod.src.HttpServer.bean
         public int id { get; set; }
         public string type { get; set; }
         public int containerid { get; set; }
+        public int funcid { get; set; }
         public string count { get; set; }
         public string itemname { get; set; }
         public string itemquality { get; set; }

@@ -83,8 +83,37 @@ namespace HioldMod.src.HttpServer.service
         public static List<ActionLog> QueryDailyAwardPull(string userid, string hbid)
         {
             Dictionary<string, object> result = new Dictionary<string, object>();
-            List<ActionLog> ls = DataBase.logdb.Queryable<ActionLog>().Where(string.Format("atcPlayerEntityId='{0}' and extinfo1={1} and actType={2} order by actTime desc", userid, hbid,LogType.pullGetDailyAward)).ToList();
+            List<ActionLog> ls = DataBase.logdb.Queryable<ActionLog>().Where(string.Format("atcPlayerEntityId='{0}' and extinfo1={1} and actType={2} order by actTime desc", userid, hbid, LogType.pullGetDailyAward)).ToList();
             return ls;
+        }
+
+        public static Int64 QueryProgresionCount(string id, string itemid, int logtype, string startTime, string endTime)
+        {
+            DataRow[] dt = null;
+            if (startTime == null && endTime == null)
+            {
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' ", id, itemid, logtype)).Select();
+            }
+            else
+            {
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", id, itemid, logtype, startTime, endTime)).Select();
+            }
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        return (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        return 0;
+                    }
+                }
+            }
+            return 0;
         }
     }
 }

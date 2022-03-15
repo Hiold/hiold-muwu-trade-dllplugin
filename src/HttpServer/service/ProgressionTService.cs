@@ -37,9 +37,16 @@ namespace HioldMod.src.HttpServer.service
         /// </summary>
         /// <param name="id">用户名</param>
         /// <returns></returns>
-        public static List<ProgressionT> getProgressionTs()
+        public static List<ProgressionT> getProgressionTs(string type)
         {
-            return DataBase.db.Queryable<ProgressionT>().Where(string.Format("status = '1' ")).ToList();
+            if (string.IsNullOrEmpty(type))
+            {
+                return DataBase.db.Queryable<ProgressionT>().Where(string.Format("status = '1' ")).ToList();
+            }
+            else
+            {
+                return DataBase.db.Queryable<ProgressionT>().Where(string.Format("status = '1' and type = {0} ", type)).ToList();
+            }
         }
 
         /// <summary>
@@ -70,7 +77,7 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="playerId">用户id</param>
         /// <param name="value">完成任务阈值</param>
         /// <returns></returns>
-        public static Int64 IsProgressionComplete(int _ttype, int _ptype, string playerId, int value)
+        public static Int64 getProgressionProgress(int _ttype, int _ptype, string playerId)
         {
             //本周日期
             string[] weekpair = ServerUtils.getDayOfThisWeek();
@@ -271,7 +278,7 @@ namespace HioldMod.src.HttpServer.service
                     switch (_ptype)
                     {
                         case HttpServer.bean.ProgressionType.MAIN:
-                            dt = DataBase.db.Ado.GetDataTable(string.Format("SELECT online_time FROM userinfo where gameentityid='{0}' ", playerId)).Select();
+                            dt = DataBase.db.Ado.GetDataTable(string.Format("SELECT sum(online_time) FROM userinfo where gameentityid='{0}' ", playerId)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
@@ -731,7 +738,7 @@ namespace HioldMod.src.HttpServer.service
                     switch (_ptype)
                     {
                         case HttpServer.bean.ProgressionType.MAIN:
-                            dt = DataBase.db.Ado.GetDataTable(string.Format("SELECT level FROM userinfo where gameentityid='{0}' ", playerId)).Select();
+                            dt = DataBase.db.Ado.GetDataTable(string.Format("SELECT sum(level) FROM userinfo where gameentityid='{0}' ", playerId)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
@@ -757,7 +764,7 @@ namespace HioldMod.src.HttpServer.service
                     switch (_ptype)
                     {
                         case HttpServer.bean.ProgressionType.MAIN:
-                            dt = DataBase.db.Ado.GetDataTable(string.Format("SELECT total_crafted FROM userinfo where gameentityid='{0}' ", playerId)).Select();
+                            dt = DataBase.db.Ado.GetDataTable(string.Format("SELECT sum(total_crafted) FROM userinfo where gameentityid='{0}' ", playerId)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {

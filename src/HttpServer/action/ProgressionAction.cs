@@ -42,7 +42,7 @@ namespace HioldMod.src.HttpServer.action
                     extinfo4 = "",
                     extinfo5 = "",
                     extinfo6 = "",
-                    status="1"
+                    status = "1"
                 });
 
                 //记录日志数据
@@ -156,7 +156,164 @@ namespace HioldMod.src.HttpServer.action
                 //获取参数
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
-                ResponseUtils.ResponseSuccessWithData(response, ProgressionTService.getProgressionTs());
+                queryRequest.TryGetValue("type", out string type);
+                ResponseUtils.ResponseSuccessWithData(response, ProgressionTService.getProgressionTs(type));
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+        public static void getProgressionProgress(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("ttype", out string ttype);
+                queryRequest.TryGetValue("ptype", out string ptype);
+                ResponseUtils.ResponseSuccessWithData(response, ProgressionTService.getProgressionProgress(int.Parse(ttype), int.Parse(ptype), request.user.gameentityid));
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 获取玩家是否已领取奖励
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getPregressionPull(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("id", out string id);
+                ProgressionT target = ProgressionTService.getProgressionTByid(id);
+                if (target != null)
+                {
+                    long count = 0;
+                    if (target.type == HttpServer.bean.ProgressionType.DAILY)
+                    {
+                        //当天日期
+                        string[] daypair = ServerUtils.getDayOfToday();
+                        count = ActionLogService.QueryProgresionCount(request.user.gameentityid, target.id + "", LogType.pullGetProgression, daypair[0], daypair[1]);
+                    }
+                    else if (target.type == HttpServer.bean.ProgressionType.WEEK)
+                    {
+                        //本周日期
+                        string[] weekpair = ServerUtils.getDayOfThisWeek();
+                        count = ActionLogService.QueryProgresionCount(request.user.gameentityid, target.id + "", LogType.pullGetProgression, weekpair[0], weekpair[1]);
+                    }
+                    else if (target.type == HttpServer.bean.ProgressionType.MAIN)
+                    {
+                        count = ActionLogService.QueryProgresionCount(request.user.gameentityid, target.id + "", LogType.pullGetProgression, null, null);
+                    }
+                    ResponseUtils.ResponseSuccessWithData(response, count);
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "没有找到对应的活动任务");
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+
+        public static void getPregressionAward(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("id", out string id);
+
+                ProgressionT target = ProgressionTService.getProgressionTByid(id);
+                if (target != null)
+                {
+                    long process = ProgressionTService.getProgressionProgress(target.progressionType, target.type, request.user.gameentityid);
+                    if (process >= double.Parse(target.value))
+                    {
+                        //校验是否已领取过
+                        long count = 0;
+                        if (target.type == HttpServer.bean.ProgressionType.DAILY)
+                        {
+                            //当天日期
+                            string[] daypair = ServerUtils.getDayOfToday();
+                            count = ActionLogService.QueryProgresionCount(request.user.gameentityid, target.id + "", LogType.pullGetProgression, daypair[0], daypair[1]);
+                        }
+                        else if (target.type == HttpServer.bean.ProgressionType.WEEK)
+                        {
+                            //本周日期
+                            string[] weekpair = ServerUtils.getDayOfThisWeek();
+                            count = ActionLogService.QueryProgresionCount(request.user.gameentityid, target.id + "", LogType.pullGetProgression, weekpair[0], weekpair[1]);
+                        }
+                        else if (target.type == HttpServer.bean.ProgressionType.MAIN)
+                        {
+                            count = ActionLogService.QueryProgresionCount(request.user.gameentityid, target.id + "", LogType.pullGetProgression, null, null);
+                        }
+
+
+                        if (count>0)
+                        {
+                            ResponseUtils.ResponseFail(response, "已领取过，无法重复领取");
+                            return;
+                        }
+
+
+                        List<AwardInfo> awards = AwardInfoService.getAwardInfos(target.id + "", AwardInfoTypeConfig.PROGRESSION);
+                        //获取奖励信息
+                        if (awards != null && awards.Count > 0)
+                        {
+                            //不同类型奖品分发方式不同
+                            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards);
+                            //LogUtils.Loger("物品发放成功");
+
+                            //记录日志数据
+                            ActionLogService.addLog(new ActionLog()
+                            {
+                                actTime = DateTime.Now,
+                                actType = LogType.pullGetProgression,
+                                atcPlayerEntityId = request.user.gameentityid,
+                                extinfo1 = id,
+                                extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                                extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(awards),
+                                desc = "完成了活动任务 （" + target.desc + "） 奖品：" + awardinfo
+                            });
+                            ResponseUtils.ResponseSuccess(response);
+                            return;
+                        }
+                        else
+                        {
+                            ResponseUtils.ResponseFail(response, "这个红包没有奖品，无法领取");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        ResponseUtils.ResponseFail(response, "任务尚未完成");
+                    }
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "没有找到对应的活动任务");
+                }
             }
             catch (Exception e)
             {

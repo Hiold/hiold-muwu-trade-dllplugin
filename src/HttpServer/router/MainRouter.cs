@@ -380,7 +380,7 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ProgressionTAction.postProgressionT(request, response);
             }
-            //修改红包
+            //修改活动任务
             else if (url.Equals("/api/updateProgression"))
             {
                 if (Filters.IsServerReady(request, response))
@@ -388,7 +388,7 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ProgressionTAction.updateProgressionT(request, response);
             }
-            //删除红包
+            //删除活动任务
             else if (url.Equals("/api/deleteProgression"))
             {
                 if (Filters.IsServerReady(request, response))
@@ -396,12 +396,33 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ProgressionTAction.deleteProgressionT(request, response);
             }
-            //获取红包
+            //获取活动任务
             else if (url.Equals("/api/getProgression"))
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
                         ProgressionTAction.getProgressionT(request, response);
+            }
+            //获取活动进展
+            else if (url.Equals("/api/getProgressionProgress"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ProgressionTAction.getProgressionProgress(request, response);
+            }
+            //获取活动任务奖品
+            else if (url.Equals("/api/getPregressionAward"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ProgressionTAction.getPregressionAward(request, response);
+            }
+            //获取领取情况
+            else if (url.Equals("/api/getPregressionPull"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ProgressionTAction.getPregressionPull(request, response);
             }
         }
     }

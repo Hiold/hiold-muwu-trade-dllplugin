@@ -110,6 +110,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int deleteProgression = 29;
         //签到
         public static int dailySign = 30;
+        //领取红包
+        public static int pullGetProgression = 31;
 
     }
 }

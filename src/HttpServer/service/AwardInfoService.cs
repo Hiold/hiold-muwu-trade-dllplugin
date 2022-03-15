@@ -35,9 +35,9 @@ namespace HioldMod.src.HttpServer.service
         /// </summary>
         /// <param name="id">用户名</param>
         /// <returns></returns>
-        public static List<AwardInfo> getAwardInfos(string containerid)
+        public static List<AwardInfo> getAwardInfos(string containerid, string funcid)
         {
-            return DataBase.db.Queryable<AwardInfo>().Where(string.Format("status = '1' and containerid = {0}", containerid)).ToList();
+            return DataBase.db.Queryable<AwardInfo>().Where(string.Format("status = '1' and containerid = {0} and funcid={1}", containerid, funcid)).ToList();
         }
 
         /// <summary>
