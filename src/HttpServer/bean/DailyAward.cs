@@ -43,6 +43,7 @@ namespace HioldMod.src.HttpServer.bean
         public string itemtint { get; set; }
         public string command { get; set; }
         public string status { get; set; }
+        public string chance { get; set; }
         public string extinfo1 { get; set; }
         public string extinfo2 { get; set; }
         public string extinfo3 { get; set; }

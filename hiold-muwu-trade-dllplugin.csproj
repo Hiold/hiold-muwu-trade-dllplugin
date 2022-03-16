@@ -118,6 +118,7 @@
     <Compile Include="src\HttpServer\bean\ActionLog.cs" />
     <Compile Include="src\HttpServer\bean\HioldRequest.cs" />
     <Compile Include="src\HttpServer\bean\DailyAward.cs" />
+    <Compile Include="src\HttpServer\bean\Lottery.cs" />
     <Compile Include="src\HttpServer\bean\PlayerGameEvent.cs" />
     <Compile Include="src\HttpServer\bean\ProgressionT.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />

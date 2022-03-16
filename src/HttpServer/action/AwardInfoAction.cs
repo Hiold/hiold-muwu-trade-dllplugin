@@ -31,6 +31,9 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("itemicon", out string itemicon);
                 queryRequest.TryGetValue("itemtint", out string itemtint);
                 queryRequest.TryGetValue("command", out string command);
+                string chance = "";
+                queryRequest.TryGetValue("chance", out chance);
+
 
                 //添加新的每日奖励
                 AwardInfoService.addAwardInfo(new AwardInfo
@@ -51,7 +54,9 @@ namespace HioldMod.src.HttpServer.action
                     extinfo4 = "",
                     extinfo5 = "",
                     extinfo6 = "",
-                    funcid = int.Parse(funcid)
+                    funcid = int.Parse(funcid),
+                    chance = chance
+
                 });
 
                 //记录日志数据
@@ -84,7 +89,7 @@ namespace HioldMod.src.HttpServer.action
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("id", out string id);
                 queryRequest.TryGetValue("type", out string type);
-                queryRequest.TryGetValue("containerid", out string containerid); 
+                queryRequest.TryGetValue("containerid", out string containerid);
                 queryRequest.TryGetValue("funcid", out string funcid);
                 queryRequest.TryGetValue("count", out string count);
                 queryRequest.TryGetValue("itemname", out string itemname);
@@ -93,7 +98,8 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("itemicon", out string itemicon);
                 queryRequest.TryGetValue("itemtint", out string itemtint);
                 queryRequest.TryGetValue("command", out string command);
-
+                string chance = "";
+                queryRequest.TryGetValue("chance", out chance);
                 AwardInfo target = AwardInfoService.getAwardInfoByid(id);
                 if (target != null)
                 {
@@ -107,6 +113,7 @@ namespace HioldMod.src.HttpServer.action
                     target.itemtint = itemtint;
                     target.command = command;
                     target.funcid = int.Parse(funcid);
+                    target.chance = chance;
                 }
 
                 AwardInfoService.UpdateAwardInfo(target);

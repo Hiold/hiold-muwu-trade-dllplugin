@@ -105,6 +105,7 @@ namespace HioldMod.src.HttpServer.database
             //红包与奖励配置
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(DailyAward));
             db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(AwardInfo));
+            db.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(Lottery));
             //游戏进程相关数据库表
             gameeventdb.CodeFirst.SetStringDefaultLength(512).InitTables(typeof(PlayerGameEvent));
         }
