@@ -17,9 +17,12 @@ namespace HioldMod.src.HttpServer.bean
         public string desc { get; set; }
         public string one { get; set; }
         public string ten { get; set; }
+        public string status { get; set; }
         public string itemname { get; set; }
+        public string itemchinese { get; set; }
         public string itemicon { get; set; }
         public string itemtint { get; set; }
+        public string quality { get; set; }
         public string extinfo1 { get; set; }
         public string extinfo2 { get; set; }
         public string extinfo3 { get; set; }

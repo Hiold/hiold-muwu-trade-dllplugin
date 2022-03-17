@@ -424,6 +424,37 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         ProgressionTAction.getPregressionPull(request, response);
             }
+            //添加新抽奖
+            else if (url.Equals("/api/postLottery"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            LotteryAction.postLottery(request, response);
+            }
+            //修改抽奖
+            else if (url.Equals("/api/updateLottery"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            LotteryAction.updateLottery(request, response);
+            }
+            //删除抽奖
+            else if (url.Equals("/api/deleteLottery"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            LotteryAction.deleteLottery(request, response);
+            }
+            //查询抽奖
+            else if (url.Equals("/api/getLottery"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                            LotteryAction.getLottery(request, response);
+            }
         }
     }
 }

@@ -113,5 +113,12 @@ namespace HioldMod.src.HttpServer.bean
         //领取红包
         public static int pullGetProgression = 31;
 
+        //添加红包
+        public static int AddLottery = 32;
+        //修改红包
+        public static int editLottery = 33;
+        //修改红包
+        public static int deleteLottery = 34;
+
     }
 }
