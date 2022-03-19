@@ -107,7 +107,7 @@ namespace HioldMod.src.Commons
                     UserStorage userStorate = new UserStorage()
                     {
                         //id
-                        itemtype = "1",
+                        itemtype = "2",
                         name = ai.itemname,
                         translate = ai.itemchinese,
                         itemicon = ai.itemicon,

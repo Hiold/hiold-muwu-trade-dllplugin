@@ -63,8 +63,10 @@ namespace HioldMod.src.HttpServer.bean
         public static int USERDELETED = 3;
         //用户自行卖出
         public static int USERSELLED = 4;
-        //用户自行卖出
+        //用户供货消耗
         public static int SUPPLYED = 5;
+        //用户抽奖消耗
+        public static int LOTERYED = 5;
     }
 
     //物品获取途径
@@ -88,6 +90,8 @@ namespace HioldMod.src.HttpServer.bean
         //已发放到游戏内
         public static int OBTAIN_TO_GAME = 1;
         //供货
-        public static int SUPPLY_TO_OTHERS = 1;
+        public static int SUPPLY_TO_OTHERS = 2;
+        //抽奖消耗
+        public static int LOTTERYED = 3;
     }
 }

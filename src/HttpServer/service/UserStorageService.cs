@@ -1,5 +1,7 @@
-﻿using HioldMod.src.HttpServer.bean;
+﻿using HioldMod.HttpServer;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.database;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,13 +45,23 @@ namespace HioldMod.src.HttpServer.service
 
 
         /// <summary>
-        /// 根据用户id获取优惠券
+        /// 查询可供货物品
         /// </summary>
         /// <param name="playerid">用户id</param>
         /// <returns></returns>
         public static UserStorage selectSupplyableItem(string playerid, string itemname, string quality, string count)
         {
             return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount >= {1} and itemStatus='1' and itemtype='1' and name='{2}' and cast(quality as int)>={3}", playerid, count, itemname, quality)).First();
+        }
+
+        /// <summary>
+        /// 根据用户id获取优惠券
+        /// </summary>
+        /// <param name="playerid">用户id</param>
+        /// <returns></returns>
+        public static UserStorage selectAvaliableItem(string playerid, string itemname, string quality, string itemtype, string count)
+        {
+            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount >= {1} and itemStatus='1' and itemtype='{2}' and name='{3}' and cast(quality as int)>={4}", playerid, count, itemtype, itemname, quality)).First();
         }
 
         /// <summary>

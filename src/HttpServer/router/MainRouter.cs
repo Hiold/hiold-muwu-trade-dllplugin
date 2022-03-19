@@ -455,6 +455,13 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                             LotteryAction.getLottery(request, response);
             }
+            //抽奖
+            else if (url.Equals("/api/doLottery"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        LotteryAction.doLottery(request, response);
+            }
         }
     }
 }

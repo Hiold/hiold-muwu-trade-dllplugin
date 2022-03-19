@@ -3,6 +3,7 @@ using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
+using HioldMod.src.HttpServer.database;
 using HioldMod.src.HttpServer.service;
 using System;
 using System.Collections.Generic;
@@ -182,6 +183,146 @@ namespace HioldMod.src.HttpServer.action
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 执行抽奖
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void doLottery(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            string postData = ServerUtils.getPostData(request.request);
+            Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+            queryRequest.TryGetValue("id", out string id);
+            queryRequest.TryGetValue("count", out string count);
+            int lotteryTimes = 0;
+            Lottery target = LotteryService.getLotteryByid(id);
+            List<AwardInfo> awards = AwardInfoService.getAwardInfos(target.id + "", AwardInfoTypeConfig.LOTTERY);
+
+            if (count.Equals("1"))
+            {
+                lotteryTimes = int.Parse(target.one);
+            }
+            else if (count.Equals("10"))
+            {
+                lotteryTimes = int.Parse(target.ten);
+            }
+            else
+            {
+                ResponseUtils.ResponseFail(response, "抽奖次数异常");
+                return;
+            }
+
+            if (awards == null || awards.Count <= 0)
+            {
+                ResponseUtils.ResponseFail(response, "此奖池中没有奖品，抽奖失败");
+                return;
+            }
+
+            if (target != null)
+            {
+                //积分
+                if (target.type.Equals("1"))
+                {
+                    if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Money, DataBase.EditType.Sub, lotteryTimes))
+                    {
+                        ResponseUtils.ResponseFail(response, "未找到此奖池");
+                        return;
+                    }
+                }
+                //点券
+                if (target.type.Equals("2"))
+                {
+                    if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Credit, DataBase.EditType.Sub, lotteryTimes))
+                    {
+                        ResponseUtils.ResponseFail(response, "未找到此奖池");
+                        return;
+                    }
+                }
+                //游戏内物品
+                if (target.type.Equals("3"))
+                {
+                    int quality = 0;
+                    int.TryParse(target.quality, out quality);
+                    UserStorage us = UserStorageService.selectAvaliableItem(request.user.gameentityid + "", target.itemname, quality + "", "1", lotteryTimes + "");
+                    if (us == null)
+                    {
+                        ResponseUtils.ResponseFail(response, "没有足够的物品抽奖");
+                        return;
+                    }
+                    //更新库存
+                    us.storageCount -= lotteryTimes;
+                    if (us.storageCount <= 0)
+                    {
+                        us.itemUsedChenal = UserStorageUsedChanel.LOTTERYED;
+                        us.itemStatus = UserStorageStatus.LOTERYED;
+                    }
+                    UserStorageService.UpdateUserStorage(us);
+                }
+                //特殊物品
+                if (target.type.Equals("4"))
+                {
+                    int quality = 0;
+                    int.TryParse(target.quality, out quality);
+                    UserStorage us = UserStorageService.selectAvaliableItem(request.user.gameentityid + "", target.itemname, quality + "", "2", lotteryTimes + "");
+                    if (us == null)
+                    {
+                        ResponseUtils.ResponseFail(response, "没有足够的物品抽奖");
+                        return;
+                    }
+                    //更新库存
+                    us.storageCount -= lotteryTimes;
+                    if (us.storageCount <= 0)
+                    {
+                        us.itemUsedChenal = UserStorageUsedChanel.LOTTERYED;
+                        us.itemStatus = UserStorageStatus.LOTERYED;
+                    }
+                    UserStorageService.UpdateUserStorage(us);
+                }
+                //积分物品扣除完毕
+                int allChance = 0;
+                List<int> sfs = new List<int>();
+                for (int af = 0; af < awards.Count; af++)
+                {
+                    AwardInfo info = awards[af];
+                    int.TryParse(info.chance, out int cs);
+                    for (int ai = 0; ai < cs; ai++)
+                    {
+                        sfs.Add(af);
+                    }
+                    allChance += cs;
+                }
+                byte[] b = new byte[4];
+                new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
+                Random r = new Random(BitConverter.ToInt32(b, 0));
+                List<AwardInfo> resultAward = new List<AwardInfo>();
+                for (int bs = 0; bs < int.Parse(count); bs++)
+                {
+                    resultAward.Add(awards[sfs[r.Next(0, allChance)]]);
+                }
+                //计算完毕发放礼品
+                string awardinfo = AwardDeliverTools.DeliverAward(request.user, resultAward);
+
+                //记录日志数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.doLottery,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = id,
+                    extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(resultAward),
+                    desc = "抽奖获得 （" + target.desc + "） 奖品：" + awardinfo
+                });
+                ResponseUtils.ResponseSuccessWithData(response, resultAward);
+            }
+            else
+            {
+                ResponseUtils.ResponseFail(response, "未找到此奖池");
                 return;
             }
         }
