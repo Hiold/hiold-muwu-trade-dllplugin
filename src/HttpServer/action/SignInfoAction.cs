@@ -224,18 +224,159 @@ namespace HioldMod.src.HttpServer.action
             string postData = ServerUtils.getPostData(request.request);
             Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
             queryRequest.TryGetValue("id", out string id);
-            SignInfo target = SignInfoService.getSignInfoByid(id);
-            List<AwardInfo> awards = AwardInfoService.getAwardInfos(target.id + "", AwardInfoTypeConfig.SIGNINFO);
+            SignInfo targetSignInfo = SignInfoService.getSignInfoByid(id);
+            int dateInt = (int)DateTime.Now.DayOfWeek;
+            if (targetSignInfo.date.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+            {
+                if (dateInt != int.Parse(targetSignInfo.day))
+                {
+                    ResponseUtils.ResponseFail(response, "日期异常无法签到");
+                    return;
+                }
+            }
+            else
+            {
+                if (!targetSignInfo.date.ToString("yyyy-MM-dd").Equals(DateTime.Now.ToString("yyyy-MM-dd")))
+                {
+                    ResponseUtils.ResponseFail(response, "日期异常无法签到");
+                    return;
+                }
+            }
 
 
-
+            List<AwardInfo> awards = AwardInfoService.getAwardInfos(targetSignInfo.id + "", AwardInfoTypeConfig.SIGNINFO);
             if (awards == null || awards.Count <= 0)
             {
                 ResponseUtils.ResponseFail(response, "此奖池中没有奖品，抽奖失败");
                 return;
             }
 
+            //计算完毕发放礼品
+            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards);
+
+            //记录日志数据
+            ActionLogService.addLog(new ActionLog()
+            {
+                actTime = DateTime.Now,
+                actType = LogType.doSignInfo,
+                atcPlayerEntityId = request.user.gameentityid,
+                extinfo1 = id,
+                extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(awards),
+                extinfo4 = targetSignInfo.date.ToString("yyyy-MM-dd"),
+                extinfo5 = targetSignInfo.day,
+                desc = "签到获得奖品：" + awardinfo
+            });
+            ResponseUtils.ResponseSuccessWithData(response, awards);
         }
+
+
+        /// <summary>
+        /// 执行签到
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void doReSignInfo(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            string postData = ServerUtils.getPostData(request.request);
+            Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+            queryRequest.TryGetValue("id", out string id);
+            SignInfo targetSignInfo = SignInfoService.getSignInfoByid(id);
+            if (targetSignInfo.type.Equals("-1"))
+            {
+                ResponseUtils.ResponseFail(response, "这天不允许补签");
+                return;
+            }
+
+            double count = double.Parse(targetSignInfo.count);
+            //积分
+            if (targetSignInfo.type.Equals("1"))
+            {
+                if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Money, DataBase.EditType.Sub, count))
+                {
+                    ResponseUtils.ResponseFail(response, "积分不足");
+                    return;
+                }
+            }
+            //点券
+            if (targetSignInfo.type.Equals("2"))
+            {
+                if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Credit, DataBase.EditType.Sub, count))
+                {
+                    ResponseUtils.ResponseFail(response, "点券不足");
+                    return;
+                }
+            }
+            //游戏内物品
+            if (targetSignInfo.type.Equals("3"))
+            {
+                int quality = 0;
+                int.TryParse(targetSignInfo.quality, out quality);
+                UserStorage us = UserStorageService.selectAvaliableItem(request.user.gameentityid + "", targetSignInfo.itemname, quality + "", "1", targetSignInfo.count);
+                if (us == null)
+                {
+                    ResponseUtils.ResponseFail(response, "没有足够的物品抽奖");
+                    return;
+                }
+                //更新库存
+                us.storageCount -= int.Parse(targetSignInfo.count);
+                if (us.storageCount <= 0)
+                {
+                    us.itemUsedChenal = UserStorageUsedChanel.RESIGNED;
+                    us.itemStatus = UserStorageStatus.RESIGNED;
+                }
+                UserStorageService.UpdateUserStorage(us);
+            }
+            //特殊物品
+            if (targetSignInfo.type.Equals("4"))
+            {
+                int quality = 0;
+                int.TryParse(targetSignInfo.quality, out quality);
+                UserStorage us = UserStorageService.selectAvaliableItem(request.user.gameentityid + "", targetSignInfo.itemname, quality + "", "2", targetSignInfo.count);
+                if (us == null)
+                {
+                    ResponseUtils.ResponseFail(response, "没有足够的物品抽奖");
+                    return;
+                }
+                //更新库存
+                us.storageCount -= int.Parse(targetSignInfo.count);
+                if (us.storageCount <= 0)
+                {
+                    us.itemUsedChenal = UserStorageUsedChanel.RESIGNED;
+                    us.itemStatus = UserStorageStatus.RESIGNED;
+                }
+                UserStorageService.UpdateUserStorage(us);
+            }
+
+
+
+            List<AwardInfo> awards = AwardInfoService.getAwardInfos(targetSignInfo.id + "", AwardInfoTypeConfig.SIGNINFO);
+            if (awards == null || awards.Count <= 0)
+            {
+                ResponseUtils.ResponseFail(response, "此奖池中没有奖品，抽奖失败");
+                return;
+            }
+
+            //计算完毕发放礼品
+            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards);
+
+            //记录日志数据
+            ActionLogService.addLog(new ActionLog()
+            {
+                actTime = DateTime.Now,
+                actType = LogType.doReSignInfo,
+                atcPlayerEntityId = request.user.gameentityid,
+                extinfo1 = id,
+                extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(awards),
+                extinfo4 = targetSignInfo.date.ToString("yyyy-MM-dd"),
+                extinfo5 = targetSignInfo.day,
+                desc = "补签获得奖品：" + awardinfo
+            });
+            ResponseUtils.ResponseSuccessWithData(response, awards);
+        }
+
 
         public static void getAvailableSignInfo(HioldRequest request, HttpListenerResponse response)
         {

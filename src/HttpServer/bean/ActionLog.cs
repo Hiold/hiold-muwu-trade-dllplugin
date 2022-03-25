@@ -123,13 +123,15 @@ namespace HioldMod.src.HttpServer.bean
         public static int doLottery = 35;
 
         //添加签到
-        public static int AddSignInfo = 32;
+        public static int AddSignInfo = 36;
         //修改签到
-        public static int editSignInfo = 33;
+        public static int editSignInfo = 37;
         //修改签到
-        public static int deleteSignInfo = 34;
+        public static int deleteSignInfo = 38;
         //签到
-        public static int doSignInfo = 35;
+        public static int doSignInfo = 39;
+        //补签
+        public static int doReSignInfo = 40;
 
     }
 }

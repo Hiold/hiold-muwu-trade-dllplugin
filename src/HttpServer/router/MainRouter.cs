@@ -508,6 +508,13 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         SignInfoAction.doSignInfo(request, response);
             }
+            //补签
+            else if (url.Equals("/api/doReSignInfo"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SignInfoAction.doReSignInfo(request, response);
+            }
         }
     }
 }

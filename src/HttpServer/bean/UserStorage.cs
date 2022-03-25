@@ -38,7 +38,7 @@ namespace HioldMod.src.HttpServer.bean
         [SugarColumn(IndexGroupNameList = new string[] { "us_index_itemstatus" })]
         public int itemStatus { get; set; }
 
-        [SugarColumn(Length = 2048,DefaultValue ="",IsNullable =true)]
+        [SugarColumn(Length = 2048, DefaultValue = "", IsNullable = true)]
         public string itemdata { get; set; }
 
         public string extinfo1 { get; set; }
@@ -66,7 +66,9 @@ namespace HioldMod.src.HttpServer.bean
         //用户供货消耗
         public static int SUPPLYED = 5;
         //用户抽奖消耗
-        public static int LOTERYED = 5;
+        public static int LOTERYED = 6;
+        //补签消耗
+        public static int RESIGNED = 7;
     }
 
     //物品获取途径
@@ -93,5 +95,7 @@ namespace HioldMod.src.HttpServer.bean
         public static int SUPPLY_TO_OTHERS = 2;
         //抽奖消耗
         public static int LOTTERYED = 3;
+        //补签消耗
+        public static int RESIGNED = 4;
     }
 }
