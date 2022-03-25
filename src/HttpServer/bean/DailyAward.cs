@@ -58,5 +58,6 @@ namespace HioldMod.src.HttpServer.bean
         public static string DAILY_AWARD = "1";
         public static string PROGRESSION = "2";
         public static string LOTTERY = "3";
+        public static string SIGNINFO = "4";
     }
 }

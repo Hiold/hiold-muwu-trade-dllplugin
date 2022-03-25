@@ -119,9 +119,17 @@ namespace HioldMod.src.HttpServer.bean
         public static int editLottery = 33;
         //修改抽奖
         public static int deleteLottery = 34;
-
         //抽奖
         public static int doLottery = 35;
+
+        //添加签到
+        public static int AddSignInfo = 32;
+        //修改签到
+        public static int editSignInfo = 33;
+        //修改签到
+        public static int deleteSignInfo = 34;
+        //签到
+        public static int doSignInfo = 35;
 
     }
 }

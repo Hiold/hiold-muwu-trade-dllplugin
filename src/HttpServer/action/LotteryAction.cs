@@ -230,7 +230,7 @@ namespace HioldMod.src.HttpServer.action
                 {
                     if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Money, DataBase.EditType.Sub, lotteryTimes))
                     {
-                        ResponseUtils.ResponseFail(response, "未找到此奖池");
+                        ResponseUtils.ResponseFail(response, "积分不足");
                         return;
                     }
                 }
@@ -239,7 +239,7 @@ namespace HioldMod.src.HttpServer.action
                 {
                     if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Credit, DataBase.EditType.Sub, lotteryTimes))
                     {
-                        ResponseUtils.ResponseFail(response, "未找到此奖池");
+                        ResponseUtils.ResponseFail(response, "点券不足");
                         return;
                     }
                 }

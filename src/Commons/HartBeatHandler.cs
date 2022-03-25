@@ -15,7 +15,7 @@ namespace HioldMod.src.Commons
         //多线程中处理玩家在线心跳任务
         public static void HandlePlayerHartbeat(object nce)
         {
-            Log.Out(string.Format("[Hiold]当前在线{0}人，正在更新用户信息", ConnectionManager.Instance.Clients.List.Count + ""));
+            //Log.Out(string.Format("[Hiold]当前在线{0}人，正在更新用户信息", ConnectionManager.Instance.Clients.List.Count + ""));
             if (ConnectionManager.Instance.Clients.List.Count > 0)
             {
                 foreach (var s in ConnectionManager.Instance.Clients.List)

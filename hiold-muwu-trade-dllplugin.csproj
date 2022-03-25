@@ -103,6 +103,7 @@
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\AwardInfoAction.cs" />
+    <Compile Include="src\HttpServer\action\SignInfoAction.cs" />
     <Compile Include="src\HttpServer\action\LotteryAction.cs" />
     <Compile Include="src\HttpServer\action\ProgressionAction.cs" />
     <Compile Include="src\HttpServer\action\DailyAwardAction.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="src\HttpServer\bean\Lottery.cs" />
     <Compile Include="src\HttpServer\bean\PlayerGameEvent.cs" />
     <Compile Include="src\HttpServer\bean\ProgressionT.cs" />
+    <Compile Include="src\HttpServer\bean\SignInfo.cs" />
     <Compile Include="src\HttpServer\bean\TradeManageItem.cs" />
     <Compile Include="src\HttpServer\bean\UserConfig.cs" />
     <Compile Include="src\HttpServer\bean\UserInfo.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="src\HttpServer\router\Filters.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
+    <Compile Include="src\HttpServer\service\SignInfoService.cs" />
     <Compile Include="src\HttpServer\service\LotteryService.cs" />
     <Compile Include="src\HttpServer\service\ProgressionTService.cs" />
     <Compile Include="src\HttpServer\service\PlayerGameEventService.cs" />

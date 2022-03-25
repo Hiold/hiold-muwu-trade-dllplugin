@@ -462,6 +462,52 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         LotteryAction.doLottery(request, response);
             }
+
+            //添加新签到
+            else if (url.Equals("/api/postSignInfo"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            SignInfoAction.postSignInfo(request, response);
+            }
+            //修改签到
+            else if (url.Equals("/api/updateSignInfo"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            SignInfoAction.updateSignInfo(request, response);
+            }
+            //删除签到
+            else if (url.Equals("/api/deleteSignInfo"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            SignInfoAction.deleteSignInfo(request, response);
+            }
+            //查询签到
+            else if (url.Equals("/api/getSignInfo"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SignInfoAction.getSignInfo(request, response);
+            }
+            //查询签到
+            else if (url.Equals("/api/getAvailableSignInfo"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SignInfoAction.getAvailableSignInfo(request, response);
+            }
+            //签到
+            else if (url.Equals("/api/doSignInfo"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SignInfoAction.doSignInfo(request, response);
+            }
         }
     }
 }
