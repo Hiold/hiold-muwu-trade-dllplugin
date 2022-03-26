@@ -515,6 +515,13 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         SignInfoAction.doReSignInfo(request, response);
             }
+            //获取签到情况
+            else if (url.Equals("/api/getSignLog"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SignInfoAction.getSignLog(request, response);
+            }
         }
     }
 }

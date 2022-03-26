@@ -242,7 +242,12 @@ namespace HioldMod.src.HttpServer.action
                     return;
                 }
             }
-
+            Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, targetSignInfo.date.ToString("yyyy-MM-dd"), targetSignInfo.day);
+            if (countResult>0)
+            {
+                ResponseUtils.ResponseFail(response, "不能重复签到");
+                return;
+            }
 
             List<AwardInfo> awards = AwardInfoService.getAwardInfos(targetSignInfo.id + "", AwardInfoTypeConfig.SIGNINFO);
             if (awards == null || awards.Count <= 0)
@@ -286,6 +291,13 @@ namespace HioldMod.src.HttpServer.action
             if (targetSignInfo.type.Equals("-1"))
             {
                 ResponseUtils.ResponseFail(response, "这天不允许补签");
+                return;
+            }
+
+            Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, targetSignInfo.date.ToString("yyyy-MM-dd"), targetSignInfo.day);
+            if (countResult > 0)
+            {
+                ResponseUtils.ResponseFail(response, "不能重复补签");
                 return;
             }
 
@@ -392,75 +404,104 @@ namespace HioldMod.src.HttpServer.action
             {
                 if (temp.day.Equals("0"))
                 {
+                    Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, temp.date.ToString("yyyy-MM-dd"), temp.day);
                     List<AwardInfo> awards = AwardInfoService.getAwardInfos(temp.id + "", AwardInfoTypeConfig.SIGNINFO);
-                    returnData[7] = new SignInfoAvalible()
+                    returnData[0] = new SignInfoAvalible()
                     {
                         info = temp,
-                        awards = awards
+                        awards = awards,
+                        signed= countResult
                     };
                 }
                 if (temp.day.Equals("1"))
                 {
+                    Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, temp.date.ToString("yyyy-MM-dd"), temp.day);
                     List<AwardInfo> awards = AwardInfoService.getAwardInfos(temp.id + "", AwardInfoTypeConfig.SIGNINFO);
                     returnData[1] = new SignInfoAvalible()
                     {
                         info = temp,
-                        awards = awards
+                        awards = awards,
+                        signed=countResult,
                     };
                 }
                 if (temp.day.Equals("2"))
                 {
+                    Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, temp.date.ToString("yyyy-MM-dd"), temp.day);
                     List<AwardInfo> awards = AwardInfoService.getAwardInfos(temp.id + "", AwardInfoTypeConfig.SIGNINFO);
                     returnData[2] = new SignInfoAvalible()
                     {
                         info = temp,
-                        awards = awards
+                        awards = awards,
+                        signed=countResult,
                     };
                 }
                 if (temp.day.Equals("3"))
                 {
+                    Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, temp.date.ToString("yyyy-MM-dd"), temp.day);
                     List<AwardInfo> awards = AwardInfoService.getAwardInfos(temp.id + "", AwardInfoTypeConfig.SIGNINFO);
                     returnData[3] = new SignInfoAvalible()
                     {
                         info = temp,
-                        awards = awards
+                        awards = awards,
+                        signed=countResult,
                     };
                 }
                 if (temp.day.Equals("4"))
                 {
+                    Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, temp.date.ToString("yyyy-MM-dd"), temp.day);
                     List<AwardInfo> awards = AwardInfoService.getAwardInfos(temp.id + "", AwardInfoTypeConfig.SIGNINFO);
                     returnData[4] = new SignInfoAvalible()
                     {
                         info = temp,
-                        awards = awards
+                        awards = awards,
+                        signed=countResult,
                     };
                 }
                 if (temp.day.Equals("5"))
                 {
+                    Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, temp.date.ToString("yyyy-MM-dd"), temp.day);
                     List<AwardInfo> awards = AwardInfoService.getAwardInfos(temp.id + "", AwardInfoTypeConfig.SIGNINFO);
                     returnData[5] = new SignInfoAvalible()
                     {
                         info = temp,
-                        awards = awards
+                        awards = awards,
+                        signed=countResult,
                     };
                 }
                 if (temp.day.Equals("6"))
                 {
+                    Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, temp.date.ToString("yyyy-MM-dd"), temp.day);
                     List<AwardInfo> awards = AwardInfoService.getAwardInfos(temp.id + "", AwardInfoTypeConfig.SIGNINFO);
                     returnData[6] = new SignInfoAvalible()
                     {
                         info = temp,
-                        awards = awards
+                        awards = awards,
+                        signed=countResult,
                     };
                 }
             }
             ResponseUtils.ResponseSuccessWithData(response, returnData);
         }
 
+
+        public static void getSignLog(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            string postData = ServerUtils.getPostData(request.request);
+            Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+            queryRequest.TryGetValue("id", out string id);
+            SignInfo targetSignInfo = SignInfoService.getSignInfoByid(id);
+
+            Int64 countResult = ActionLogService.QuerySignInfoCount(request.user.gameentityid, targetSignInfo.date.ToString("yyyy-MM-dd"), targetSignInfo.day);
+            
+            ResponseUtils.ResponseSuccessWithData(response, countResult);
+        }
+
         class SignInfoAvalible
         {
             public SignInfo info { get; set; }
             public List<AwardInfo> awards { get; set; }
+            public Int64 signed { get; set; }
         }
     }
 }

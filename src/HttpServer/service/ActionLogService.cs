@@ -1,4 +1,5 @@
-﻿using HioldMod.src.HttpServer.bean;
+﻿using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.database;
 using System;
 using System.Collections.Generic;
@@ -113,6 +114,99 @@ namespace HioldMod.src.HttpServer.service
                     }
                 }
             }
+            return 0;
+        }
+
+        /// <summary>
+        /// 查询签到
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="hbid"></param>
+        /// <returns></returns>
+        public static Int64 QuerySignInfoCount(string userid, string date, string day)
+        {
+            DataRow[] dt = null;
+            if (date == null)
+            {
+                string[] dataPair = ServerUtils.getDayOfThisWeek();
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo5='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", userid, day, LogType.doSignInfo, dataPair[0], dataPair[1])).Select();
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt)
+                    {
+                        foreach (object data in row.ItemArray)
+                        {
+                            try
+                            {
+                                if ((Int64)data > 0) { return (Int64)data; }
+
+                            }
+                            catch (Exception)
+                            {
+                                return 0;
+                            }
+                        }
+                    }
+                }
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo5='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", userid, day, LogType.doReSignInfo, dataPair[0], dataPair[1])).Select();
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt)
+                    {
+                        foreach (object data in row.ItemArray)
+                        {
+                            try
+                            {
+                                if ((Int64)data > 0) { return (Int64)data; }
+                            }
+                            catch (Exception)
+                            {
+                                return 0;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo4='{1}' and t.actType='{2}' ", userid, date, LogType.doSignInfo)).Select();
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt)
+                    {
+                        foreach (object data in row.ItemArray)
+                        {
+                            try
+                            {
+                                if ((Int64)data > 0) { return (Int64)data; }
+                            }
+                            catch (Exception)
+                            {
+                                return 0;
+                            }
+                        }
+                    }
+                }
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo4='{1}' and t.actType='{2}' ", userid, date, LogType.doReSignInfo)).Select();
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt)
+                    {
+                        foreach (object data in row.ItemArray)
+                        {
+                            try
+                            {
+                                if ((Int64)data > 0) { return (Int64)data; }
+                            }
+                            catch (Exception)
+                            {
+                                return 0;
+                            }
+                        }
+                    }
+                }
+            }
+            //Console.WriteLine(dt);
             return 0;
         }
     }
