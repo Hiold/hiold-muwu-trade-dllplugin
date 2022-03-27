@@ -319,7 +319,7 @@ namespace HioldMod.HttpServer.common
         public static string[] getDayOfThisWeek()
         {
             string[] weekPair = new string[2];
-            DateTime currentDate = DateTime.Now.Date.AddDays(1);
+            DateTime currentDate = DateTime.Now.Date;
             //int dayOfWeek = (int)currentDate.DayOfWeek;
             // 以星期日为第一天时，第一天为
             int daydiff = (int)currentDate.DayOfWeek - 1 < 0 ? 6 : (int)currentDate.DayOfWeek - 1;
@@ -327,7 +327,7 @@ namespace HioldMod.HttpServer.common
             // 最后一天
             DateTime lastDay = firstDay.AddDays(6);
             weekPair[0] = firstDay.ToString("yyyy-MM-dd HH:mm:ss");
-            weekPair[1] = lastDay.ToString("yyyy-MM-dd HH:mm:ss");
+            weekPair[1] = lastDay.ToString("yyyy-MM-dd") + " 23:59:59";
             return weekPair;
         }
         

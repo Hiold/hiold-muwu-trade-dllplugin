@@ -126,7 +126,8 @@ namespace HioldMod.src.HttpServer.service
         public static Int64 QuerySignInfoCount(string userid, string date, string day)
         {
             DataRow[] dt = null;
-            if (date == null)
+            //循环签到奖励
+            if (date == null || date.Equals("0001-01-01"))
             {
                 string[] dataPair = ServerUtils.getDayOfThisWeek();
                 dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo5='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", userid, day, LogType.doSignInfo, dataPair[0], dataPair[1])).Select();
@@ -167,6 +168,7 @@ namespace HioldMod.src.HttpServer.service
                     }
                 }
             }
+            //指定日期签到奖励
             else
             {
                 dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo4='{1}' and t.actType='{2}' ", userid, date, LogType.doSignInfo)).Select();
