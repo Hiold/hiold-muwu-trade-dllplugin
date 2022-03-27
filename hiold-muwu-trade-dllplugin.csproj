@@ -103,6 +103,7 @@
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\AwardInfoAction.cs" />
+    <Compile Include="src\HttpServer\action\ManageAction.cs" />
     <Compile Include="src\HttpServer\action\SignInfoAction.cs" />
     <Compile Include="src\HttpServer\action\LotteryAction.cs" />
     <Compile Include="src\HttpServer\action\ProgressionAction.cs" />

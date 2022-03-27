@@ -211,6 +211,71 @@ namespace HioldMod.src.HttpServer.service
             return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToList();
         }
 
+        /// <summary>
+        /// 获取玩家店铺信息
+        /// </summary>
+        /// <param name="name">用户名/店铺名</param>
+        /// <param name="orderby">排序</param>
+        /// <returns></returns>
+        public static Dictionary<string, object> getUserByPage(string sorttype, string name, string steamid, string eosid, int page, int limit)
+        {
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            int count = 0;
+            string whereStr = "";
+            string sortStr = "";
+            //排序处理
+            if (sorttype != null)
+            {
+                if (sorttype.Equals("默认排序"))
+                {
+                    sortStr = "";
+                }
+                if (sorttype.Equals("等级高到低"))
+                {
+                    sortStr = " order by level desc";
+                }
+                if (sorttype.Equals("积分高到低"))
+                {
+                    sortStr = " order by money desc";
+                }
+                if (sorttype.Equals("获赞高到低"))
+                {
+                    sortStr = " order by likecount desc";
+                }
+                if (sorttype.Equals("销售额高到低"))
+                {
+                    sortStr = " order by trade_money desc";
+                }
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    whereStr += string.Format("and (name like '%{0}%' or shopname like '%{0}%') ", name);
+                }
+
+                if (!string.IsNullOrEmpty(steamid))
+                {
+                    whereStr += string.Format(" and gameentityid='{0}' ", steamid);
+                }
+
+                if (!string.IsNullOrEmpty(eosid))
+                {
+                    whereStr += string.Format(" and platformid='{0}' ", eosid);
+                }
+            }
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+            {
+                result.Add("data", HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("type!='1' " + whereStr + sortStr)).ToPageList(page, limit, ref count)));
+                result.Add("totalCount", count);
+                return result;
+            }
+            else
+            {
+                result.Add("data", DataBase.db.Queryable<UserInfo>().Where(string.Format("type!='1' " + whereStr + sortStr)).ToPageList(page, limit, ref count));
+                result.Add("totalCount", count);
+                return result;
+            }
+        }
+
         public static List<UserInfo> HandleUserListQueryMoney(List<UserInfo> source)
         {
             try

@@ -522,6 +522,14 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         SignInfoAction.getSignLog(request, response);
             }
+            //查询用户信息分页
+            else if (url.Equals("/api/getUserByPage"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getUserByPage(request, response);
+            }
         }
     }
 }
