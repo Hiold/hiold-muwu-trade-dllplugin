@@ -305,7 +305,7 @@ namespace HioldMod.src.HttpServer.action
                     resultAward.Add(awards[sfs[r.Next(0, allChance)]]);
                 }
                 //计算完毕发放礼品
-                string awardinfo = AwardDeliverTools.DeliverAward(request.user, resultAward);
+                string awardinfo = AwardDeliverTools.DeliverAward(request.user, resultAward, UserStorageGetChanel.LOTTERY);
 
                 //记录日志数据
                 ActionLogService.addLog(new ActionLog()

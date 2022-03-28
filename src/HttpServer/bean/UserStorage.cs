@@ -50,7 +50,7 @@ namespace HioldMod.src.HttpServer.bean
     }
 
 
-    //物品获取途径
+    //物品状态
     public class UserStorageStatus
     {
         //正常在库
@@ -84,6 +84,16 @@ namespace HioldMod.src.HttpServer.bean
         public static int SUPPLY = 4;
         //从游戏中获得
         public static int GAME_STORAGE = 5;
+        //签到
+        public static int SIGN = 6;
+        //补签
+        public static int RESIGN = 7;
+        //抽奖
+        public static int LOTTERY = 8;
+        //任务
+        public static int PROGRESSION = 9;
+        //红包
+        public static int DAILYAWARD = 10;
     }
 
     //物品最终用途

@@ -453,7 +453,7 @@ namespace HioldMod.HttpServer.router
             {
                 if (Filters.IsServerReady(request, response))
                     if (Filters.UserLoginFilter(request, response))
-                            LotteryAction.getLottery(request, response);
+                        LotteryAction.getLottery(request, response);
             }
             //抽奖
             else if (url.Equals("/api/doLottery"))
@@ -530,6 +530,31 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ManageAction.getUserByPage(request, response);
             }
+            //更新用户信息
+            else if (url.Equals("/api/updateUserInfoParam"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.updateUserInfoParam(request, response);
+            }
+            //库存查询
+            else if (url.Equals("/api/getStorageByPage"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getStorageByPage(request, response);
+            }
+            //库存修改
+            else if (url.Equals("/api/updateUserStorageParam"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.updateUserStorageParam(request, response);
+            }
+
         }
     }
 }

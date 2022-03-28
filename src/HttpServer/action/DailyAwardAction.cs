@@ -258,7 +258,7 @@ namespace HioldMod.src.HttpServer.action
                         if (awards != null && awards.Count > 0)
                         {
                             //不同类型奖品分发方式不同
-                            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards);
+                            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards,UserStorageGetChanel.DAILYAWARD);
                             //LogUtils.Loger("物品发放成功");
 
                             //记录日志数据

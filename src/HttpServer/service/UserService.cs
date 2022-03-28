@@ -298,5 +298,15 @@ namespace HioldMod.src.HttpServer.service
             }
             return source;
         }
+
+        /// <summary>
+        /// 根据SteamID获取玩家数据
+        /// </summary>
+        /// <param name="id">用户名</param>
+        /// <returns></returns>
+        public static void UpdateUserInfoParam(Dictionary<string, object> dt)
+        {
+            var t66 = DataBase.db.Updateable(dt).AS("userinfo").WhereColumns("id").ExecuteCommand();
+        }
     }
 }

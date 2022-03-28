@@ -34,6 +34,11 @@ namespace HioldMod.src.HttpServer.action
                 if (resultList != null && resultList.Count > 0)
                 {
                     UserInfo ui = resultList[0];
+                    if (ui.status != 1)
+                    {
+                        ResponseUtils.ResponseFail(response, "账号已被封禁，请联系管理员");
+                        return;
+                    }
                     ui.password = "[masked]";
                     if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                     {
@@ -95,8 +100,12 @@ namespace HioldMod.src.HttpServer.action
 
                 if (uiss != null && uiss.Count > 0)
                 {
-
                     UserInfo ui = uiss[0];
+                    if (ui.status != 1)
+                    {
+                        ResponseUtils.ResponseFail(response, "账号已被封禁，请联系管理员");
+                        return;
+                    }
                     ui.password = "[masked]";
                     if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                     {

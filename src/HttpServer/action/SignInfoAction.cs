@@ -257,7 +257,7 @@ namespace HioldMod.src.HttpServer.action
             }
 
             //计算完毕发放礼品
-            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards);
+            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards, UserStorageGetChanel.SIGN);
 
             //记录日志数据
             ActionLogService.addLog(new ActionLog()
@@ -371,7 +371,7 @@ namespace HioldMod.src.HttpServer.action
             }
 
             //计算完毕发放礼品
-            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards);
+            string awardinfo = AwardDeliverTools.DeliverAward(request.user, awards, UserStorageGetChanel.RESIGN);
 
             //记录日志数据
             ActionLogService.addLog(new ActionLog()

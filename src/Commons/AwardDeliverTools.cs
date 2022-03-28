@@ -13,7 +13,7 @@ namespace HioldMod.src.Commons
 {
     public static class AwardDeliverTools
     {
-        public static string DeliverAward(UserInfo ui, List<AwardInfo> awards)
+        public static string DeliverAward(UserInfo ui, List<AwardInfo> awards,int getChenel)
         {
             StringBuilder awardinfo = new StringBuilder("");
             foreach (AwardInfo ai in awards)
@@ -87,7 +87,7 @@ namespace HioldMod.src.Commons
                         gameentityid = ui.gameentityid,
                         collectTime = DateTime.Now,
                         storageCount = int.Parse(ai.count),
-                        itemGetChenal = UserStorageGetChanel.SHOP_BUY,
+                        itemGetChenal = getChenel,
                         itemStatus = UserStorageStatus.NORMAL_STORAGED,
                         //拓展属性
                         extinfo1 = "",
@@ -155,7 +155,7 @@ namespace HioldMod.src.Commons
                         gameentityid = ui.gameentityid,
                         collectTime = DateTime.Now,
                         storageCount = int.Parse(ai.count),
-                        itemGetChenal = UserStorageGetChanel.SHOP_BUY,
+                        itemGetChenal = getChenel,
                         itemStatus = UserStorageStatus.NORMAL_STORAGED,
                         //拓展属性
                         extinfo1 = "",
