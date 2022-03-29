@@ -524,7 +524,7 @@ namespace HioldMod.src.HttpServer.action
                     extinfo3 = "",
                     extinfo4 = "",
                     extinfo5 = "",
-                    itemdata = "",
+                    itemdata = item.itemdata,
                     //重新定义内容属性
                     stock = count,
                 };

@@ -39,6 +39,7 @@ namespace HioldMod.src.HttpServer.action
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
         }
+
         /// <summary>
         /// 更新玩家
         /// </summary>
@@ -78,6 +79,11 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 查询库存
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public static void getStorageByPage(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -104,8 +110,11 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
-
+        /// <summary>
+        /// 更新库存
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public static void updateUserStorageParam(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -116,10 +125,78 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("id", out string id);
                 queryRequest.TryGetValue("type", out string type);
                 queryRequest.TryGetValue("data", out string data);
+                if (type.Equals("itemStatus"))
+                {
+                    var dt2 = new Dictionary<string, object>();
+                    dt2.Add("id", id);
+                    dt2.Add("itemStatus", data);
+                    UserStorageService.UpdateParam(dt2);
+                }
+
+
                 var dt = new Dictionary<string, object>();
                 dt.Add("id", id);
                 dt.Add(type, data);
                 UserStorageService.UpdateParam(dt);
+                ResponseUtils.ResponseSuccess(response);
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+        /// <summary>
+        /// 查询交易
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getTradeByPage(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("steamid", out string steamid);
+                queryRequest.TryGetValue("eosid", out string eosid);
+                queryRequest.TryGetValue("username", out string username);
+                queryRequest.TryGetValue("itemname", out string itemname);
+                queryRequest.TryGetValue("status", out string status);
+                queryRequest.TryGetValue("group", out string group);
+                queryRequest.TryGetValue("itemtype", out string itemtype);
+
+                queryRequest.TryGetValue("page", out string page);
+                queryRequest.TryGetValue("limit", out string limit);
+                ResponseUtils.ResponseSuccessWithData(response, UserTradeService.selectTradeParam(steamid, eosid, username, itemname, itemtype, group, status, int.Parse(page), int.Parse(limit)));
+            }
+            catch (Exception)
+            {
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+        /// <summary>
+        /// 更新交易
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void updateTradeeParam(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("id", out string id);
+                queryRequest.TryGetValue("type", out string type);
+                queryRequest.TryGetValue("data", out string data);
+      
+                var dt = new Dictionary<string, object>();
+                dt.Add("id", id);
+                dt.Add(type, data);
+                UserTradeService.UpdateParam(dt);
                 ResponseUtils.ResponseSuccess(response);
             }
             catch (Exception e)

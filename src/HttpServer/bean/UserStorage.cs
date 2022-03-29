@@ -69,6 +69,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int LOTERYED = 6;
         //补签消耗
         public static int RESIGNED = 7;
+        //补签消耗
+        public static int ADMINDELETE = 8;
     }
 
     //物品获取途径

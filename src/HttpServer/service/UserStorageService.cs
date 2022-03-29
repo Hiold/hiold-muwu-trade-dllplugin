@@ -198,7 +198,7 @@ namespace HioldMod.src.HttpServer.service
             }
             if (!string.IsNullOrEmpty(status))
             {
-                whereStr += string.Format(" and status='{0}' ", status);
+                whereStr += string.Format(" and itemStatus='{0}' ", status);
             }
 
             //包含大分类信息

@@ -116,5 +116,86 @@ namespace HioldMod.src.HttpServer.service
         {
             DataBase.db.Updateable<UserTrade>(storage).ExecuteCommand();
         }
+
+
+        /// <summary>
+        /// 根据用户id获取玩家库存
+        /// </summary>
+        /// <param name="playerid">用户id</param>
+        /// <param name="itemtype">物品类型</param>
+        /// <returns></returns>
+        public static Dictionary<string, object> selectTradeParam(string steamid, string eosid, string username, string itemname, string mainType, string gruopsStrs,string status, int pageIndex, int pageSize)
+        {
+            int totalCount = 0;
+            string whereStr = "";
+            //包含group信息
+            if (gruopsStrs != null && gruopsStrs.Length > 0)
+            {
+                whereStr += " and (";
+                string[] groups = gruopsStrs.Split('/');
+                for (int i = 0; i < groups.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        whereStr += string.Format(" class1 like '%{0}%' or class2 like '%{0}%'", groups[i]);
+                    }
+                    else
+                    {
+                        whereStr += string.Format(" or class1 like '%{0}%' or class2 like '%{0}%'", groups[i]);
+                    }
+                }
+                whereStr += ") ";
+            }
+            //包含大分类信息
+            if (mainType != null && mainType.Length > 0)
+            {
+                if (mainType.Equals("普通物品"))
+                {
+                    whereStr += " and itemtype='1' ";
+                }
+                if (mainType.Equals("特殊物品"))
+                {
+                    whereStr += " and itemtype='2' ";
+                }
+                if (mainType.Equals("积分商城"))
+                {
+                    whereStr += " and currency='1' ";
+                }
+                if (mainType.Equals("钻石商城"))
+                {
+                    whereStr += " and currency='2' ";
+                }
+            }
+            //判断是否要加上用户判断
+            if (!string.IsNullOrEmpty(steamid))
+            {
+                whereStr += " and gameentityid = '" + steamid + "' ";
+            }
+            if (!string.IsNullOrEmpty(eosid))
+            {
+                whereStr += " and platformid = '" + eosid + "' ";
+            }
+            if (!string.IsNullOrEmpty(itemname)){
+                whereStr += string.Format(" and (name like '%{0}%' or translate like '%{0}%') ", itemname);
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                whereStr += string.Format(" and itemStatus='{0}' ", status);
+            }
+            if (!string.IsNullOrEmpty(username))
+            {
+                whereStr += string.Format(" and username like '%{0}%' ", username);
+            }
+
+            List<UserTrade> ls = DataBase.db.Queryable<UserTrade>().Where(string.Format(" 1 = 1 " + whereStr)).ToPageList(pageIndex, pageSize, ref totalCount);
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("data", ls);
+            result.Add("count", totalCount);
+            return result;
+        }
+        public static void UpdateParam(Dictionary<string, object> dt)
+        {
+            var t66 = DataBase.db.Updateable(dt).AS("usertrade").WhereColumns("id").ExecuteCommand();
+        }
     }
 }

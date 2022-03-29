@@ -554,6 +554,22 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ManageAction.updateUserStorageParam(request, response);
             }
+            //交易查询
+            else if (url.Equals("/api/getTradeByPage"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getTradeByPage(request, response);
+            }
+            //交易修改
+            else if (url.Equals("/api/updateTradeeParam"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.updateTradeeParam(request, response);
+            }
 
         }
     }
