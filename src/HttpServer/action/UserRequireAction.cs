@@ -98,14 +98,6 @@ namespace HioldMod.src.HttpServer.action
                 UserService.UpdateAmount(request.user, UserInfoCountType.REQUIRE_COUNT, 1);
                 UserService.UpdateAmount(request.user, UserInfoCountType.REQUIRE_MONEY, price);
 
-                //记录用户购买数据
-                ActionLogService.addLog(new ActionLog()
-                {
-                    actTime = DateTime.Now,
-                    actType = LogType.PostRequire,
-                    atcPlayerEntityId = request.user.gameentityid,
-                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(require)
-                });
 
                 //记录日志数据
                 ActionLogService.addLog(new ActionLog()

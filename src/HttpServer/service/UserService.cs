@@ -113,6 +113,17 @@ namespace HioldMod.src.HttpServer.service
                 return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList());
             return DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList();
         }
+        /// <summary>
+        /// 通过姓名获取用户
+        /// </summary>
+        /// <param name="steamid"></param>
+        /// <returns></returns>
+        public static List<UserInfo> getUserByName(string name)
+        {
+            if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
+                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') ", name)).ToList());
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') ", name)).ToList();
+        }
 
         public static void UpdateUserInfo(UserInfo user)
         {

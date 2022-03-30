@@ -570,7 +570,22 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ManageAction.updateTradeeParam(request, response);
             }
-
+            //查询操作记录
+            else if (url.Equals("/api/getActionByPage"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getActionByPage(request, response);
+            }
+            //获取游戏事件记录
+            else if (url.Equals("/api/getGameActionByPage"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getGameActionByPage(request, response);
+            }
         }
     }
 }

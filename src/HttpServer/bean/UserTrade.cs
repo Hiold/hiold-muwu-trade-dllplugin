@@ -47,5 +47,7 @@ namespace HioldMod.src.HttpServer.bean
         public static int SELLED = 2;
         //已下架取回
         public static int TAKC_BACK = 3;
+        //管理员删除
+        public static int ADMINDELETE = 4;
     }
 }

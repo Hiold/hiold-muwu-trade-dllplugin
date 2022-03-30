@@ -86,5 +86,71 @@ namespace HioldMod.src.HttpServer.service
             List<PlayerGameEvent> ls = DataBase.gameeventdb.Queryable<PlayerGameEvent>().Where(string.Format("atcPlayerEntityId='{0}' and extinfo1={1} and actType={2} order by actTime desc", userid, hbid,LogType.pullGetDailyAward)).ToList();
             return ls;
         }
+
+
+        /// <summary>
+        /// 查询用户操作日志
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> QueryEventParam(string steamid, string eosid, string username, string actType, int pageIndex, int pageSize)
+        {
+            string whereStr = "";
+            int totalCount = 0;
+            if (!string.IsNullOrEmpty(steamid))
+            {
+                whereStr += string.Format(" and atcPlayerEntityId='{0}' ", steamid);
+            }
+
+            if (!string.IsNullOrEmpty(eosid))
+            {
+                string tmp = "and atcPlayerEntityId in (";
+                List<UserInfo> uis = UserService.getUserByEOS(eosid);
+                if (uis != null && uis.Count > 0)
+                {
+                    foreach (UserInfo ui in uis)
+                    {
+                        tmp += string.Format("'{0}',", ui.gameentityid);
+                    }
+                    tmp = tmp.Substring(0, tmp.Length - 1);
+                    tmp += ")";
+                    whereStr += tmp;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                string tmp = "and atcPlayerEntityId in (";
+                List<UserInfo> uis = UserService.getUserByName(username);
+                if (uis != null && uis.Count > 0)
+                {
+                    foreach (UserInfo ui in uis)
+                    {
+                        tmp += string.Format("'{0}',", ui.gameentityid);
+                    }
+                    tmp = tmp.Substring(0, tmp.Length - 1);
+                    tmp += ")";
+                    whereStr += tmp;
+                }
+            }
+            if (!string.IsNullOrEmpty(actType))
+            {
+                whereStr += string.Format(" and actType='{0}' ", actType);
+            }
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
+            List<PlayerGameEvent> ls = DataBase.gameeventdb.Queryable<PlayerGameEvent>().Where(" 1=1 " + whereStr + " order by actTime desc ").ToPageList(pageIndex, pageSize, ref totalCount);
+            foreach (PlayerGameEvent al in ls)
+            {
+                Dictionary<string, object> tmp = new Dictionary<string, object>();
+                tmp.Add("action", al);
+                tmp.Add("userinfo", UserService.getUserBySteamid(al.atcPlayerEntityId));
+                data.Add(tmp);
+            }
+            result.Add("data", data);
+            result.Add("count", totalCount);
+            return result;
+        }
     }
 }

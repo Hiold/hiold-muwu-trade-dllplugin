@@ -205,5 +205,63 @@ namespace HioldMod.src.HttpServer.action
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
         }
+
+        /// <summary>
+        /// 查询操作记录
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getActionByPage(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("steamid", out string steamid);
+                queryRequest.TryGetValue("eosid", out string eosid);
+                queryRequest.TryGetValue("username", out string username);
+                queryRequest.TryGetValue("type", out string type);
+
+                queryRequest.TryGetValue("page", out string page);
+                queryRequest.TryGetValue("limit", out string limit);
+                ResponseUtils.ResponseSuccessWithData(response, ActionLogService.QueryLogsParam(steamid,eosid,username,type,int.Parse(page),int.Parse(limit)));
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+        /// <summary>
+        /// 查询游戏事件记录
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getGameActionByPage(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("steamid", out string steamid);
+                queryRequest.TryGetValue("eosid", out string eosid);
+                queryRequest.TryGetValue("username", out string username);
+                queryRequest.TryGetValue("type", out string type);
+
+                queryRequest.TryGetValue("page", out string page);
+                queryRequest.TryGetValue("limit", out string limit);
+                ResponseUtils.ResponseSuccessWithData(response, PlayerGameEventService.QueryEventParam(steamid, eosid, username, type, int.Parse(page), int.Parse(limit)));
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+
     }
 }

@@ -89,35 +89,35 @@ namespace HioldMod.src.HttpServer.bean
         public static int AddDailyAward = 20;
         //修改红包
         public static int editDailyAward = 21;
-        //修改红包
+        //删除红包
         public static int deleteDailyAward = 22;
 
         //添加奖品
         public static int AddAwardInfo = 23;
         //修改奖品
         public static int editAwardInfo = 24;
-        //修改奖品
+        //删除奖品
         public static int deleteAwardInfo = 25;
 
         //领取红包
         public static int pullGetDailyAward = 26;
 
-        //添加红包
+        //添加阶段任务
         public static int AddProgression = 27;
-        //修改红包
+        //修改阶段任务
         public static int editProgression = 28;
-        //修改红包
+        //删除阶段任务
         public static int deleteProgression = 29;
         //签到
         public static int dailySign = 30;
-        //领取红包
+        //领取阶段任务奖励
         public static int pullGetProgression = 31;
 
         //添加抽奖
         public static int AddLottery = 32;
         //修改抽奖
         public static int editLottery = 33;
-        //修改抽奖
+        //删除抽奖
         public static int deleteLottery = 34;
         //抽奖
         public static int doLottery = 35;
@@ -126,7 +126,7 @@ namespace HioldMod.src.HttpServer.bean
         public static int AddSignInfo = 36;
         //修改签到
         public static int editSignInfo = 37;
-        //修改签到
+        //删除签到
         public static int deleteSignInfo = 38;
         //签到
         public static int doSignInfo = 39;
