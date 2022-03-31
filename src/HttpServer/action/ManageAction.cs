@@ -192,7 +192,7 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("id", out string id);
                 queryRequest.TryGetValue("type", out string type);
                 queryRequest.TryGetValue("data", out string data);
-      
+
                 var dt = new Dictionary<string, object>();
                 dt.Add("id", id);
                 dt.Add(type, data);
@@ -225,7 +225,7 @@ namespace HioldMod.src.HttpServer.action
 
                 queryRequest.TryGetValue("page", out string page);
                 queryRequest.TryGetValue("limit", out string limit);
-                ResponseUtils.ResponseSuccessWithData(response, ActionLogService.QueryLogsParam(steamid,eosid,username,type,int.Parse(page),int.Parse(limit)));
+                ResponseUtils.ResponseSuccessWithData(response, ActionLogService.QueryLogsParam(steamid, eosid, username, type, int.Parse(page), int.Parse(limit)));
             }
             catch (Exception e)
             {
@@ -262,6 +262,100 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 查询用户数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getDailyUser(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                DateTime now = DateTime.Now;
+                List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+                for (int idx = 6; idx >= 0; idx--)
+                {
+                    Dictionary<string, object> tmp = new Dictionary<string, object>();
+                    string target = now.AddDays(-idx).ToString("yyyy-MM-dd");
+                    Int64[] count = ActionLogService.QueryUserActionCount(target + " 00:00:00", target + " 23:59:59");
+                    tmp.Add("date", target);
+                    tmp.Add("data", count);
+                    result.Add(tmp);
+                }
+                ResponseUtils.ResponseSuccessWithData(response, result);
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
 
+        /// <summary>
+        /// 查询交易数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getDailyTrade(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                DateTime now = DateTime.Now;
+                List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+                for (int idx = 6; idx >= 0; idx--)
+                {
+                    Dictionary<string, object> tmp = new Dictionary<string, object>();
+                    string target = now.AddDays(-idx).ToString("yyyy-MM-dd");
+                    Int64[] count = ActionLogService.QueryTradeCount(target + " 00:00:00", target + " 23:59:59");
+                    tmp.Add("date", target);
+                    tmp.Add("data", count);
+                    result.Add(tmp);
+                }
+                ResponseUtils.ResponseSuccessWithData(response, result);
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+        /// <summary>
+        /// 查询交易数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getDailySell(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                DateTime now = DateTime.Now;
+                List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+                for (int idx = 6; idx >= 0; idx--)
+                {
+                    Dictionary<string, object> tmp = new Dictionary<string, object>();
+                    string target = now.AddDays(-idx).ToString("yyyy-MM-dd");
+                    Int64[] count = ActionLogService.QuerySellCount(target + " 00:00:00", target + " 23:59:59");
+                    tmp.Add("date", target);
+                    tmp.Add("data", count);
+                    result.Add(tmp);
+                }
+                ResponseUtils.ResponseSuccessWithData(response, result);
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
     }
 }

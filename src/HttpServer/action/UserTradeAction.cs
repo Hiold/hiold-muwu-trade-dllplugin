@@ -99,8 +99,8 @@ namespace HioldMod.src.HttpServer.action
                     //进行限购检查
                     string tdStart = DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00";
                     string tdEnd = DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59";
-                    Int64 tdCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, item.id + "", LogType.BuyItem, tdStart, tdEnd);
-                    Int64 allCount = ActionLogService.QueryItemLogCount(request.user.gameentityid, item.id + "", LogType.BuyItem, null, null);
+                    Int64 tdCount = ActionLogService.QueryItemLogCount(ui.gameentityid, item.id + "", LogType.BuyItem, tdStart, tdEnd);
+                    Int64 allCount = ActionLogService.QueryItemLogCount(ui.gameentityid, item.id + "", LogType.BuyItem, null, null);
                     if ((item.xglevel.Equals("2") || item.xglevel.Equals("3")) && int.TryParse(item.xgdayset, out int intxgdayset))
                     {
                         if (tdCount + intCount > intxgdayset)
@@ -133,9 +133,9 @@ namespace HioldMod.src.HttpServer.action
 
 
                     //如果玩家优惠率不为0，计算折后总价
-                    if (request.user.vipdiscount != 0)
+                    if (ui.vipdiscount != 0)
                     {
-                        priceAll = priceAll * ((100D - request.user.vipdiscount) / 100D);
+                        priceAll = priceAll * ((100D - ui.vipdiscount) / 100D);
                     }
 
                     //检查用户是否使用了优惠券
@@ -297,7 +297,7 @@ namespace HioldMod.src.HttpServer.action
                     //积分
                     if (item.currency == "1")
                     {
-                        if (!database.DataBase.MoneyEditor(request.user, MoneyType.Money, EditType.Sub, priceAll))
+                        if (!database.DataBase.MoneyEditor(ui, MoneyType.Money, EditType.Sub, priceAll))
                         {
                             ResponseUtils.ResponseFail(response, "积分不足。购买失败！");
                             return;
@@ -306,7 +306,7 @@ namespace HioldMod.src.HttpServer.action
                     //点券
                     if (item.currency == "2")
                     {
-                        if (!database.DataBase.MoneyEditor(request.user, MoneyType.Credit, EditType.Sub, priceAll))
+                        if (!database.DataBase.MoneyEditor(ui, MoneyType.Credit, EditType.Sub, priceAll))
                         {
                             ResponseUtils.ResponseFail(response, "点券不足。购买失败！");
                             return;
@@ -358,9 +358,9 @@ namespace HioldMod.src.HttpServer.action
                         postTime = item.postTime,
                         deleteTime = item.deleteTime,
                         //非继承属性
-                        username = request.user.name,
-                        platformid = request.user.platformid,
-                        gameentityid = request.user.gameentityid,
+                        username = ui.name,
+                        platformid = ui.platformid,
+                        gameentityid = ui.gameentityid,
                         collectTime = DateTime.Now,
                         storageCount = int.Parse(_buy.count),
                         itemGetChenal = UserStorageGetChanel.SHOP_BUY,
@@ -388,15 +388,15 @@ namespace HioldMod.src.HttpServer.action
                     item.selloutcount = (selled + intCount) + "";
                     ShopTradeService.updateShopItem(item);
                     //更新交易信息数据
-                    UserService.UpdateAmount(request.user, UserInfoCountType.BUY_COUNT, intCount);
-                    UserService.UpdateAmount(request.user, UserInfoCountType.BUY_MONEY, priceAll);
+                    UserService.UpdateAmount(ui, UserInfoCountType.BUY_COUNT, intCount);
+                    UserService.UpdateAmount(ui, UserInfoCountType.BUY_MONEY, priceAll);
 
                     //记录用户购买数据
                     ActionLogService.addLog(new ActionLog()
                     {
                         actTime = DateTime.Now,
                         actType = LogType.BuyItem,
-                        atcPlayerEntityId = request.user.gameentityid,
+                        atcPlayerEntityId = ui.gameentityid,
                         extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(_buy),
                         extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(userStorate),
                         extinfo3 = priceAll + "",

@@ -586,6 +586,30 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ManageAction.getGameActionByPage(request, response);
             }
+            //获取活跃用户
+            else if (url.Equals("/api/getDailyUser"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getDailyUser(request, response);
+            }
+            //获取交易信息
+            else if (url.Equals("/api/getDailyTrade"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getDailyTrade(request, response);
+            }
+            //获取出售物品信息getDailySell
+            else if (url.Equals("/api/getDailySell"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ManageAction.getDailySell(request, response);
+            }
         }
     }
 }

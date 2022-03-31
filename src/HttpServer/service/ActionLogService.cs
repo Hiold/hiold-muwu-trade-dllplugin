@@ -13,7 +13,7 @@ namespace HioldMod.src.HttpServer.service
     class ActionLogService
     {
         /// <summary>
-        /// 插入游戏内物品数据
+        /// 插入日志
         /// </summary>
         /// <param name="item">物品</param>
         public static void addLog(ActionLog log)
@@ -44,7 +44,15 @@ namespace HioldMod.src.HttpServer.service
             }
         }
 
-
+        /// <summary>
+        /// 查询日志
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="itemid"></param>
+        /// <param name="logtype"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public static Int64 QueryItemLogCount(string id, string itemid, int logtype, string startTime, string endTime)
         {
             DataRow[] dt = null;
@@ -74,7 +82,6 @@ namespace HioldMod.src.HttpServer.service
             return 0;
         }
 
-
         /// <summary>
         /// 查询用户操作日志
         /// </summary>
@@ -88,6 +95,15 @@ namespace HioldMod.src.HttpServer.service
             return ls;
         }
 
+        /// <summary>
+        /// 查询Progression数量
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="itemid"></param>
+        /// <param name="logtype"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public static Int64 QueryProgresionCount(string id, string itemid, int logtype, string startTime, string endTime)
         {
             DataRow[] dt = null;
@@ -212,7 +228,6 @@ namespace HioldMod.src.HttpServer.service
             return 0;
         }
 
-
         /// <summary>
         /// 查询用户操作日志
         /// </summary>
@@ -277,5 +292,162 @@ namespace HioldMod.src.HttpServer.service
             result.Add("count", totalCount);
             return result;
         }
+
+        /// <summary>
+        /// 查询活跃用户数
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="itemid"></param>
+        /// <param name="logtype"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static Int64[] QueryUserActionCount(string startTime, string endTime)
+        {
+            //提前声明数量
+            Int64[] result = new Int64[] { 0, 0 };
+            //查询接口访问量
+            DataRow[] dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.actTime>'{0}' and t.actTime< '{1}' ", startTime, endTime)).Select();
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        result[0] = (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        result[0] = 0;
+                    }
+                }
+            }
+
+            //查询活跃用户量
+            DataRow[] dt2 = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) from (SELECT atcPlayerEntityId FROM actionlog where actTime>'{0}' and actTime< '{1}' group by atcPlayerEntityId) ", startTime, endTime)).Select();
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt2)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        result[1] = (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        result[1] = 0;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 查询交易数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="itemid"></param>
+        /// <param name="logtype"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static Int64[] QueryTradeCount(string startTime, string endTime)
+        {
+            //提前声明数量
+            Int64[] result = new Int64[] { 0, 0 };
+            //查询数量
+            DataRow[] dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.actType='{0}' and t.actTime>'{1}' and t.actTime< '{2}' ", LogType.BuyUserTrade, startTime, endTime)).Select();
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        result[0] = (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        result[0] = 0;
+                    }
+                }
+            }
+
+            //查询金额
+            DataRow[] dt2 = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(t.extinfo4) cnt from actionlog t where t.actType='{0}' and t.actTime>'{1}' and t.actTime< '{2}' ", LogType.BuyUserTrade, startTime, endTime)).Select();
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt2)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        result[1] = (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        result[1] = 0;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 查询出售数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="itemid"></param>
+        /// <param name="logtype"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static Int64[] QuerySellCount(string startTime, string endTime)
+        {
+            //提前声明数量
+            Int64[] result = new Int64[] { 0, 0 };
+            //查询数量
+            DataRow[] dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.actType='{0}' and t.actTime>'{1}' and t.actTime< '{2}' ", LogType.BuyItem, startTime, endTime)).Select();
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        result[0] = (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        result[0] = 0;
+                    }
+                }
+            }
+
+            //查询金额
+            DataRow[] dt2 = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(t.extinfo3) cnt from actionlog t where t.actType='{0}' and t.actTime>'{1}' and t.actTime< '{2}' ", LogType.BuyItem, startTime, endTime)).Select();
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt2)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        result[1] = (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        result[1] = 0;
+                    }
+                }
+            }
+
+            return result;
+        }
+
     }
 }
