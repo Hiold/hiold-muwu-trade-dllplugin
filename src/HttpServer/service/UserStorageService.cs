@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.database;
+using HioldMod.src.UserTools;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,68 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="item">物品</param>
         public static void addUserStorage(UserStorage storage)
         {
-            DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
+            //判断是否需要合并库存
+            if (!string.IsNullOrEmpty(storage.itemdata))
+            {
+                ItemStack[] dStack = JsonUtils.ItemFromString(storage.itemdata);
+                //只处理单个ItemStack
+                if (dStack != null && dStack.Length > 0)
+                {
+                    ItemStack targetStack = dStack[0];
+                    string itemname = targetStack.itemValue.ItemClass.GetItemName();
+                    //没有quality属性才执行堆叠
+                    if (targetStack.itemValue.Quality <= 0)
+                    {
+                        UserStorage stackableStorage = UserStorageService.selectStackableItem(storage.gameentityid, itemname, "1");
+                        if (stackableStorage != null)
+                        {
+                            ItemStack[] stackableStacks = JsonUtils.ItemFromString(stackableStorage.itemdata);
+                            if (stackableStacks != null && stackableStacks.Length > 0)
+                            {
+                                ItemStack stackableStack = stackableStacks[0];
+                                stackableStack.count = stackableStorage.storageCount + storage.storageCount;
+                                string newitemdata = JsonUtils.ByteStringFromItem(new ItemStack[] { stackableStack });
+                                stackableStorage.itemdata = newitemdata;
+                                stackableStorage.storageCount = stackableStorage.storageCount + storage.storageCount;
+                                stackableStorage.itemGetChenal = UserStorageGetChanel.STACK;
+                                UserStorageService.UpdateUserStorage(stackableStorage);
+                            }
+                            else
+                            {
+                                //有quality属性 不堆叠 执行添加
+                                DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
+
+                            }
+                        }
+                        else
+                        {
+                            //有quality属性 不堆叠 执行添加
+                            DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
+
+                        }
+                    }
+                    else
+                    {
+                        //有quality属性 不堆叠 执行添加
+                        DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
+                    }
+                }
+            }
+            else
+            {
+                UserStorage stackableStorage = UserStorageService.selectStackableItem(storage.gameentityid, storage.name, storage.itemtype);
+                if (stackableStorage != null)
+                {
+                    stackableStorage.storageCount += storage.storageCount;
+                    stackableStorage.itemGetChenal = UserStorageGetChanel.STACK;
+                    UserStorageService.UpdateUserStorage(stackableStorage);
+                }
+                else
+                {
+                    //有quality属性 不堆叠 执行添加
+                    DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
+                }
+            }
         }
 
 
@@ -40,7 +102,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserStorage> selectPlayersCou(string playerid)
         {
-            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount > 0 and itemStatus='1' and itemtype='2' ", playerid)).ToList();
+            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount > 0 and itemStatus='1' and itemtype='2' and couCurrType in ('积分折扣','积分满减','钻石折扣','钻石满减')", playerid)).ToList();
         }
 
 
@@ -55,7 +117,7 @@ namespace HioldMod.src.HttpServer.service
         }
 
         /// <summary>
-        /// 根据用户id获取优惠券
+        /// 获取有效物品
         /// </summary>
         /// <param name="playerid">用户id</param>
         /// <returns></returns>
@@ -65,7 +127,17 @@ namespace HioldMod.src.HttpServer.service
         }
 
         /// <summary>
-        /// 根据用户id获取玩家库存
+        /// 获取可堆叠物品
+        /// </summary>
+        /// <param name="playerid">用户id</param>
+        /// <returns></returns>
+        public static UserStorage selectStackableItem(string playerid, string itemname, string itemtype)
+        {
+            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and itemStatus='1' and itemtype='{1}' and name='{2}' ", playerid, itemtype, itemname)).First();
+        }
+
+        /// <summary>
+        /// 获取库存
         /// </summary>
         /// <param name="playerid">用户id</param>
         /// <param name="itemtype">物品类型</param>

@@ -96,6 +96,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int PROGRESSION = 9;
         //红包
         public static int DAILYAWARD = 10;
+        //自动堆叠
+        public static int STACK = 11;
     }
 
     //物品最终用途

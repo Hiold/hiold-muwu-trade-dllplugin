@@ -27,6 +27,14 @@ namespace HioldMod.src.HttpServer.bean
         public string extinfo6 { get; set; }
     }
 
+    /*
+     "" varchar(512) NOT NULL  ,
+"" varchar(512) NOT NULL  ,
+"" varchar(512) NOT NULL  ,
+"" varchar(512) NOT NULL  ,
+"" datetime NOT NULL  ,
+"" datetime NOT NULL  ,
+     */
     [SugarTable("awardinfo")]
     public class AwardInfo
     {
@@ -44,6 +52,12 @@ namespace HioldMod.src.HttpServer.bean
         public string command { get; set; }
         public string status { get; set; }
         public string chance { get; set; }
+        public string couCurrType { get; set; }
+        public string couPrice { get; set; }
+        public string couCond { get; set; }
+        public string coudatelimit { get; set; }
+        public string couDateStart { get; set; }
+        public string couDateEnd { get; set; }
         public string extinfo1 { get; set; }
         public string extinfo2 { get; set; }
         public string extinfo3 { get; set; }

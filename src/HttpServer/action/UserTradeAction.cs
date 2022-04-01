@@ -169,7 +169,7 @@ namespace HioldMod.src.HttpServer.action
                                     //货币类型错误
                                     if (item.currency.Equals("2"))
                                     {
-                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为钻石优惠券");
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为积分优惠券");
                                         return;
                                     }
 
@@ -201,7 +201,7 @@ namespace HioldMod.src.HttpServer.action
                                 {
                                     if (item.currency.Equals("2"))
                                     {
-                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为钻石优惠券");
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为积分优惠券");
                                         return;
                                     }
                                     if (int.TryParse(couInfo.couCond, out int intCouCond))
@@ -232,7 +232,7 @@ namespace HioldMod.src.HttpServer.action
                                 {
                                     if (item.currency.Equals("1"))
                                     {
-                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为积分优惠券");
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为钻石优惠券");
                                         return;
                                     }
                                     if (int.TryParse(couInfo.couCond, out int intCouCond))
@@ -263,7 +263,7 @@ namespace HioldMod.src.HttpServer.action
                                 {
                                     if (item.currency.Equals("1"))
                                     {
-                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为积分优惠券");
+                                        ResponseUtils.ResponseFail(response, "无法使用这个优惠券，此优惠券为钻石优惠券");
                                         return;
                                     }
                                     if (int.TryParse(couInfo.couCond, out int intCouCond))

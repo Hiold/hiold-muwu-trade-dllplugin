@@ -13,7 +13,7 @@ namespace HioldMod.src.Commons
 {
     public static class AwardDeliverTools
     {
-        public static string DeliverAward(UserInfo ui, List<AwardInfo> awards,int getChenel)
+        public static string DeliverAward(UserInfo ui, List<AwardInfo> awards, int getChenel)
         {
             StringBuilder awardinfo = new StringBuilder("");
             foreach (AwardInfo ai in awards)
@@ -118,12 +118,12 @@ namespace HioldMod.src.Commons
                         class2 = "",
                         classmod = "0",
                         desc = "",
-                        couCurrType = "0",
-                        couPrice = "0",
-                        couCond = "0",
-                        coudatelimit = "0",
-                        couDateStart = DateTime.MinValue,
-                        couDateEnd = DateTime.MinValue,
+                        couCurrType = ai.couCurrType,
+                        couPrice = ai.couPrice,
+                        couCond = ai.couCond,
+                        coudatelimit = ai.coudatelimit,
+                        couDateStart = DateTime.Parse(ai.couDateStart),
+                        couDateEnd = DateTime.Parse(ai.couDateEnd),
                         count = "1",
                         currency = "0",
                         price = 0,

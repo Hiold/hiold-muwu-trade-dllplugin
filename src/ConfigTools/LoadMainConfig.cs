@@ -1,4 +1,8 @@
 ﻿using HioldMod;
+using HioldMod.HttpServer;
+using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.bean;
+using HioldMod.src.HttpServer.service;
 using HioldMod.src.UserTools;
 using System;
 using System.IO;
@@ -21,6 +25,8 @@ namespace ConfigTools
         {
             public static string Host;
             public static string Port;
+            public static string username;
+            public static string password;
         }
 
 
@@ -92,10 +98,94 @@ namespace ConfigTools
                                 }
                                 MainConfig.Port = _line.GetAttribute("value");
                                 break;
+                            case "AdminUsername":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.username = _line.GetAttribute("value");
+                                break;
+                            case "AdminPassword":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.password = _line.GetAttribute("value");
+                                break;
 
                         }
                     }
                 }
+            }
+            //
+            try { 
+            if (!string.IsNullOrEmpty(MainConfig.username) && !string.IsNullOrEmpty(MainConfig.password))
+            {
+                //获取管理员用户
+                UserInfo ui = UserService.getAdmin(MainConfig.username);
+                if (ui != null)
+                {
+                    if (!ServerUtils.md5(MainConfig.password).Equals(ui.password))
+                    {
+                        ui.password = ServerUtils.md5(MainConfig.password);
+                        LogUtils.Loger("检测到管理员密码变动，执行修改");
+                    }
+                    ui.type = "1";
+                    UserService.UpdateUserInfo(ui);
+                }
+                else
+                {
+                    int id = UserService.userRegister(new UserInfo()
+                    {
+                        created_at = DateTime.Now,
+                        name = MainConfig.username,
+                        gameentityid = MainConfig.username,
+                        platformid = MainConfig.username,
+                        money = 0,
+                        credit = 0,
+                        status = 1,
+                        password = ServerUtils.md5(MainConfig.password),
+                        qq = "",
+                        email = "",
+                        avatar = MainConfig.username + ".png",
+                        sign = "",
+                        extinfo1 = "",
+                        extinfo2 = "",
+                        extinfo3 = "",
+                        extinfo4 = "",
+                        extinfo5 = "",
+                        extinfo6 = "",
+                        trade_count = "0",
+                        store_count = "0",
+                        require_count = "0",
+                        type = "1",
+                        level = 0,
+                        online_time = "0",
+                        zombie_kills = "0",
+                        player_kills = "0",
+                        total_crafted = "0",
+                        vipdiscount = 0,
+                        creditcharge = 0,
+                        creditcost = 0,
+                        moneycharge = 0,
+                        moneycost = 0,
+                        signdays = 0,
+                        likecount = 0,
+                        trade_money = 0,
+                        require_money = 0,
+                        buy_count = "0",
+                        shopname = MainConfig.username + "的小店",
+                        ncode = "",
+                    });
+                    LogUtils.Loger("管理员注册成功");
+                }
+            }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger("初始化管理员异常 跳过");
             }
         }
 
@@ -112,6 +202,10 @@ namespace ConfigTools
                 sw.WriteLine(string.Format("        <Option Name=\"Host\" value=\"{0}\" />", "auto"));
                 sw.WriteLine(string.Format("        <!--交易系统port 当配置为auto时系统自动计算端口号，计算方式为游戏端口+11（如游戏端口为26900，则本交易系统端口为26911）-->"));
                 sw.WriteLine(string.Format("        <Option Name=\"Port\" value=\"{0}\" />", "auto"));
+                sw.WriteLine(string.Format("        <!--交易系统port 当配置为auto时系统自动计算端口号，计算方式为游戏端口+11（如游戏端口为26900，则本交易系统端口为26911）-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"AdminUsername\" value=\"{0}\" />", "admin"));
+                sw.WriteLine(string.Format("        <!--交易系统port 当配置为auto时系统自动计算端口号，计算方式为游戏端口+11（如游戏端口为26900，则本交易系统端口为26911）-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"AdminPassword\" value=\"{0}\" />", "auto"));
                 sw.WriteLine("    </HioldMod>");
                 sw.WriteLine("</HioldModConfig>");
                 //配置文件结束

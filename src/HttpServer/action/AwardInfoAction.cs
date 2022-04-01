@@ -33,8 +33,13 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("command", out string command);
                 string chance = "";
                 queryRequest.TryGetValue("chance", out chance);
-
-
+                //特殊属性
+                queryRequest.TryGetValue("couCurrType", out string couCurrType);
+                queryRequest.TryGetValue("couPrice", out string couPrice);
+                queryRequest.TryGetValue("couCond", out string couCond);
+                queryRequest.TryGetValue("coudatelimit", out string coudatelimit);
+                queryRequest.TryGetValue("couDateStart", out string couDateStart);
+                queryRequest.TryGetValue("couDateEnd", out string couDateEnd);
                 //添加新的每日奖励
                 AwardInfoService.addAwardInfo(new AwardInfo
                 {
@@ -47,6 +52,12 @@ namespace HioldMod.src.HttpServer.action
                     itemicon = itemicon,
                     itemtint = itemtint,
                     command = command,
+                    couCond = couCond,
+                    couCurrType = couCurrType,
+                    couPrice = couPrice,
+                    coudatelimit = coudatelimit,
+                    couDateEnd = couDateEnd,
+                    couDateStart = couDateStart,
                     status = "1",
                     extinfo1 = "",
                     extinfo2 = "",
@@ -100,6 +111,13 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("command", out string command);
                 string chance = "";
                 queryRequest.TryGetValue("chance", out chance);
+                //特殊属性
+                queryRequest.TryGetValue("couCurrType", out string couCurrType);
+                queryRequest.TryGetValue("couPrice", out string couPrice);
+                queryRequest.TryGetValue("couCond", out string couCond);
+                queryRequest.TryGetValue("coudatelimit", out string coudatelimit);
+                queryRequest.TryGetValue("couDateStart", out string couDateStart);
+                queryRequest.TryGetValue("couDateEnd", out string couDateEnd);
                 AwardInfo target = AwardInfoService.getAwardInfoByid(id);
                 if (target != null)
                 {
@@ -114,6 +132,12 @@ namespace HioldMod.src.HttpServer.action
                     target.command = command;
                     target.funcid = int.Parse(funcid);
                     target.chance = chance;
+                    target.couCurrType = couCurrType;
+                    target.couCond = couCond;
+                    target.couPrice = couPrice;
+                    target.coudatelimit = coudatelimit;
+                    target.couDateStart = couDateStart;
+                    target.couDateEnd = couDateEnd;
                 }
 
                 AwardInfoService.UpdateAwardInfo(target);

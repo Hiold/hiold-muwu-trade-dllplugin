@@ -125,6 +125,16 @@ namespace HioldMod.src.HttpServer.service
             return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') ", name)).ToList();
         }
 
+        /// <summary>
+        /// 获取管理员用户
+        /// </summary>
+        /// <param name="steamid"></param>
+        /// <returns></returns>
+        public static UserInfo getAdmin(string name)
+        {
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format(" name='{0}' ", name)).First();
+        }
+
         public static void UpdateUserInfo(UserInfo user)
         {
             DataBase.db.Updateable<UserInfo>(user).ExecuteCommand();
