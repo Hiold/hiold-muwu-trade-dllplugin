@@ -216,7 +216,7 @@ namespace HioldMod.src.HttpServer.service
                     switch (_ptype)
                     {
                         case HttpServer.bean.ProgressionType.DAILY:
-                            dt = DataBase.gameeventdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, daypair[0], daypair[1], PlayerGameEventType.LIKE)).Select();
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, daypair[0], daypair[1], LogType.Like)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
@@ -234,7 +234,7 @@ namespace HioldMod.src.HttpServer.service
                             }
                             break;
                         case HttpServer.bean.ProgressionType.WEEK:
-                            dt = DataBase.gameeventdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, weekpair[0], weekpair[1], PlayerGameEventType.LIKE)).Select();
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, weekpair[0], weekpair[1], LogType.Like)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
@@ -252,7 +252,7 @@ namespace HioldMod.src.HttpServer.service
                             }
                             break;
                         case HttpServer.bean.ProgressionType.MAIN:
-                            dt = DataBase.gameeventdb.Ado.GetDataTable(string.Format("select count(*) cnt from gameeventlog t where t.atcPlayerEntityId='{0}' and t.actType='{1}' ", playerId, PlayerGameEventType.LIKE)).Select();
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.actType='{1}' ", playerId, LogType.Like)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {

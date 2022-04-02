@@ -69,6 +69,7 @@ namespace HioldMod.src.HttpServer.bean
 
     public static class AwardInfoTypeConfig
     {
+        public static string SPECIAL_ITEM_TEMLATE = "0";
         public static string DAILY_AWARD = "1";
         public static string PROGRESSION = "2";
         public static string LOTTERY = "3";

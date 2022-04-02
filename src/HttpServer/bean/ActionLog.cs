@@ -132,6 +132,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int doSignInfo = 39;
         //补签
         public static int doReSignInfo = 40;
+        //补签
+        public static int Like = 41;
 
     }
 }

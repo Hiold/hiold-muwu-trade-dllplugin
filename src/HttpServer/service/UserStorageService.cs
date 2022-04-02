@@ -102,7 +102,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<UserStorage> selectPlayersCou(string playerid)
         {
-            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount > 0 and itemStatus='1' and itemtype='2' and couCurrType in ('积分折扣','积分满减','钻石折扣','钻石满减')", playerid)).ToList();
+            return DataBase.db.Queryable<UserStorage>().Where(string.Format("gameentityid = '{0}' and storageCount > 0 and itemStatus='1' and itemtype='2' and (couCurrType like '%积分折扣%' or couCurrType like '%积分满减%' or couCurrType like '%钻石折扣%' or couCurrType like '%钻石满减%')", playerid)).ToList();
         }
 
 

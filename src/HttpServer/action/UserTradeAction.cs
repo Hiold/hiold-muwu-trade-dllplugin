@@ -122,7 +122,15 @@ namespace HioldMod.src.HttpServer.action
                     }
 
 
-
+                    if (item.selltype==2)
+                    {
+                        if (ui.vipdiscount<=0)
+                        {
+                            //库存量不足
+                            ResponseUtils.ResponseFail(response, "此物品为VIP专属，您不是VIP");
+                            return;
+                        }
+                    }
 
 
                     //查看当前物品是否有折扣
@@ -147,6 +155,10 @@ namespace HioldMod.src.HttpServer.action
                             if (couTicket.Count > 0)
                             {
                                 UserStorage couInfo = couTicket[0];
+                                if (string.IsNullOrEmpty(couInfo.couCond))
+                                {
+                                    couInfo.couCond = "0";
+                                }
                                 if (couInfo.coudatelimit.Equals("2"))
                                 {
                                     if (item.couDateStart > DateTime.Now)
@@ -164,7 +176,7 @@ namespace HioldMod.src.HttpServer.action
 
 
 
-                                if (couInfo.couCurrType.Equals("积分折扣"))
+                                if (couInfo.couCurrType.Contains("积分折扣"))
                                 {
                                     //货币类型错误
                                     if (item.currency.Equals("2"))
@@ -197,7 +209,7 @@ namespace HioldMod.src.HttpServer.action
                                     }
                                 }
 
-                                if (couInfo.couCurrType.Equals("积分满减"))
+                                if (couInfo.couCurrType.Contains("积分满减"))
                                 {
                                     if (item.currency.Equals("2"))
                                     {
@@ -228,7 +240,7 @@ namespace HioldMod.src.HttpServer.action
                                     }
                                 }
 
-                                if (couInfo.couCurrType.Equals("钻石折扣"))
+                                if (couInfo.couCurrType.Contains("钻石折扣"))
                                 {
                                     if (item.currency.Equals("1"))
                                     {
@@ -259,7 +271,7 @@ namespace HioldMod.src.HttpServer.action
                                     }
                                 }
 
-                                if (couInfo.couCurrType.Equals("钻石满减"))
+                                if (couInfo.couCurrType.Contains("钻石满减"))
                                 {
                                     if (item.currency.Equals("1"))
                                     {
@@ -289,6 +301,14 @@ namespace HioldMod.src.HttpServer.action
                                         return;
                                     }
                                 }
+
+                                couInfo.storageCount--;
+                                UserStorageService.UpdateUserStorage(couInfo);
+                            }
+                            else
+                            {
+                                ResponseUtils.ResponseFail(response, "优惠券已耗尽，无法继续使用");
+                                return;
                             }
                         }
                     }

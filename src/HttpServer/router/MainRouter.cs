@@ -610,6 +610,20 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ManageAction.getDailySell(request, response);
             }
+            //点赞
+            else if (url.Equals("/api/like"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        UserInfoAction.like(request, response);
+            }
+            //获取点赞信息
+            else if (url.Equals("/api/likecount"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        UserInfoAction.likecount(request, response);
+            }
         }
     }
 }

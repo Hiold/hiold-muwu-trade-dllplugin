@@ -764,6 +764,82 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
+
+        /// <summary>
+        /// 点赞
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void like(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("steamid", out string steamid);
+                List<UserInfo> rest = UserService.getUserBySteamid(steamid);
+                if (rest != null && rest.Count > 0)
+                {
+                    long count = ActionLogService.QueryLikeCount(request.user.gameentityid, steamid, DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+                    if (count <= 0)
+                    {
+                        //记录日志数据
+                        ActionLogService.addLog(new ActionLog()
+                        {
+                            actTime = DateTime.Now,
+                            actType = LogType.Like,
+                            atcPlayerEntityId = request.user.gameentityid,
+                            extinfo1 = steamid,
+                            desc = string.Format("为 " + rest[0].name + " 的店铺点赞")
+                        });
+                        UserInfo ui = rest[0];
+                        ui.likecount = ui.likecount + 1;
+                        UserService.UpdateUserInfo(ui);
+                        ResponseUtils.ResponseSuccess(response);
+                        return;
+                    }
+                    else
+                    {
+                        ResponseUtils.ResponseFail(response, "今天已经点赞过了，请明天在为ta点赞");
+                        return;
+                    }
+                }
+                else
+                {
+                    ResponseUtils.ResponseFail(response, "未找到用户信息");
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+        public static void likecount(HioldRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                //获取参数
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("steamid", out string steamid);
+                long count = ActionLogService.QueryLikeCount(request.user.gameentityid, steamid, DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+                ResponseUtils.ResponseSuccessWithData(response, count);
+                return;
+            }
+            catch (Exception e)
+            {
+                LogUtils.Loger(e.Message);
+                ResponseUtils.ResponseFail(response, "参数异常");
+                return;
+            }
+        }
+
+
         public class info
         {
             public string userid { get; set; }

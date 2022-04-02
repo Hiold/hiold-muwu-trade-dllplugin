@@ -449,5 +449,28 @@ namespace HioldMod.src.HttpServer.service
             return result;
         }
 
+        public static Int64 QueryLikeCount(string actplayer, string targetplayer, string startTime, string endTime)
+        {
+            //查询数量
+            DataRow[] dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.actType='{0}' and t.actTime>'{1}' and t.actTime< '{2}' and atcPlayerEntityId='{3}' and extinfo1='{4}'", LogType.Like, startTime, endTime, actplayer, targetplayer)).Select();
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        return (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        return 0;
+                    }
+                }
+            }
+            return 0;
+
+        }
+
     }
 }
