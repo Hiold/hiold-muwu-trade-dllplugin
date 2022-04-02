@@ -119,6 +119,7 @@
     <Compile Include="src\HttpServer\action\TranslationAction.cs" />
     <Compile Include="src\HttpServer\action\UserTradeAction.cs" />
     <Compile Include="src\HttpServer\bean\ActionLog.cs" />
+    <Compile Include="src\HttpServer\bean\ItemExchange.cs" />
     <Compile Include="src\HttpServer\bean\HioldRequest.cs" />
     <Compile Include="src\HttpServer\bean\DailyAward.cs" />
     <Compile Include="src\HttpServer\bean\Lottery.cs" />
