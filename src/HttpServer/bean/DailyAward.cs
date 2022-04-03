@@ -74,5 +74,6 @@ namespace HioldMod.src.HttpServer.bean
         public static string PROGRESSION = "2";
         public static string LOTTERY = "3";
         public static string SIGNINFO = "4";
+        public static string ITEM_EXCHANGE = "5";
     }
 }

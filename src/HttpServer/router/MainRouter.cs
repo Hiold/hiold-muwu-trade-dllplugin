@@ -624,6 +624,37 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         UserInfoAction.likecount(request, response);
             }
+            //添加物品转换
+            else if (url.Equals("/api/postExchange"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ItemExchangeAction.postExchange(request, response);
+            }
+            //修改物品转换
+            else if (url.Equals("/api/updateExchange"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ItemExchangeAction.updateExchange(request, response);
+            }
+            //删除物品转换
+            else if (url.Equals("/api/deleteExchange"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ItemExchangeAction.deleteExchange(request, response);
+            }
+            //查询物品转换
+            else if (url.Equals("/api/getExchange"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ItemExchangeAction.getExchange(request, response);
+            }
         }
     }
 }

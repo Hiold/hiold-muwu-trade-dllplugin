@@ -103,6 +103,7 @@
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\AwardInfoAction.cs" />
+    <Compile Include="src\HttpServer\action\ItemExchangeAction.cs" />
     <Compile Include="src\HttpServer\action\ManageAction.cs" />
     <Compile Include="src\HttpServer\action\SignInfoAction.cs" />
     <Compile Include="src\HttpServer\action\LotteryAction.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="src\HttpServer\router\Filters.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />
+    <Compile Include="src\HttpServer\service\ItemExchangeService.cs" />
     <Compile Include="src\HttpServer\service\SignInfoService.cs" />
     <Compile Include="src\HttpServer\service\LotteryService.cs" />
     <Compile Include="src\HttpServer\service\ProgressionTService.cs" />
