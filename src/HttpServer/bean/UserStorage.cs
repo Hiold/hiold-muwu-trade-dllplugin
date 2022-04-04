@@ -98,6 +98,8 @@ namespace HioldMod.src.HttpServer.bean
         public static int DAILYAWARD = 10;
         //自动堆叠
         public static int STACK = 11;
+        //自动堆叠
+        public static int CRAFT = 12;
     }
 
     //物品最终用途

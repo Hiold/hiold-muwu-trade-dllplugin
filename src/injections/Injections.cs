@@ -16,6 +16,8 @@ using static ConfigTools.LoadMainConfig;
 
 public static class Injections
 {
+    public static XmlDocument xmlDocStatic = null;
+
     public static bool TELockServer_PostFix(int _clrIdx, Vector3i _blockPos, int _lootEntityId, int _entityIdThatOpenedIt)
     {
         try
@@ -81,66 +83,8 @@ public static class Injections
                 //
                 if (xmlname.Equals("XUi/windows"))
                 {
-                    MemoryStream ms = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
-                    DeflateInputStream dis = new DeflateInputStream(ms);
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.Load(dis);
-                    XmlNode targetNode = xmlDoc.SelectSingleNode("/windows/window[@name='HioldShopWindow']");
-                    //如果存在 尝试移除数据
-                    if (targetNode != null)
-                    {
-                        xmlDoc.SelectSingleNode("/windows").RemoveChild(targetNode);
-                    }
-                    //<window_group name="HioldshopWindows"> <window name="HioldShopWindow" /> </window_group>
 
-                    //生成数据结构
-                    //window
-                    //window
-                    XmlElement window = xmlDoc.CreateElement("window");
-                    window.SetAttribute("name", "HioldShopWindow");
-                    window.SetAttribute("anchor", "LeftTop");
-                    window.SetAttribute("depth", "51");
-                    window.SetAttribute("pos", "200,200");
-                    window.SetAttribute("width", "800");
-                    window.SetAttribute("height", "800");
-                    window.SetAttribute("cursor_area", "true");
-                    //rect
-                    XmlElement rect = xmlDoc.CreateElement("rect");
-                    rect.SetAttribute("name", "serverinfo");
-                    rect.SetAttribute("controller", "ServerInfo");
-                    rect.SetAttribute("name", "HioldShop");
-                    //label1
-                    XmlElement label1 = xmlDoc.CreateElement("label");
-                    label1.SetAttribute("depth", "2");
-                    label1.SetAttribute("pos", "520,-550");
-                    label1.SetAttribute("text", "[D65E62]★--- [FFFFFF]点击此处网页链接，跳转至交易系统[D65E62] ---★");
-                    label1.SetAttribute("width", "100%");
-                    label1.SetAttribute("justify", "center");
-                    label1.SetAttribute("font_size", "32");
-                    rect.AppendChild(label1);
-                    //添加背景色
-                    XmlElement sprite = xmlDoc.CreateElement("sprite");
-                    sprite.SetAttribute("depth", "8");
-                    sprite.SetAttribute("name", "backgroundMain");
-                    sprite.SetAttribute("sprite", "menu_empty3px");
-                    sprite.SetAttribute("pos", "500,-510");
-                    sprite.SetAttribute("width", "900");
-                    sprite.SetAttribute("height", "400");
-                    sprite.SetAttribute("color", "[black]");
-                    sprite.SetAttribute("type", "sliced");
-                    sprite.SetAttribute("fillcenter", "true");
-                    sprite.SetAttribute("globalopacity", "true");
-                    sprite.SetAttribute("globalopacitymod", "1");
-                    rect.AppendChild(sprite);
-                    //label2
-                    XmlElement label2 = xmlDoc.CreateElement("label");
-                    label2.SetAttribute("depth", "11");
-                    label2.SetAttribute("pos", "550,-600");
-                    label2.SetAttribute("width", "480");
-                    label2.SetAttribute("height", "32");
-                    label2.SetAttribute("name", "ServerWebsiteURL");
-                    /*下面是网页链接*/
-                    //label2.SetAttribute("text", "https://td.hiold.net/");
+
                     //生成动态码
                     string ncode = "";
 
@@ -206,6 +150,77 @@ public static class Injections
                     {
                         int.TryParse(MainConfig.Port, out port);
                     }
+
+
+                    XmlDocument xmlDoc = new XmlDocument();
+                    if (xmlDocStatic == null)
+                    {
+                        MemoryStream ms = new MemoryStream(Traverse.Create(xmls).Field("CompressedXmlData").GetValue<byte[]>());
+                        DeflateInputStream dis = new DeflateInputStream(ms);
+                        xmlDoc.Load(dis);
+                        xmlDocStatic = xmlDoc;
+                    }
+                    else
+                    {
+                        xmlDoc = xmlDocStatic;
+                    }
+                    XmlNode targetNode = xmlDoc.SelectSingleNode("/windows/window[@name='HioldShopWindow']");
+                    //如果存在 尝试移除数据
+                    if (targetNode != null)
+                    {
+                        xmlDoc.SelectSingleNode("/windows").RemoveChild(targetNode);
+                    }
+                    //<window_group name="HioldshopWindows"> <window name="HioldShopWindow" /> </window_group>
+
+                    //生成数据结构
+                    //window
+                    //window
+                    XmlElement window = xmlDoc.CreateElement("window");
+                    window.SetAttribute("name", "HioldShopWindow");
+                    window.SetAttribute("anchor", "LeftTop");
+                    window.SetAttribute("depth", "51");
+                    window.SetAttribute("pos", "200,200");
+                    window.SetAttribute("width", "800");
+                    window.SetAttribute("height", "800");
+                    window.SetAttribute("cursor_area", "true");
+                    //rect
+                    XmlElement rect = xmlDoc.CreateElement("rect");
+                    rect.SetAttribute("name", "serverinfo");
+                    rect.SetAttribute("controller", "ServerInfo");
+                    rect.SetAttribute("name", "HioldShop");
+                    //label1
+                    XmlElement label1 = xmlDoc.CreateElement("label");
+                    label1.SetAttribute("depth", "2");
+                    label1.SetAttribute("pos", "520,-550");
+                    label1.SetAttribute("text", "[D65E62]★--- [FFFFFF]点击此处网页链接，跳转至交易系统[D65E62] ---★");
+                    label1.SetAttribute("width", "100%");
+                    label1.SetAttribute("justify", "center");
+                    label1.SetAttribute("font_size", "32");
+                    rect.AppendChild(label1);
+                    //添加背景色
+                    XmlElement sprite = xmlDoc.CreateElement("sprite");
+                    sprite.SetAttribute("depth", "8");
+                    sprite.SetAttribute("name", "backgroundMain");
+                    sprite.SetAttribute("sprite", "menu_empty3px");
+                    sprite.SetAttribute("pos", "500,-510");
+                    sprite.SetAttribute("width", "900");
+                    sprite.SetAttribute("height", "400");
+                    sprite.SetAttribute("color", "[black]");
+                    sprite.SetAttribute("type", "sliced");
+                    sprite.SetAttribute("fillcenter", "true");
+                    sprite.SetAttribute("globalopacity", "true");
+                    sprite.SetAttribute("globalopacitymod", "1");
+                    rect.AppendChild(sprite);
+                    //label2
+                    XmlElement label2 = xmlDoc.CreateElement("label");
+                    label2.SetAttribute("depth", "11");
+                    label2.SetAttribute("pos", "550,-600");
+                    label2.SetAttribute("width", "480");
+                    label2.SetAttribute("height", "32");
+                    label2.SetAttribute("name", "ServerWebsiteURL");
+                    /*下面是网页链接*/
+                    //label2.SetAttribute("text", "https://td.hiold.net/");
+
 
                     label2.SetAttribute("text", "http://" + host + ":" + port + "/#/login?ncode=" + ncode);
                     label2.SetAttribute("justify", "left");
@@ -276,7 +291,12 @@ public static class Injections
                     //插入目标节点
                     xmlDoc.SelectSingleNode("/windows").AppendChild(window);
                     //开始压缩
-                    MemoryStream msencTarget = new MemoryStream(Encoding.UTF8.GetBytes(xmlDoc.InnerXml));
+                    string xuiString = xmlDoc.InnerXml;
+                    if (xuiString.Contains("##trade_system_url##"))
+                    {
+                        xuiString = xuiString.Replace("##trade_system_url##", "http://" + host + ":" + port + "/#/login?ncode=" + ncode);
+                    }
+                    MemoryStream msencTarget = new MemoryStream(Encoding.UTF8.GetBytes(xuiString));
                     MemoryStream msenc = new MemoryStream();
                     DeflateOutputStream dos = new DeflateOutputStream(msenc, 3, true);
                     StreamUtils.StreamCopy(msencTarget, dos);
@@ -289,7 +309,6 @@ public static class Injections
                     //DeflateInputStream dos2 = new DeflateInputStream(msenc2);
                     //FileStream fs = new FileStream("D:\\xmlCongif\\window.xml", FileMode.OpenOrCreate);
                     //dos2.CopyTo(fs);
-
 
                 }
                 //

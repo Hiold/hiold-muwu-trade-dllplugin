@@ -655,6 +655,41 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         ItemExchangeAction.getExchange(request, response);
             }
+            //获取有效物品
+            else if (url.Equals("/api/getAvalivleItem"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ItemExchangeAction.getAvalivleItem(request, response);
+            }
+            //获取有效物品
+            else if (url.Equals("/api/craftItem"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ItemExchangeAction.craftItem(request, response);
+            }
+            //制作物品
+            else if (url.Equals("/api/craftItem"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ItemExchangeAction.craftItem(request, response);
+            }
+            //获取正在制作的列表
+            else if (url.Equals("/api/getCrafting"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ItemExchangeAction.getCrafting(request, response);
+            }
+            //获取制作产出物品
+            else if (url.Equals("/api/getCraftAward"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ItemExchangeAction.getCraftAward(request, response);
+            }
         }
     }
 }

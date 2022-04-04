@@ -472,5 +472,31 @@ namespace HioldMod.src.HttpServer.service
 
         }
 
+        /// <summary>
+        /// 查询正在制作的物品
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static List<ActionLog> getCrafting(string userid, string status)
+        {
+            List<ActionLog> ls = DataBase.logdb.Queryable<ActionLog>().Where(string.Format("atcPlayerEntityId='{0}' and actType='{1}' and extinfo6='{2}' order by actTime desc", userid, LogType.CraftItem, status)).ToList();
+            return ls;
+        }
+
+        /// <summary>
+        /// 查询正在制作的物品
+        /// </summary>
+        /// <param name="if"></param>
+        /// <returns></returns>
+        public static ActionLog getActionLogById(string id)
+        {
+            return DataBase.logdb.Queryable<ActionLog>().Where(string.Format("id='{0}' ", id)).First();
+        }
+        //更新数据
+        public static void UpdateParam(Dictionary<string, object> dt)
+        {
+            var t66 = DataBase.logdb.Updateable(dt).AS("actionlog").WhereColumns("id").ExecuteCommand();
+        }
     }
 }
