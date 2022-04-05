@@ -1119,7 +1119,7 @@ namespace HioldMod.src.ChunckLoader
                             _serializedItemStack.itemQuality = _item.itemValue.Quality + "";
                             _serializedItemStack.itemMaxUseTime = _item.itemValue.MaxUseTimes + "";
                             _serializedItemStack.itemData = itemString;
-                            _serializedItemStack.desc = LocalizationUtils.getDesc(_item.itemValue.ItemClass.GetItemName() + "Desc");
+                            _serializedItemStack.desc = LocalizationUtils.getDesc(_item.itemValue.ItemClass.GetItemDescriptionKey());
                             //物品内模组信息
                             List<string> modList = new List<string>();
                             foreach (ItemValue mod in _item.itemValue.Modifications)

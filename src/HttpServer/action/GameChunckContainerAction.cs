@@ -125,7 +125,7 @@ namespace HioldMod.src.HttpServer.action
                         //id
                         itemtype = "1",
                         name = ii.Data.itemName,
-                        translate = ii.Data.translate,
+                        translate = ii.Data.translate == null ? ii.Data.itemName : ii.Data.translate,
                         itemicon = (ii.Data.CustomIcon == null ? ii.Data.itemName : ii.Data.CustomIcon) + ".png",
                         itemtint = ii.Data.CustomIconTint == null ? "" : ii.Data.CustomIconTint,
                         quality = parseInt(ii.Data.itemQuality),
@@ -133,7 +133,7 @@ namespace HioldMod.src.HttpServer.action
                         class1 = parseGroup(ii.Data.Groups),
                         class2 = parseGroup(ii.Data.Groups),
                         classmod = "",
-                        desc = ii.Data.desc,
+                        desc = ii.Data.desc == null ? "" : ii.Data.desc,
                         couCurrType = "",
                         couPrice = "",
                         couCond = "",

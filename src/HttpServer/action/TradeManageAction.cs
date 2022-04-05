@@ -295,7 +295,7 @@ namespace HioldMod.src.HttpServer.action
 
                 if (!string.IsNullOrEmpty(id))
                 {
-                    List<TradeManageItem> ls = ShopTradeService.getShopItemById(int.Parse(id));
+                    List<TradeManageItem> ls = ShopTradeService.getShopItemByIdWithCollect(int.Parse(id),request.user);
                     Dictionary<string, object> resultForid = new Dictionary<string, object>();
                     resultForid.Add("data", ls);
                     resultForid.Add("count", 1);

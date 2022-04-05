@@ -44,6 +44,17 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("Itemicon", out string Itemicon);
                 queryRequest.TryGetValue("Itemicontint", out string Itemicontint);
                 queryRequest.TryGetValue("Itemgroups", out string Itemgroups);
+                //检查游戏内物品参数
+                //获取游戏内物品数据
+                ItemClass targetItem = ItemClass.GetItem(Itemname).ItemClass;
+                if (!targetItem.HasQuality)
+                {
+                    if (!Itemquality.Equals("0") && !string.IsNullOrEmpty(Itemquality))
+                    {
+                        ResponseUtils.ResponseFail(response, "求购的物品没有品质，请删除品质再发布！");
+                        return;
+                    }
+                }
 
                 //检查参数
                 if (string.IsNullOrEmpty(Itemname) || string.IsNullOrEmpty(Itemchinese) || string.IsNullOrEmpty(Itemicon)
