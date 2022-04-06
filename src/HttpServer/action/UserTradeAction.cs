@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.Commons;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -122,9 +123,9 @@ namespace HioldMod.src.HttpServer.action
                     }
 
 
-                    if (item.selltype==2)
+                    if (item.selltype == 2)
                     {
-                        if (ui.vipdiscount<=0)
+                        if (ui.vipdiscount <= 0)
                         {
                             //库存量不足
                             ResponseUtils.ResponseFail(response, "此物品为VIP专属，您不是VIP");
@@ -561,6 +562,8 @@ namespace HioldMod.src.HttpServer.action
                 });
                 UserTradeService.addUserTrade(userTrade);
                 ResponseUtils.ResponseSuccessWithData(response, "出售成功!");
+                //全服广播
+                HioldsCommons.BroadCast("有玩家上架了物品 （" + item.translate + "），有需要请前往交易系统查看");
                 return;
             }
             catch (Exception e)

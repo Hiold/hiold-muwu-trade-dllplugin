@@ -139,5 +139,30 @@ namespace HioldMod.src.Commons
             return null;
         }
 
+        /// <summary>
+        /// 全服广播
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void BroadCast(string msg)
+        {
+            foreach (EntityPlayer ep in GameManager.Instance.World.GetPlayers())
+            {
+                ClientInfo _cInfo = GetClientInfoFromEntityId(ep.entityId);
+                if (_cInfo != null)
+                {
+                    _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]交易系统", false, null));
+                }
+            }
+        }
+
+
+        public static void sendToPlayer(string steamid,string msg)
+        {
+            ClientInfo _cInfo = GetClientInfoByEOSorSteamid(steamid);
+            if (_cInfo != null)
+            {
+                _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]交易系统", false, null));
+            }
+        }
     }
 }

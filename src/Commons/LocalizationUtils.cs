@@ -97,7 +97,14 @@ namespace HioldMod.src.UserTools
             //读取缓存
             if (TranslateCache.TryGetValue(key, out string[] cacheHit))
             {
-                return cacheHit[16];
+                if (cacheHit[16]==null|| cacheHit[16]=="")
+                {
+                    return cacheHit[4];
+                }
+                else
+                {
+                    return cacheHit[16];
+                }
             }
 
             //没有缓存从系统中进行查找
@@ -107,6 +114,10 @@ namespace HioldMod.src.UserTools
             {
                 //存放缓存
                 TranslateCache.Add(key, ttl);
+                if (ttl[16] == null || ttl[16] == "")
+                {
+                    return ttl[4];
+                }
                 return ttl[16];
             }
             return "";

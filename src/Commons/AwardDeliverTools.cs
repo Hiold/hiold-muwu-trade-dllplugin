@@ -1,4 +1,5 @@
-﻿using HioldMod.src.HttpServer.bean;
+﻿using HioldMod.HttpServer;
+using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.database;
 using HioldMod.src.HttpServer.service;
 using HioldMod.src.UserTools;
@@ -21,10 +22,12 @@ namespace HioldMod.src.Commons
                 //游戏内物品
                 if (ai.type.Equals("1"))
                 {
+                    LogUtils.Loger(ai.itemname);
                     //获取游戏内物品数据
                     ItemClass currentItem = ItemClass.GetItem(ai.itemname).ItemClass;
-
+                    LogUtils.Loger((currentItem == null).ToString());
                     string groupInfo = "";
+                    //获取Group
                     foreach (string temp in currentItem.Groups)
                     {
                         groupInfo += temp + "|";
@@ -33,9 +36,12 @@ namespace HioldMod.src.Commons
                     {
                         groupInfo = groupInfo.Substring(0, groupInfo.Length - 1);
                     }
-
-                    int quality = 0;
-                    int.TryParse(ai.itemquality, out quality);
+                    //调试输出
+                    LogUtils.Loger(groupInfo);
+                    int.TryParse(ai.itemquality, out int quality);
+                    //获取描述
+                    string desc = LocalizationUtils.getDesc(ai.itemname + "Desc");
+                    //构建库存对象
                     UserStorage userStorate = new UserStorage()
                     {
                         //id
@@ -49,7 +55,7 @@ namespace HioldMod.src.Commons
                         class1 = groupInfo,
                         class2 = groupInfo,
                         classmod = "0",
-                        desc = LocalizationUtils.getDesc(ai.itemname + "Desc"),
+                        desc = desc == null ? "" : desc,
                         couCurrType = "0",
                         couPrice = "0",
                         couCond = "0",

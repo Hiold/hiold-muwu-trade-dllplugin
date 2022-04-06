@@ -88,7 +88,7 @@ namespace HioldMod.HttpServer.router
                 if (Filters.IsServerReady(request, response))
                     AuthAction.Verification(request, response);
             }
-            else if (url.Equals("/api/Verification"))
+            else if (url.Equals("/api/getTranslation"))
             {
                 if (Filters.IsServerReady(request, response))
                     TranslationAction.getTranslation(request, response);

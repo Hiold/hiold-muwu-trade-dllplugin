@@ -192,6 +192,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="db\GameEventLog.db" />
+    <None Include="db\Log.db" />
     <None Include="ModInfo.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

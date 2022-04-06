@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.Commons;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -123,6 +124,8 @@ namespace HioldMod.src.HttpServer.action
                 });
 
                 ResponseUtils.ResponseSuccessWithData(response, "求购成功!");
+                //全服广播
+                HioldsCommons.BroadCast("有玩家发布了求购 （" + Itemchinese + "），为他供货可获得奖励，请前往交易系统查看");
                 return;
             }
             catch (Exception e)

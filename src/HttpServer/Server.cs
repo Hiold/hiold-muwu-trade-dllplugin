@@ -92,6 +92,7 @@ namespace HioldModServer
                                         catch (Exception e)
                                         {
                                             LogUtils.Loger("api handler error:" + e.Message);
+                                            LogUtils.Loger(e.StackTrace);
                                         }
                                     }
                                     catch (Exception e)

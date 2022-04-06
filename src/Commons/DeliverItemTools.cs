@@ -171,7 +171,12 @@ namespace HioldMod.src.UserTools
             return true;
         }
 
-
+        /// <summary>
+        /// 给使用用户发放物品
+        /// </summary>
+        /// <param name="_cInfo"></param>
+        /// <param name="itemData"></param>
+        /// <returns></returns>
         public static bool deliverItemWithData(ClientInfo _cInfo, DeliverItemWithData itemData)
         {
             Log.Out("发放物品Data给: " + _cInfo);
@@ -186,25 +191,73 @@ namespace HioldMod.src.UserTools
                 World world = GameManager.Instance.World;
                 //根据客户端提供数量修改对应数量
                 var prepireStack = itemStacks[0];
-                if (int.TryParse(itemData.count, out int tmpcount))
+                int.TryParse(itemData.count, out int tmpcount);
+
+                //检查堆叠
+                ItemClass _class = prepireStack.itemValue.ItemClass;
+                if (tmpcount > _class.Stacknumber.Value)
                 {
-                    prepireStack.count = tmpcount;
+                    int dcount = tmpcount / _class.Stacknumber.Value;
+                    int dsam = tmpcount % _class.Stacknumber.Value;
+                    //执行发放物品
+                    for (int a = 0; a < dcount; a++)
+                    {
+                        //修改数量
+                        prepireStack.count = _class.Stacknumber.Value;
+                        EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
+                        {
+                            entityClass = EntityClass.FromString("item"),
+                            id = EntityFactory.nextEntityID++,
+                            pos = world.Players.dict[_cInfo.entityId].position,
+                            rot = new Vector3(20f, 0f, 20f),
+                            itemStack = prepireStack,
+                            lifetime = 60f,
+                            belongsPlayerId = _cInfo.entityId
+                        });
+                        world.SpawnEntityInWorld(entityItem);
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
+                        world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                    }
+                    //余数
+                    if (dsam > 0)
+                    {
+                        //修改数量
+                        prepireStack.count = dsam;
+                        EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
+                        {
+                            entityClass = EntityClass.FromString("item"),
+                            id = EntityFactory.nextEntityID++,
+                            pos = world.Players.dict[_cInfo.entityId].position,
+                            rot = new Vector3(20f, 0f, 20f),
+                            itemStack = prepireStack,
+                            lifetime = 60f,
+                            belongsPlayerId = _cInfo.entityId
+                        });
+                        world.SpawnEntityInWorld(entityItem);
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
+                        world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                    }
+
                 }
-                //执行发放物品
-                EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
+                else
                 {
-                    entityClass = EntityClass.FromString("item"),
-                    id = EntityFactory.nextEntityID++,
-                    pos = world.Players.dict[_cInfo.entityId].position,
-                    rot = new Vector3(20f, 0f, 20f),
-                    itemStack = prepireStack,
-                    lifetime = 60f,
-                    belongsPlayerId = _cInfo.entityId
-                });
-                world.SpawnEntityInWorld(entityItem);
-                _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
-                world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
-                Log.Out("发放物品entityItem: " + entityItem);
+                    //修改数量
+                    prepireStack.count = tmpcount;
+                    EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
+                    {
+                        entityClass = EntityClass.FromString("item"),
+                        id = EntityFactory.nextEntityID++,
+                        pos = world.Players.dict[_cInfo.entityId].position,
+                        rot = new Vector3(20f, 0f, 20f),
+                        itemStack = prepireStack,
+                        lifetime = 60f,
+                        belongsPlayerId = _cInfo.entityId
+                    });
+                    world.SpawnEntityInWorld(entityItem);
+                    _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
+                    world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                    Log.Out("发放物品entityItem: " + entityItem);
+                }
             }
             return true;
         }
