@@ -257,6 +257,11 @@ namespace HioldMod.src.HttpServer.action
                     //response.AddHeader("max-age", "8640000");
                     response.ContentType = "image/x-icon";
                 }
+                response.AddHeader("Access-Control-Allow-Origin", "*");
+                response.AddHeader("Access-Control-Allow-Methods", "POST,OPTIONS,GET");
+                response.AddHeader("Access-Control-Allow-Headers", "accept,x-requested-with,Content-Type,X-Custom-Header");
+                response.AddHeader("Access-Control-Allow-Credentials", "true");
+                response.AddHeader("Access-Control-Max-Age", "3600");
                 //max-age:86400
                 //if (request.request.RawUrl.Contains(".png") || request.request.RawUrl.Contains(".jpg") || request.request.RawUrl.Contains(".mov"))
                 //{

@@ -175,12 +175,21 @@ namespace HioldMod.src.HttpServer.action
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("id", out string id);
                 UserRequire cous = UserRequireService.selectUserRequireByid(id);
+                if (cous==null)
+                {
+                    ResponseUtils.ResponseFail(response, "取消失败，校验错误");
+                    return;
+                }
+                if (cous.Status != UserRequireConfig.NORMAL_REQUIRE)
+                {
+                    ResponseUtils.ResponseFail(response, "取消失败，校验错误");
+                    return;
+                }
                 cous.Status = UserRequireConfig.DELETE;
                 UserRequireService.UpdateUserRequire(cous);
                 //检查是否为自己的求购
                 if (cous.gameentityid != request.user.gameentityid)
                 {
-
                     return;
                 }
 

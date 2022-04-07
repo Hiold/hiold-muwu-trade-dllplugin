@@ -601,6 +601,13 @@ namespace HioldMod.src.HttpServer.action
                     ResponseUtils.ResponseFail(response, "非个人物品，取回失败");
                     return;
                 }
+
+                //检查物品属性
+                if (item.itemStatus!= UserTradeConfig.NORMAL_ON_TRADE)
+                {
+                    ResponseUtils.ResponseFail(response, "物品状态校验失败，下架失败");
+                    return;
+                }
                 //更新库存数据
                 item.itemStatus = UserTradeConfig.TAKC_BACK;
                 UserTradeService.UpdateUserTrade(item);
