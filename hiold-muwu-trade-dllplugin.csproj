@@ -15,7 +15,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Mods\hiold-muwu-trade-dllplugin_funcs\</OutputPath>
+    <OutputPath>release-bin\trade\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -200,5 +200,7 @@
     <None Include="packages.config" />
     <None Include="db\TradeManageDB.db" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="release-bin\" />
+  </ItemGroup>
 </Project>

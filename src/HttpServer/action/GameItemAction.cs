@@ -149,9 +149,25 @@ namespace HioldMod.src.HttpServer.action
                     basepath2 = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
                 }
 
+
                 //判断两个路径是否存在文件，均不存在返回404
                 if (File.Exists(basepath + url))
                 {
+                    FileInfo fi = new FileInfo(basepath + url);
+                    string modified = request.request.Headers.Get("if-modified-since");
+                    //Console.WriteLine(modified);
+                    if (modified != null && DateTime.Parse(modified).ToString().Equals(fi.LastWriteTime.ToString()))
+                    {
+                        response.StatusCode = 304;
+                        response.OutputStream.Flush();
+                        response.OutputStream.Close();
+                        return;
+                    }
+                    else
+                    {
+                        response.Headers.Add("Last-Modified", fi.LastWriteTime.ToString());
+                    }
+
                     FileStream fs = File.OpenRead(basepath + url);
                     fs.CopyTo(response.OutputStream);
                     fs.Flush();
@@ -161,6 +177,20 @@ namespace HioldMod.src.HttpServer.action
                 }
                 else if (File.Exists(basepath2 + url))
                 {
+                    FileInfo fi = new FileInfo(basepath + url);
+                    string modified = request.request.Headers.Get("if-modified-since");
+                    //Console.WriteLine(modified);
+                    if (modified != null && DateTime.Parse(modified).ToString().Equals(fi.LastWriteTime.ToString()))
+                    {
+                        response.StatusCode = 304;
+                        response.OutputStream.Flush();
+                        response.OutputStream.Close();
+                        return;
+                    }
+                    else
+                    {
+                        response.Headers.Add("Last-Modified", fi.LastWriteTime.ToString());
+                    }
                     FileStream fs = File.OpenRead(basepath2 + url);
                     fs.CopyTo(response.OutputStream);
                     fs.Flush();
@@ -257,21 +287,33 @@ namespace HioldMod.src.HttpServer.action
                     //response.AddHeader("max-age", "8640000");
                     response.ContentType = "image/x-icon";
                 }
-                response.AddHeader("Access-Control-Allow-Origin", "*");
-                response.AddHeader("Access-Control-Allow-Methods", "POST,OPTIONS,GET");
-                response.AddHeader("Access-Control-Allow-Headers", "accept,x-requested-with,Content-Type,X-Custom-Header");
-                response.AddHeader("Access-Control-Allow-Credentials", "true");
-                response.AddHeader("Access-Control-Max-Age", "3600");
+
                 //max-age:86400
                 //if (request.request.RawUrl.Contains(".png") || request.request.RawUrl.Contains(".jpg") || request.request.RawUrl.Contains(".mov"))
                 //{
                 //    response.AddHeader("max-age", "86400");
                 //}
+              
                 string appendUrl = "";
                 if (request.request.RawUrl.Equals("/"))
                 {
                     appendUrl += "index.html";
                 }
+                FileInfo fi = new FileInfo(basepath + request.request.RawUrl + appendUrl);
+                string modified = request.request.Headers.Get("if-modified-since");
+                //Console.WriteLine(modified);
+                if (modified != null && DateTime.Parse(modified).ToString().Equals(fi.LastWriteTime.ToString()))
+                {
+                    response.StatusCode = 304;
+                    response.OutputStream.Flush();
+                    response.OutputStream.Close();
+                    return;
+                }
+                else
+                {
+                    response.Headers.Add("Last-Modified", fi.LastWriteTime.ToString());
+                }
+                //比对失败回写文件文件
                 FileStream fs = File.OpenRead(basepath + request.request.RawUrl + appendUrl);
                 fs.CopyTo(response.OutputStream);
                 fs.Flush();
