@@ -200,8 +200,9 @@ namespace HioldMod.src.HttpServer.service
         /// <param name="name">用户名/店铺名</param>
         /// <param name="orderby">排序</param>
         /// <returns></returns>
-        public static List<UserInfo> getUserShopList(string name, string sorttype)
+        public static List<UserInfo> getUserShopList(string name, string sorttype, int pageIndex, int pageSize)
         {
+            int totalCount = 0;
             string sortStr = "";
             //排序处理
             if (sorttype != null)
@@ -228,8 +229,8 @@ namespace HioldMod.src.HttpServer.service
                 }
             }
             if (HioldMod.API.isOnServer && HioldMod.API.isNaiwaziBot)
-                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToList());
-            return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToList();
+                return HandleUserListQueryMoney(DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToPageList(pageIndex, pageSize, ref totalCount));
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format(" (name like '%{0}%' or shopname like '%{0}%') and type!='1' " + sortStr, name)).ToPageList(pageIndex, pageSize, ref totalCount);
         }
 
         /// <summary>

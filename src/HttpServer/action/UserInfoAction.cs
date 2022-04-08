@@ -534,10 +534,17 @@ namespace HioldMod.src.HttpServer.action
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("name", out string name);
                 queryRequest.TryGetValue("orderby", out string orderby);
-                List<UserInfo> rest = UserService.getUserShopList(name, orderby);
+                queryRequest.TryGetValue("page", out string page);
+                queryRequest.TryGetValue("limit", out string limit);
+                int.TryParse(page, out int intpage);
+                int.TryParse(limit, out int intlimit);
+                List<UserInfo> rest = UserService.getUserShopList(name, orderby, intpage, intlimit);
+
                 foreach (UserInfo infoTemp in rest)
                 {
-                    infoTemp.password = "[masked]";
+                    //利用password传递点赞信息
+                    long count = ActionLogService.QueryLikeCount(request.user.gameentityid, infoTemp.gameentityid, DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+                    infoTemp.password = count + "";
                 }
 
                 ResponseUtils.ResponseSuccessWithData(response, rest);

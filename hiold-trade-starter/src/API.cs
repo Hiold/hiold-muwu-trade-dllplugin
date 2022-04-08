@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Collections.Generic;
 using HioldMod.src.UserTools;
 using System.Net;
+using ICSharpCode.SharpZipLib.Zip;
+using System.Threading;
 
 namespace HioldMod
 {
@@ -13,124 +15,42 @@ namespace HioldMod
         private static Assembly MainAssembly;
         private static IModApi ApiInstance;
         private static Mod _modInstance;
+
         public void InitMod(Mod _modInstance)
         {
             API._modInstance = _modInstance;
-            string version = "";
-            try
+            //检查mod更新
+            API.updateDLL(null);
+
+            //生成文件名
+            string tempFileName = GetRandomString(16, true, true, true, false, "");
+            //删除以往生成的文件
+            string[] oldFiles = Directory.GetFiles(AssemblyPath, "*.dlc");
+            if (oldFiles != null && oldFiles.Length > 0)
             {
-                version = HttpTools.HttpPost("https://qc.hiold.net/hioldapi/modversion.json");
-            }
-            catch (Exception e)
-            {
-                Log.Out(e.Message);
-            }
-            Log.Out("[HIOLD] 远程version信息：{0}", version);
-            //是否执行更新
-            bool modhasUpdate = false;
-            //读取本地文件
-            string txt = "";
-            try
-            {
-                StreamReader sr = new StreamReader(@AssemblyPath + "modversion.json");
-                while (!sr.EndOfStream)
+
+                foreach (string oldfilename in oldFiles)
                 {
-                    string str = sr.ReadLine();
-                    txt += str;
-                }
-                sr.Close();
-            }
-            catch (Exception e)
-            {
-                Log.Out("[HIOLD] 没有发现version信息，执行下载");
-            }
-            Log.Out("[HIOLD] 本地version信息：{0}", txt);
-            //校验本地文件
-            //没有检测到文件，写入新文件 并执行更新
-            if (txt.Equals("") || txt == null)
-            {
-                modhasUpdate = true;
-                //写入文件
-                File.Delete(AssemblyPath + "modversion.json");
-                using (StreamWriter sw = new StreamWriter(@AssemblyPath + "modversion.json", true))
-                {
-                    sw.WriteLine(version);
-                    sw.Flush();
-                    sw.Close();
-                }
-            }
-
-
-
-
-            //判断版本情况
-            if (version.Length > 0 && txt.Length > 0)
-            {
-                //
-                try
-                {
-                    if (version.Equals(txt))
+                    try
                     {
-                        modhasUpdate = false;
+                        File.Delete(oldfilename);
                     }
-                    else
+                    catch (Exception)
                     {
-                        modhasUpdate = true;
-                    }
-
-
-                }
-                catch (Exception e)
-                {
-                    Log.Out(e.Message);
-                    modhasUpdate = false;
-                }
-            }
-            //下载dll
-            if (modhasUpdate)
-            {
-                Log.Out("[HIOLD] 检测到更新mod更新，正在下载");
-                //覆盖旧文件
-                if (DownloadFile("https://qc.hiold.net/hioldapi/main.bin", AssemblyPath + "main.bin.new"))
-                {
-                    File.Delete(AssemblyPath + "main.bin");
-                    File.Copy(AssemblyPath + "main.bin.new", AssemblyPath + "main.bin");
-                    File.Delete(AssemblyPath + "main.bin.new");
-                    //写入文件
-                    File.Delete(AssemblyPath + "modversion.json");
-                    using (StreamWriter sw = new StreamWriter(@AssemblyPath + "modversion.json", true))
-                    {
-                        sw.WriteLine(version);
-                        sw.Flush();
-                        sw.Close();
+                        Log.Out("[HIOLD] 正在运行的dll不删除");
                     }
                 }
             }
-            else
-            {
-                Log.Out("[HIOLD] mod已为最新，不再更新");
-            }
+            //当前目标bin路径
+            string targetBinfile = AssemblyPath + tempFileName + ".dlc";
+            //复制主文件进行加载
+            File.Copy(AssemblyPath + "trade.bin", targetBinfile);
+            LoadAssembly(targetBinfile);
 
-
-
-
-
-
-            //赋值主文件进行加载
-            try
-            {
-                File.Delete(AssemblyPath + "main.dlc");
-                File.Copy(AssemblyPath + "main.bin", AssemblyPath + "main.dlc");
-                //反射获取数据
-                LoadAssembly(AssemblyPath + "main.dlc");
-            }
-            catch (Exception)
-            {
-                File.Delete(AssemblyPath + "main.dlc2");
-                File.Copy(AssemblyPath + "main.bin", AssemblyPath + "main.dlc2");
-                //反射获取数据
-                LoadAssembly(AssemblyPath + "main.dlc2");
-            }
+            //定时器发送心跳数据
+            Log.Out("正在初始化定时更新任务");
+            System.Threading.Timer updateDLLtimer = new System.Threading.Timer(new TimerCallback(API.updateDLL), null, TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(20));
+            System.Threading.Timer updateWEBtimer = new System.Threading.Timer(new TimerCallback(API.updateWEB), null, TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(20));
         }
 
         //加载mod
@@ -216,5 +136,279 @@ namespace HioldMod
             return s;
         }
 
+
+        public static void updateDLL(object j)
+        {
+            string version = "";
+            try
+            {
+                version = HttpTools.HttpPost("https://qc.hiold.net/hioldapi/modversion");
+            }
+            catch (Exception e)
+            {
+                Log.Out(e.Message);
+            }
+            if (version.Equals(""))
+            {
+                Log.Out("[HIOLD] 获取远程versoin信息失败不更新");
+                return;
+            }
+
+            Log.Out("[HIOLD] 远程version信息：{0}", version);
+            //是否执行更新
+            bool modhasUpdate = false;
+            //读取本地文件
+            string txt = "";
+            try
+            {
+                StreamReader sr = new StreamReader(@AssemblyPath + "modversion");
+                while (!sr.EndOfStream)
+                {
+                    string str = sr.ReadLine();
+                    txt += str;
+                }
+                sr.Close();
+            }
+            catch (Exception e)
+            {
+                Log.Out("[HIOLD] 没有发现version信息，执行下载");
+            }
+            Log.Out("[HIOLD] 本地version信息：{0}", txt);
+            //校验本地文件
+            //没有检测到文件，写入新文件 并执行更新
+            if (txt.Equals("") || txt == null)
+            {
+                modhasUpdate = true;
+                //删除文件
+                File.Delete(AssemblyPath + "modversion");
+                using (StreamWriter sw = new StreamWriter(@AssemblyPath + "modversion", true))
+                {
+                    sw.WriteLine(version);
+                    sw.Flush();
+                    sw.Close();
+                }
+            }
+
+
+
+
+            //判断版本情况
+            if (version.Length > 0 && txt.Length > 0)
+            {
+                //
+                try
+                {
+                    if (version.Equals(txt))
+                    {
+                        modhasUpdate = false;
+                    }
+                    else
+                    {
+                        modhasUpdate = true;
+                    }
+
+
+                }
+                catch (Exception e)
+                {
+                    Log.Out(e.Message);
+                    modhasUpdate = false;
+                }
+            }
+
+            //下载dll
+            if (modhasUpdate)
+            {
+                Log.Out("[HIOLD] 检测到更新mod更新，正在下载");
+                //覆盖旧文件
+                if (DownloadFile("https://qc.hiold.net/hioldapi/trade.zip", AssemblyPath + "trade.zip"))
+                {
+                    Log.Out("[HIOLD] 下载完成正在解压");
+                    File.Delete(AssemblyPath + "trade.bin");
+                    //解压
+                    zipUtils.UnZip(AssemblyPath + "trade.zip", AssemblyPath);
+                    File.Delete(AssemblyPath + "trade.zip");
+                    //写入文件
+                    File.Delete(AssemblyPath + "modversion");
+                    using (StreamWriter sw = new StreamWriter(@AssemblyPath + "modversion", true))
+                    {
+                        sw.WriteLine(version);
+                        sw.Flush();
+                        sw.Close();
+                    }
+                    Log.Out("[HIOLD] 更新完毕，此更新需要等待服务器重启（或无缝重启）");
+                }
+            }
+            else
+            {
+                Log.Out("[HIOLD] mod已为最新，不再更新");
+            }
+        }
+        public static void updateWEB(object j)
+        {
+            string version = "";
+            try
+            {
+                version = HttpTools.HttpPost("https://qc.hiold.net/hioldapi/webversion");
+            }
+            catch (Exception e)
+            {
+                Log.Out(e.Message);
+            }
+            if (version.Equals(""))
+            {
+                Log.Out("[HIOLD] 获取远程webversion信息失败不更新");
+                return;
+            }
+
+            Log.Out("[HIOLD] 远程webversion信息：{0}", version);
+            //是否执行更新
+            bool modhasUpdate = false;
+            //读取本地文件
+            string txt = "";
+            try
+            {
+                StreamReader sr = new StreamReader(@AssemblyPath + "webversion");
+                while (!sr.EndOfStream)
+                {
+                    string str = sr.ReadLine();
+                    txt += str;
+                }
+                sr.Close();
+            }
+            catch (Exception e)
+            {
+                Log.Out("[HIOLD] 没有发现webversion信息，执行下载");
+            }
+            Log.Out("[HIOLD] 本地webversion信息：{0}", txt);
+            //校验本地文件
+            //没有检测到文件，写入新文件 并执行更新
+            if (txt.Equals("") || txt == null)
+            {
+                modhasUpdate = true;
+                //删除文件
+                File.Delete(AssemblyPath + "webversion");
+                using (StreamWriter sw = new StreamWriter(@AssemblyPath + "webversion", true))
+                {
+                    sw.WriteLine(version);
+                    sw.Flush();
+                    sw.Close();
+                }
+            }
+
+
+
+
+            //判断版本情况
+            if (version.Length > 0 && txt.Length > 0)
+            {
+                //
+                try
+                {
+                    if (version.Equals(txt))
+                    {
+                        modhasUpdate = false;
+                    }
+                    else
+                    {
+                        modhasUpdate = true;
+                    }
+
+
+                }
+                catch (Exception e)
+                {
+                    Log.Out(e.Message);
+                    modhasUpdate = false;
+                }
+            }
+
+            //下载dll
+            if (modhasUpdate)
+            {
+                Log.Out("[HIOLD] 检测到更新mod更新，正在下载");
+                //覆盖旧文件
+                if (DownloadFile("https://qc.hiold.net/hioldapi/web.zip", AssemblyPath + "web.zip"))
+                {
+                    Log.Out("[HIOLD] 下载完成正在解压");
+                    try
+                    {
+                        File.Delete(AssemblyPath + @"\web\index.html");
+                    }
+                    catch (Exception)
+                    {
+                        Log.Out("[HIOLD] 找不到index.html跳过删除步骤");
+                    }
+                    try
+                    {
+                        Directory.Delete(AssemblyPath + @"\web\assets\", true);
+                    }
+                    catch (Exception)
+                    {
+                        Log.Out("[HIOLD] 找不到assets跳过删除步骤");
+                    }
+                    //解压
+                    zipUtils.UnZip(AssemblyPath + "web.zip", AssemblyPath + @"\web\");
+                    File.Delete(AssemblyPath + "web.zip");
+                    //写入文件
+                    File.Delete(AssemblyPath + "webversion");
+                    using (StreamWriter sw = new StreamWriter(@AssemblyPath + "webversion", true))
+                    {
+                        sw.WriteLine(version);
+                        sw.Flush();
+                        sw.Close();
+                    }
+                }
+                Log.Out("[HIOLD] 更新完毕，此更新立即生效");
+            }
+            else
+            {
+                Log.Out("[HIOLD] mod已为最新，不再更新");
+            }
+        }
+
+    }
+    class zipUtils
+    {
+        public static void UnZip(string SrcFile, string DstFile)
+        {
+            (new FastZip()).ExtractZip(SrcFile, DstFile, "");
+        }
+    }
+
+    class commandupdate : ConsoleCmdAbstract
+    {
+        public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
+        {
+            API.updateWEB(null);
+        }
+
+        public override string[] GetCommands()
+        {
+            return new string[] { "tradeup-web" };
+        }
+
+        public override string GetDescription()
+        {
+            return "更新交易系统web";
+        }
+    }
+
+    class commandupdate2 : ConsoleCmdAbstract
+    {
+        public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
+        {
+            API.updateDLL(null);
+        }
+
+        public override string[] GetCommands()
+        {
+            return new string[] { "tradeup-dll" };
+        }
+
+        public override string GetDescription()
+        {
+            return "更新交易系统dll";
+        }
     }
 }
