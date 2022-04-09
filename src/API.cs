@@ -132,6 +132,8 @@ namespace HioldMod
                 //定时器发送心跳数据
                 LogUtils.Loger("正在初始化用户基础信息更新定时器");
                 System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback(HartBeatHandler.HandlePlayerHartbeat), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+                LogUtils.Loger("正在初始化游戏记录入库定时器");
+                System.Threading.Timer Onlinetimer2 = new System.Threading.Timer(new TimerCallback(KillEntityHandler.AddEventLog), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
                 LogUtils.Loger("Init执行完毕");
             }
 

@@ -690,6 +690,13 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         ItemExchangeAction.getCraftAward(request, response);
             }
+            //查询抽奖次数
+            else if (url.Equals("/api/QueryLotteryCount"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        LotteryAction.QueryLotteryCount(request, response);
+            }
         }
     }
 }

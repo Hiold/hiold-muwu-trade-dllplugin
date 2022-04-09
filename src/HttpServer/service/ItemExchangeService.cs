@@ -64,9 +64,9 @@ namespace HioldMod.src.HttpServer.service
         /// </summary>
         /// <param name="id">用户名</param>
         /// <returns></returns>
-        public static List<ItemExchange> getItemExchangeByType(string type)
+        public static List<ItemExchange> getItemExchangeByType(string type, string name, string page, string limit)
         {
-            return DataBase.db.Queryable<ItemExchange>().Where(string.Format("status = '1' and type in ({0}) ", type)).ToList();
+            return DataBase.db.Queryable<ItemExchange>().Where(string.Format("status = '1' and type in ({0}) and itemchinese like '%{1}%' ", type, name)).ToPageList(int.Parse(page), int.Parse(limit));
         }
 
     }

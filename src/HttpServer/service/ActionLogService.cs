@@ -498,5 +498,41 @@ namespace HioldMod.src.HttpServer.service
         {
             var t66 = DataBase.logdb.Updateable(dt).AS("actionlog").WhereColumns("id").ExecuteCommand();
         }
+
+
+
+        /// <summary>
+        /// 查询抽奖次数
+        /// </summary>
+        /// <returns></returns>
+        public static Int64 QueryLotteryCount(string id, string itemid, int logtype, string startTime, string endTime)
+        {
+            DataRow[] dt = null;
+            if (startTime == null && endTime == null)
+            {
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo4) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' ", id, itemid, logtype)).Select();
+            }
+            else
+            {
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo4) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", id, itemid, logtype, startTime, endTime)).Select();
+            }
+            //Console.WriteLine(dt);
+            foreach (DataRow row in dt)
+            {
+                foreach (object data in row.ItemArray)
+                {
+                    try
+                    {
+                        return (Int64)data;
+                    }
+                    catch (Exception)
+                    {
+                        return 0;
+                    }
+                }
+            }
+            return 0;
+        }
+
     }
 }

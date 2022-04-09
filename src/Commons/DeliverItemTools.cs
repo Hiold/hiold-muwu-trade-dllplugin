@@ -203,39 +203,47 @@ namespace HioldMod.src.UserTools
                     for (int a = 0; a < dcount; a++)
                     {
                         //修改数量
-                        prepireStack.count = _class.Stacknumber.Value;
-                        EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
-                        {
-                            entityClass = EntityClass.FromString("item"),
-                            id = EntityFactory.nextEntityID++,
-                            pos = world.Players.dict[_cInfo.entityId].position,
-                            rot = new Vector3(20f, 0f, 20f),
-                            itemStack = prepireStack,
-                            lifetime = 60f,
-                            belongsPlayerId = _cInfo.entityId
-                        });
-                        world.SpawnEntityInWorld(entityItem);
-                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
-                        world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                        //prepireStack.count = _class.Stacknumber.Value;
+                        //EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
+                        //{
+                        //    entityClass = EntityClass.FromString("item"),
+                        //    id = EntityFactory.nextEntityID++,
+                        //    pos = world.Players.dict[_cInfo.entityId].position,
+                        //    rot = new Vector3(20f, 0f, 20f),
+                        //    itemStack = prepireStack,
+                        //    lifetime = 60f,
+                        //    belongsPlayerId = _cInfo.entityId
+                        //});
+                        //world.SpawnEntityInWorld(entityItem);
+                        //_cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
+                        //world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                        DeliverItemWithData newdate = itemData;
+                        newdate.count = _class.Stacknumber.Value + "";
+                        DeliverItemTools.deliverDataItemQueue.Enqueue(newdate);
+
+
                     }
                     //余数
                     if (dsam > 0)
                     {
                         //修改数量
-                        prepireStack.count = dsam;
-                        EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
-                        {
-                            entityClass = EntityClass.FromString("item"),
-                            id = EntityFactory.nextEntityID++,
-                            pos = world.Players.dict[_cInfo.entityId].position,
-                            rot = new Vector3(20f, 0f, 20f),
-                            itemStack = prepireStack,
-                            lifetime = 60f,
-                            belongsPlayerId = _cInfo.entityId
-                        });
-                        world.SpawnEntityInWorld(entityItem);
-                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
-                        world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                        //prepireStack.count = dsam;
+                        //EntityItem entityItem = (EntityItem)EntityFactory.CreateEntity(new EntityCreationData
+                        //{
+                        //    entityClass = EntityClass.FromString("item"),
+                        //    id = EntityFactory.nextEntityID++,
+                        //    pos = world.Players.dict[_cInfo.entityId].position,
+                        //    rot = new Vector3(20f, 0f, 20f),
+                        //    itemStack = prepireStack,
+                        //    lifetime = 60f,
+                        //    belongsPlayerId = _cInfo.entityId
+                        //});
+                        //world.SpawnEntityInWorld(entityItem);
+                        //_cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageEntityCollect>().Setup(entityItem.entityId, _cInfo.entityId));
+                        //world.RemoveEntity(entityItem.entityId, EnumRemoveEntityReason.Despawned);
+                        DeliverItemWithData newdate = itemData;
+                        newdate.count = dsam + "";
+                        DeliverItemTools.deliverDataItemQueue.Enqueue(newdate);
                     }
 
                 }

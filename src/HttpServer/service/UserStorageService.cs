@@ -22,48 +22,45 @@ namespace HioldMod.src.HttpServer.service
             //判断是否需要合并库存
             if (!string.IsNullOrEmpty(storage.itemdata))
             {
-                ItemStack[] dStack = JsonUtils.ItemFromString(storage.itemdata);
-                //只处理单个ItemStack
-                if (dStack != null && dStack.Length > 0)
+                try
                 {
-                    ItemStack targetStack = dStack[0];
-                    string itemname = targetStack.itemValue.ItemClass.GetItemName();
-                    //没有quality属性才执行堆叠
-                    if (targetStack.itemValue.Quality <= 0)
+                    ItemStack[] dStack = JsonUtils.ItemFromString(storage.itemdata);
+                    //只处理单个ItemStack
+                    if (dStack != null && dStack.Length > 0)
                     {
-                        UserStorage stackableStorage = UserStorageService.selectStackableItem(storage.gameentityid, itemname, "1");
-                        if (stackableStorage != null)
+                        ItemStack targetStack = dStack[0];
+                        string itemname = targetStack.itemValue.ItemClass.GetItemName();
+                        //没有quality属性才执行堆叠
+                        if (!targetStack.itemValue.HasQuality || targetStack.itemValue.Quality <= 0)
                         {
-                            ItemStack[] stackableStacks = JsonUtils.ItemFromString(stackableStorage.itemdata);
-                            if (stackableStacks != null && stackableStacks.Length > 0)
+                            UserStorage stackableStorage = UserStorageService.selectStackableItem(storage.gameentityid, itemname, "1");
+                            if (stackableStorage != null)
                             {
-                                ItemStack stackableStack = stackableStacks[0];
-                                stackableStack.count = stackableStorage.storageCount + storage.storageCount;
-                                string newitemdata = JsonUtils.ByteStringFromItem(new ItemStack[] { stackableStack });
-                                stackableStorage.itemdata = newitemdata;
                                 stackableStorage.storageCount = stackableStorage.storageCount + storage.storageCount;
                                 stackableStorage.itemGetChenal = UserStorageGetChanel.STACK;
                                 UserStorageService.UpdateUserStorage(stackableStorage);
                             }
                             else
                             {
-                                //有quality属性 不堆叠 执行添加
                                 DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
-
                             }
                         }
                         else
                         {
-                            //有quality属性 不堆叠 执行添加
                             DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
-
                         }
                     }
                     else
                     {
-                        //有quality属性 不堆叠 执行添加
                         DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
                     }
+                }
+                catch (Exception e)
+                {
+                    LogUtils.Loger(e.Message);
+                    LogUtils.Loger(e.StackTrace);
+                    LogUtils.Loger("读取itemdata失败，直接添加新库存");
+                    DataBase.db.Insertable<UserStorage>(storage).ExecuteCommand();
                 }
             }
             else

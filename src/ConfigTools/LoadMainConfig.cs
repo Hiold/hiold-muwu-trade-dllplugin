@@ -27,6 +27,7 @@ namespace ConfigTools
             public static string Port;
             public static string username;
             public static string password;
+            public static string killevent = "False";
         }
 
 
@@ -114,74 +115,83 @@ namespace ConfigTools
                                 }
                                 MainConfig.password = _line.GetAttribute("value");
                                 break;
+                            case "KillEvent":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.killevent = _line.GetAttribute("value");
+                                break;
 
                         }
                     }
                 }
             }
             //
-            try { 
-            if (!string.IsNullOrEmpty(MainConfig.username) && !string.IsNullOrEmpty(MainConfig.password))
+            try
             {
-                //获取管理员用户
-                UserInfo ui = UserService.getAdmin(MainConfig.username);
-                if (ui != null)
+                if (!string.IsNullOrEmpty(MainConfig.username) && !string.IsNullOrEmpty(MainConfig.password))
                 {
-                    if (!ServerUtils.md5(MainConfig.password).Equals(ui.password))
+                    //获取管理员用户
+                    UserInfo ui = UserService.getAdmin(MainConfig.username);
+                    if (ui != null)
                     {
-                        ui.password = ServerUtils.md5(MainConfig.password);
-                        LogUtils.Loger("检测到管理员密码变动，执行修改");
+                        if (!ServerUtils.md5(MainConfig.password).Equals(ui.password))
+                        {
+                            ui.password = ServerUtils.md5(MainConfig.password);
+                            LogUtils.Loger("检测到管理员密码变动，执行修改");
+                        }
+                        ui.type = "1";
+                        UserService.UpdateUserInfo(ui);
                     }
-                    ui.type = "1";
-                    UserService.UpdateUserInfo(ui);
-                }
-                else
-                {
-                    int id = UserService.userRegister(new UserInfo()
+                    else
                     {
-                        created_at = DateTime.Now,
-                        name = MainConfig.username,
-                        gameentityid = MainConfig.username,
-                        platformid = MainConfig.username,
-                        money = 0,
-                        credit = 0,
-                        status = 1,
-                        password = ServerUtils.md5(MainConfig.password),
-                        qq = "",
-                        email = "",
-                        avatar = MainConfig.username + ".png",
-                        sign = "",
-                        extinfo1 = "",
-                        extinfo2 = "",
-                        extinfo3 = "",
-                        extinfo4 = "",
-                        extinfo5 = "",
-                        extinfo6 = "",
-                        trade_count = "0",
-                        store_count = "0",
-                        require_count = "0",
-                        type = "1",
-                        level = 0,
-                        online_time = "0",
-                        zombie_kills = "0",
-                        player_kills = "0",
-                        total_crafted = "0",
-                        vipdiscount = 0,
-                        creditcharge = 0,
-                        creditcost = 0,
-                        moneycharge = 0,
-                        moneycost = 0,
-                        signdays = 0,
-                        likecount = 0,
-                        trade_money = 0,
-                        require_money = 0,
-                        buy_count = "0",
-                        shopname = MainConfig.username + "的小店",
-                        ncode = "",
-                    });
-                    LogUtils.Loger("管理员注册成功");
+                        int id = UserService.userRegister(new UserInfo()
+                        {
+                            created_at = DateTime.Now,
+                            name = MainConfig.username,
+                            gameentityid = MainConfig.username,
+                            platformid = MainConfig.username,
+                            money = 0,
+                            credit = 0,
+                            status = 1,
+                            password = ServerUtils.md5(MainConfig.password),
+                            qq = "",
+                            email = "",
+                            avatar = MainConfig.username + ".png",
+                            sign = "",
+                            extinfo1 = "",
+                            extinfo2 = "",
+                            extinfo3 = "",
+                            extinfo4 = "",
+                            extinfo5 = "",
+                            extinfo6 = "",
+                            trade_count = "0",
+                            store_count = "0",
+                            require_count = "0",
+                            type = "1",
+                            level = 0,
+                            online_time = "0",
+                            zombie_kills = "0",
+                            player_kills = "0",
+                            total_crafted = "0",
+                            vipdiscount = 0,
+                            creditcharge = 0,
+                            creditcost = 0,
+                            moneycharge = 0,
+                            moneycost = 0,
+                            signdays = 0,
+                            likecount = 0,
+                            trade_money = 0,
+                            require_money = 0,
+                            buy_count = "0",
+                            shopname = MainConfig.username + "的小店",
+                            ncode = "",
+                        });
+                        LogUtils.Loger("管理员注册成功");
+                    }
                 }
-            }
             }
             catch (Exception e)
             {

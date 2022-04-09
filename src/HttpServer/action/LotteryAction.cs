@@ -202,6 +202,8 @@ namespace HioldMod.src.HttpServer.action
             int lotteryTimes = 0;
             Lottery target = LotteryService.getLotteryByid(id);
             List<AwardInfo> awards = AwardInfoService.getAwardInfos(target.id + "", AwardInfoTypeConfig.LOTTERY);
+            //检查抽奖次数
+
 
             if (count.Equals("1"))
             {
@@ -225,6 +227,26 @@ namespace HioldMod.src.HttpServer.action
 
             if (target != null)
             {
+                //检查抽奖限制
+                if (!string.IsNullOrEmpty(target.limit))
+                {
+                    string tms = DateTime.Now.ToString("yyyy-MM-dd");
+                    int.TryParse(target.limit, out int intlimit);
+                    long lotTimes = ActionLogService.QueryLotteryCount(request.user.gameentityid, id, LogType.doLottery, tms + " 00:00:00", tms + " 23:59:59");
+                    if (intlimit != -1 && lotTimes >= intlimit)
+                    {
+                        ResponseUtils.ResponseFail(response, "今日抽奖次数已用完");
+                        return;
+                    }
+                    if (intlimit != -1 && lotTimes + int.Parse(count) > intlimit)
+                    {
+                        ResponseUtils.ResponseFail(response, "可用抽奖次数不足，剩余" + (intlimit - lotTimes) + "次");
+                        return;
+                    }
+                }
+
+
+
                 //积分
                 if (target.type.Equals("1"))
                 {
@@ -316,6 +338,7 @@ namespace HioldMod.src.HttpServer.action
                     extinfo1 = id,
                     extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
                     extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(resultAward),
+                    extinfo4 = count,
                     desc = "抽奖获得 （" + target.desc + "） 奖品：" + awardinfo
                 });
                 ResponseUtils.ResponseSuccessWithData(response, resultAward);
@@ -325,6 +348,25 @@ namespace HioldMod.src.HttpServer.action
                 ResponseUtils.ResponseFail(response, "未找到此奖池");
                 return;
             }
+        }
+
+        public static void QueryLotteryCount(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("id", out string id);
+                string tms = DateTime.Now.ToString("yyyy-MM-dd");
+                ResponseUtils.ResponseSuccessWithData(response, ActionLogService.QueryLotteryCount(request.user.gameentityid, id, LogType.doLottery, tms + " 00:00:00", tms + " 23:59:59"));
+            }
+            catch (Exception)
+            {
+                ResponseUtils.ResponseFail(response, "请求异常");
+                return;
+            }
+
         }
 
     }

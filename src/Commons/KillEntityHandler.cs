@@ -3,17 +3,35 @@ using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.service;
 using HioldMod.src.UserTools;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ConfigTools.LoadMainConfig;
 
 namespace HioldMod.src.Commons
 {
     class KillEntityHandler
     {
+        public static ConcurrentQueue<PlayerGameEvent> eventLog = new ConcurrentQueue<PlayerGameEvent>();
+
+        //多线程中处理玩家在线心跳任务
+        public static void AddEventLog(object nce)
+        {
+            while (eventLog.TryDequeue(out PlayerGameEvent events))
+            {
+                PlayerGameEventService.addLog(events);
+            }
+        }
+
         public static void EntityKilledHandler(Entity _target, Entity _player)
         {
+            //默认不开启记录
+            if (MainConfig.killevent.Equals("False"))
+            {
+                return;
+            }
             try
             {
                 //非空校验
@@ -29,7 +47,7 @@ namespace HioldMod.src.Commons
                     //击杀目标为僵尸
                     if (_tags.Contains("zombie"))
                     {
-                        PlayerGameEventService.addLog(new PlayerGameEvent()
+                        eventLog.Enqueue(new PlayerGameEvent()
                         {
                             actTime = DateTime.Now,
                             actType = PlayerGameEventType.KILL_ZOMBIE,
@@ -44,7 +62,7 @@ namespace HioldMod.src.Commons
                     //击杀目标为动物
                     if (_tags.Contains("animal"))
                     {
-                        PlayerGameEventService.addLog(new PlayerGameEvent()
+                        eventLog.Enqueue(new PlayerGameEvent()
                         {
                             actTime = DateTime.Now,
                             actType = PlayerGameEventType.KILL_ANIMAL,

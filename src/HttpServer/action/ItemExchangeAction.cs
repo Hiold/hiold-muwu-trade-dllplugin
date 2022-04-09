@@ -3,6 +3,7 @@ using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
+using HioldMod.src.HttpServer.database;
 using HioldMod.src.HttpServer.service;
 using System;
 using System.Collections.Generic;
@@ -157,7 +158,10 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("type", out string type);
-                List<ItemExchange> ls = ItemExchangeService.getItemExchangeByType(type);
+                queryRequest.TryGetValue("name", out string name);
+                queryRequest.TryGetValue("page", out string page);
+                queryRequest.TryGetValue("limit", out string limit);
+                List<ItemExchange> ls = ItemExchangeService.getItemExchangeByType(type, name, page, limit);
                 List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
                 foreach (ItemExchange ie in ls)
                 {
@@ -222,29 +226,69 @@ namespace HioldMod.src.HttpServer.action
                     return;
                 }
                 List<UserStorage> uss = new List<UserStorage>();
+                UserInfo ui = UserService.getUserById(request.user.id + "")[0];
                 foreach (AwardInfo info in infos)
                 {
-                    if (string.IsNullOrEmpty(info.itemquality))
+                    if (info.type.Equals("1") || info.type.Equals("2"))
                     {
-                        info.itemquality = "0";
+                        if (string.IsNullOrEmpty(info.itemquality))
+                        {
+                            info.itemquality = "0";
+                        }
+                        UserStorage us = UserStorageService.selectAvaliableItem(request.user.gameentityid, info.itemname, info.itemquality, info.type, (int.Parse(info.count) * intCount) + "");
+                        if (us == null)
+                        {
+                            ResponseUtils.ResponseFail(response, "物品（" + info.itemchinese + "）数量不足，无法合成");
+                            return;
+                        }
+                        else
+                        {
+                            us.storageCount -= (int.Parse(info.count) * intCount);
+                            uss.Add(us);
+
+                        }
                     }
-                    UserStorage us = UserStorageService.selectAvaliableItem(request.user.gameentityid, info.itemname, info.itemquality, info.type, (int.Parse(info.count) * intCount) + "");
-                    if (us == null)
+                    else if (info.type.Equals("4"))
                     {
-                        ResponseUtils.ResponseFail(response, "物品（" + info.itemchinese + "）数量不足，无法合成");
-                        return;
+                        if (ui.money < int.Parse(info.count))
+                        {
+                            ResponseUtils.ResponseFail(response, "积分数量不足，无法合成");
+                            return;
+                        }
                     }
-                    else
+                    else if (info.type.Equals("5"))
                     {
-                        us.storageCount -= (int.Parse(info.count) * intCount);
-                        uss.Add(us);
+                        if (ui.credit < int.Parse(info.count))
+                        {
+                            ResponseUtils.ResponseFail(response, "点券数量不足，无法合成");
+                            return;
+                        }
                     }
                 }
+                //
+                foreach (AwardInfo info in infos)
+                {
+                    if (info.type.Equals("4"))
+                    {
+                        bool ok = DataBase.MoneyEditor(ui, DataBase.MoneyType.Money, DataBase.EditType.Sub, double.Parse(info.count));
+                        if (!ok)
+                        {
+                            ResponseUtils.ResponseFail(response, "积分数量不足，合成失败");
+                            return;
+                        }
+                    }
+                    else if (info.type.Equals("5"))
+                    {
+                        ui.credit -= double.Parse(info.count);
+                    }
+                }
+
                 //执行更新库存
                 foreach (UserStorage avaStorage in uss)
                 {
                     UserStorageService.UpdateUserStorage(avaStorage);
                 }
+
 
                 //记录用户购买数据
                 ActionLogService.addLog(new ActionLog()
