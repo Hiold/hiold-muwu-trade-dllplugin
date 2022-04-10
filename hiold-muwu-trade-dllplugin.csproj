@@ -104,6 +104,7 @@
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\AwardInfoAction.cs" />
     <Compile Include="src\HttpServer\action\ItemExchangeAction.cs" />
+    <Compile Include="src\HttpServer\action\ItemLimitConfigAction.cs" />
     <Compile Include="src\HttpServer\action\ManageAction.cs" />
     <Compile Include="src\HttpServer\action\SignInfoAction.cs" />
     <Compile Include="src\HttpServer\action\LotteryAction.cs" />

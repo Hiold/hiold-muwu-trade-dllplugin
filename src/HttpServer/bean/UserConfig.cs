@@ -32,9 +32,16 @@ namespace HioldMod.src.HttpServer.bean
         public string configValue { get; set; }
         [SugarColumn(IndexGroupNameList = new string[] { "index_available" })]
         public string available { get; set; }
+        public string extinfo1 { get; set; }
+        public string extinfo2 { get; set; }
+        public string extinfo3 { get; set; }
+        public string extinfo4 { get; set; }
+        public string extinfo5 { get; set; }
+        public string extinfo6 { get; set; }
     }
     public class ConfigType
     {
         public static string Collect = "1";
+        public static string Item_Limit = "2";
     }
 }

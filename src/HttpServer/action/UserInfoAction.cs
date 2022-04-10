@@ -497,7 +497,13 @@ namespace HioldMod.src.HttpServer.action
                         platformid = request.user.platformid,
                         configType = ConfigType.Collect,
                         configValue = id,
-                        available = "1"
+                        available = "1",
+                        extinfo1="",
+                        extinfo2 = "",
+                        extinfo3 = "",
+                        extinfo4 = "",
+                        extinfo5 = "",
+                        extinfo6 = "",
                     };
 
                     //记录日志数据
