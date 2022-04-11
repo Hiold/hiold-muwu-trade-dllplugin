@@ -52,14 +52,24 @@ namespace HioldMod.src.HttpServer.service
             return DataBase.db.Queryable<UserConfig>().Where(string.Format("gameentityid = '{0}' and configType = '{1}' and available='1'", gameentityid, type)).ToList();
         }
 
-        public static Dictionary<string, object> QueryItemLimitConfig(string id, string itemname, string page, string limit)
+        public static Dictionary<string, object> QueryItemLimitConfig(string itemname, string page, string limit)
         {
             int count = 0;
             Dictionary<string, object> result = new Dictionary<string, object>();
-            List<UserConfig> list = DataBase.db.Queryable<UserConfig>().Where(string.Format(" id = '{0}' and configType = '{1}' and configValue like '%{2}%' ", id, ConfigType.Item_Limit, itemname)).ToPageList(int.Parse(page), int.Parse(limit), ref count);
+            List<UserConfig> list = DataBase.db.Queryable<UserConfig>().Where(string.Format(" configType = '{0}' and name like '%{1}%' ", ConfigType.Item_Limit, itemname)).ToPageList(int.Parse(page), int.Parse(limit), ref count);
             result.Add("count", count);
             result.Add("data", list);
             return result;
+        }
+
+        public static UserConfig getUserConfigById(string id)
+        {
+            return DataBase.db.Queryable<UserConfig>().Where(string.Format(" id = '{0}' ", id)).First();
+        }
+
+        public static List<UserConfig> getUserConfigByItemName(string name)
+        {
+            return DataBase.db.Queryable<UserConfig>().Where(string.Format(" name = '{0}' ", name)).ToList();
         }
 
     }

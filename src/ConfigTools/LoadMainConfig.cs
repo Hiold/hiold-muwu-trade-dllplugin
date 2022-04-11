@@ -28,6 +28,7 @@ namespace ConfigTools
             public static string username;
             public static string password;
             public static string killevent = "False";
+            public static string BroadCast = "True";
         }
 
 
@@ -123,6 +124,14 @@ namespace ConfigTools
                                 }
                                 MainConfig.killevent = _line.GetAttribute("value");
                                 break;
+                            case "BroadCast":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.BroadCast = _line.GetAttribute("value");
+                                break;
 
                         }
                     }
@@ -216,6 +225,10 @@ namespace ConfigTools
                 sw.WriteLine(string.Format("        <Option Name=\"AdminUsername\" value=\"{0}\" />", "admin"));
                 sw.WriteLine(string.Format("        <!--交易系统port 当配置为auto时系统自动计算端口号，计算方式为游戏端口+11（如游戏端口为26900，则本交易系统端口为26911）-->"));
                 sw.WriteLine(string.Format("        <Option Name=\"AdminPassword\" value=\"{0}\" />", "auto"));
+                sw.WriteLine(string.Format("        <!--是否开启击杀记录-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"KillEvent\" value=\"{0}\" />", "False"));
+                sw.WriteLine(string.Format("        <!--是否开启全服广播-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"BroadCast\" value=\"{0}\" />", "True"));
                 sw.WriteLine("    </HioldMod>");
                 sw.WriteLine("</HioldModConfig>");
                 //配置文件结束

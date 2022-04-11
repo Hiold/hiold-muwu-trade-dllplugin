@@ -466,7 +466,51 @@ namespace HioldMod.src.HttpServer.action
                 }
                 queryRequest.TryGetValue("id", out string id);
                 UserStorage item = UserStorageService.selectUserStorageByid(id);
+                //检查物品交易限制
+                List<UserConfig> ucs = UserConfigService.getUserConfigByItemName(item.name);
+                foreach (UserConfig uc in ucs)
+                {
+                    //启用了交易限制
+                    if (uc.available.Equals("1"))
+                    {
+                        if (uc.configValue.Equals("0"))
+                        {
+                            ResponseUtils.ResponseFail(response, "该物品禁止交易！");
+                            return;
+                        }
+                        if (!string.IsNullOrEmpty(uc.extinfo1))
+                        {
+                            int maxprice = int.Parse(uc.extinfo1);
+                            if (price > maxprice)
+                            {
+                                ResponseUtils.ResponseFail(response, "此物品最高单价为" + maxprice + "，请调整价格");
+                                return;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(uc.extinfo2))
+                        {
+                            int minprice = int.Parse(uc.extinfo2);
+                            if (price < minprice)
+                            {
+                                ResponseUtils.ResponseFail(response, "此物品最低单价为" + minprice + "，请调整价格");
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                if (price <= 0)
+                {
+                    ResponseUtils.ResponseFail(response, "请输入正确的价格");
+                    return;
+                }
+
                 //检查物品属性
+                if (item.itemStatus != UserStorageStatus.NORMAL_STORAGED)
+                {
+                    ResponseUtils.ResponseFail(response, "物品状态校验失败，上架失败");
+                    return;
+                }
                 if (!request.user.gameentityid.Equals(item.gameentityid))
                 {
                     ResponseUtils.ResponseFail(response, "非个人物品，出售失败");
@@ -603,7 +647,7 @@ namespace HioldMod.src.HttpServer.action
                 }
 
                 //检查物品属性
-                if (item.itemStatus!= UserTradeConfig.NORMAL_ON_TRADE)
+                if (item.itemStatus != UserTradeConfig.NORMAL_ON_TRADE)
                 {
                     ResponseUtils.ResponseFail(response, "物品状态校验失败，下架失败");
                     return;

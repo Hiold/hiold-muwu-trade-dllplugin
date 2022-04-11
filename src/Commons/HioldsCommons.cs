@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static ConfigTools.LoadMainConfig;
 
 namespace HioldMod.src.Commons
 {
@@ -147,16 +148,19 @@ namespace HioldMod.src.Commons
         {
             foreach (EntityPlayer ep in GameManager.Instance.World.GetPlayers())
             {
-                ClientInfo _cInfo = GetClientInfoFromEntityId(ep.entityId);
-                if (_cInfo != null)
+                if (MainConfig.BroadCast.Equals("True"))
                 {
-                    _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]交易系统", false, null));
+                    ClientInfo _cInfo = GetClientInfoFromEntityId(ep.entityId);
+                    if (_cInfo != null)
+                    {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]交易系统", false, null));
+                    }
                 }
             }
         }
 
 
-        public static void sendToPlayer(string steamid,string msg)
+        public static void sendToPlayer(string steamid, string msg)
         {
             ClientInfo _cInfo = GetClientInfoByEOSorSteamid(steamid);
             if (_cInfo != null)

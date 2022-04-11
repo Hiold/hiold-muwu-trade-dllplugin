@@ -697,6 +697,37 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         LotteryAction.QueryLotteryCount(request, response);
             }
+            //查询交易限制
+            else if (url.Equals("/api/QueryItemLimitConfig"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        ItemLimitConfigAction.QueryItemLimitConfig(request, response);
+            }
+            //添加交易限制
+            else if (url.Equals("/api/postItemLimitConfig"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ItemLimitConfigAction.postItemLimitConfig(request, response);
+            }
+            //更新交易限制
+            else if (url.Equals("/api/updateItemLimitConfig"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ItemLimitConfigAction.updateItemLimitConfig(request, response);
+            }
+            //删除交易限制
+            else if (url.Equals("/api/deleteItemLimitConfig"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        if (Filters.isAdminFilter(request, response))
+                            ItemLimitConfigAction.updateItemLimitConfig(request, response);
+            }
         }
     }
 }

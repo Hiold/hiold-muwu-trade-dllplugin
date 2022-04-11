@@ -137,5 +137,12 @@ namespace HioldMod.src.HttpServer.bean
         //点赞
         public static int CraftItem = 42;
 
+        //添加奖品
+        public static int AddItemLimitConfig = 43;
+        //修改奖品
+        public static int editItemLimitConfig = 44;
+        //删除奖品
+        public static int deleteItemLimitConfig = 45;
+
     }
 }

@@ -57,6 +57,39 @@ namespace HioldMod.src.HttpServer.action
                     }
                 }
 
+                //检查物品交易限制
+                List<UserConfig> ucs = UserConfigService.getUserConfigByItemName(Itemname);
+                foreach (UserConfig uc in ucs)
+                {
+                    //启用了交易限制
+                    if (uc.available.Equals("1"))
+                    {
+                        if (uc.configValue.Equals("0"))
+                        {
+                            ResponseUtils.ResponseFail(response, "该物品禁止交易！");
+                            return;
+                        }
+                        if (!string.IsNullOrEmpty(uc.extinfo1))
+                        {
+                            int maxprice = int.Parse(uc.extinfo1);
+                            if ((price/count) > maxprice)
+                            {
+                                ResponseUtils.ResponseFail(response, "此物品最高单价为" + maxprice + "，请调整价格");
+                                return;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(uc.extinfo2))
+                        {
+                            int minprice = int.Parse(uc.extinfo2);
+                            if ((price / count) < minprice)
+                            {
+                                ResponseUtils.ResponseFail(response, "此物品最低单价为" + minprice + "，请调整价格");
+                                return;
+                            }
+                        }
+                    }
+                }
+
                 //检查参数
                 if (string.IsNullOrEmpty(Itemname) || string.IsNullOrEmpty(Itemchinese) || string.IsNullOrEmpty(Itemicon)
                     || string.IsNullOrEmpty(Itemicontint) || string.IsNullOrEmpty(Itemgroups) || count == 0 || price == 0
