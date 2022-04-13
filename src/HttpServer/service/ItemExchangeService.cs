@@ -64,9 +64,29 @@ namespace HioldMod.src.HttpServer.service
         /// </summary>
         /// <param name="id">用户名</param>
         /// <returns></returns>
-        public static List<ItemExchange> getItemExchangeByType(string type, string name, string page, string limit)
+        public static List<ItemExchange> getItemExchangeByType(string searchType, string awardType, string type, string name, string page, string limit)
         {
-            return DataBase.db.Queryable<ItemExchange>().Where(string.Format("status = '1' and type in ({0}) and itemchinese like '%{1}%' ", type, name)).ToPageList(int.Parse(page), int.Parse(limit));
+            if (searchType.Equals("制作物"))
+            {
+                return DataBase.db.Queryable<ItemExchange>().Where(string.Format("status = '1' and type in ({0}) and itemchinese like '%{1}%' ", type, name)).ToPageList(int.Parse(page), int.Parse(limit));
+            }
+            else if (searchType.Equals("配方"))
+            {
+                if (string.IsNullOrEmpty(awardType))
+                {
+                    return DataBase.db.Queryable<ItemExchange>().Where(string.Format("status = '1' and type in ({0}) and id in (SELECT containerid FROM awardinfo where funcid = '5' and itemchinese like '%{1}%' ) ", type, name)).ToPageList(int.Parse(page), int.Parse(limit));
+                }
+                else
+                {
+                    return DataBase.db.Queryable<ItemExchange>().Where(string.Format("status = '1' and type in ({0}) and id in (SELECT containerid FROM awardinfo where funcid = '5' and itemchinese like '%{1}%' and type='{2}' ) ", type, name, awardType)).ToPageList(int.Parse(page), int.Parse(limit));
+                }
+
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
     }

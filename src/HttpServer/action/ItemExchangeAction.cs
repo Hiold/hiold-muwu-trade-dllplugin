@@ -158,10 +158,20 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("type", out string type);
+                queryRequest.TryGetValue("searchType", out string searchType);
+                queryRequest.TryGetValue("awardType", out string awardType);
                 queryRequest.TryGetValue("name", out string name);
                 queryRequest.TryGetValue("page", out string page);
                 queryRequest.TryGetValue("limit", out string limit);
-                List<ItemExchange> ls = ItemExchangeService.getItemExchangeByType(type, name, page, limit);
+                if (awardType.Equals("4"))
+                {
+                    name = "";
+                }
+                if (awardType.Equals("5"))
+                {
+                    name = "";
+                }
+                List<ItemExchange> ls = ItemExchangeService.getItemExchangeByType(searchType, awardType, type, name, page, limit);
                 List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
                 foreach (ItemExchange ie in ls)
                 {
