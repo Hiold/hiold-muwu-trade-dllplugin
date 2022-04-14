@@ -36,9 +36,21 @@ namespace HioldMod.src.HttpServer.service
         /// </summary>
         /// <param name="playerid">用户id</param>
         /// <returns></returns>
-        public static List<UserRequire> selectUserRequiresByUserid(string playerid, string gruopsStrs)
+        public static List<UserRequire> selectUserRequiresByUserid(string playerid, string gruopsStrs, string name, string sort)
         {
             string groupStr = "";
+            string sortStr = "";
+            if (!string.IsNullOrEmpty(sort))
+            {
+                if (sort.Equals("价格高到低"))
+                {
+                    sortStr += "order by Price desc";
+                }
+                if (sort.Equals("价格低到高"))
+                {
+                    sortStr += "order by Price asc";
+                }
+            }
             if (gruopsStrs != null && gruopsStrs.Length > 0)
             {
                 groupStr += " and (";
@@ -59,11 +71,11 @@ namespace HioldMod.src.HttpServer.service
 
             if (string.IsNullOrEmpty(playerid))
             {
-                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' " + groupStr, UserRequireConfig.NORMAL_REQUIRE)).ToList();
+                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' and Itemchinese like '%{1}%' " + groupStr + sortStr, UserRequireConfig.NORMAL_REQUIRE, name)).ToList();
             }
             else
             {
-                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' and gameentityid={1}" + groupStr, UserRequireConfig.NORMAL_REQUIRE, playerid)).ToList();
+                return DataBase.db.Queryable<UserRequire>().Where(string.Format("Status = '{0}' and gameentityid='{1}' and Itemchinese like '%{2}%' " + groupStr + sortStr, UserRequireConfig.NORMAL_REQUIRE, playerid, name)).ToList();
             }
         }
 

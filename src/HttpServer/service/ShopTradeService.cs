@@ -89,11 +89,11 @@ namespace HioldMod.src.HttpServer.service
                 }
                 if (sorttype.Equals("价格低到高"))
                 {
-                    sortStr = " order by price asc";
+                    sortStr = " order by price*(discount/10) asc";
                 }
                 if (sorttype.Equals("价格高到低"))
                 {
-                    sortStr = " order by price desc";
+                    sortStr = " order by price*(discount/10) desc";
                 }
             }
 

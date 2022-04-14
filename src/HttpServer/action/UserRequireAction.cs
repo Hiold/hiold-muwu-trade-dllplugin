@@ -72,7 +72,7 @@ namespace HioldMod.src.HttpServer.action
                         if (!string.IsNullOrEmpty(uc.extinfo1))
                         {
                             int maxprice = int.Parse(uc.extinfo1);
-                            if ((price/count) > maxprice)
+                            if ((price / count) > maxprice)
                             {
                                 ResponseUtils.ResponseFail(response, "此物品最高单价为" + maxprice + "，请调整价格");
                                 return;
@@ -181,8 +181,10 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("id", out string id);
+                queryRequest.TryGetValue("name", out string name);
                 queryRequest.TryGetValue("class2", out string class2);
-                List<UserRequire> cous = UserRequireService.selectUserRequiresByUserid(id, class2);
+                queryRequest.TryGetValue("sort", out string sort);
+                List<UserRequire> cous = UserRequireService.selectUserRequiresByUserid(id, class2, name, sort);
                 //List<UserInfo> resultList = UserService.userLogin(_info.username, ServerUtils.md5(_info.password));
                 ResponseUtils.ResponseSuccessWithData(response, cous);
                 return;
@@ -208,7 +210,7 @@ namespace HioldMod.src.HttpServer.action
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("id", out string id);
                 UserRequire cous = UserRequireService.selectUserRequireByid(id);
-                if (cous==null)
+                if (cous == null)
                 {
                     ResponseUtils.ResponseFail(response, "取消失败，校验错误");
                     return;
