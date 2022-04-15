@@ -163,6 +163,7 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("name", out string name);
                 queryRequest.TryGetValue("page", out string page);
                 queryRequest.TryGetValue("limit", out string limit);
+                UserInfo ui = UserService.getUserById(request.user.id + "")[0];
                 if (awardType.Equals("4"))
                 {
                     name = "";
@@ -177,13 +178,46 @@ namespace HioldMod.src.HttpServer.action
                 {
                     Dictionary<string, object> tmp = new Dictionary<string, object>();
                     tmp.Add("data", ie);
-                    tmp.Add("award", AwardInfoService.getAwardInfos(ie.id + "", AwardInfoTypeConfig.ITEM_EXCHANGE));
+                    List<AwardInfo> ais = AwardInfoService.getAwardInfos(ie.id + "", AwardInfoTypeConfig.ITEM_EXCHANGE);
+                    foreach (AwardInfo ai in ais)
+                    {
+                        if (ai.type.Equals("1") || ai.type.Equals("2"))
+                        {
+                            if (string.IsNullOrEmpty(ai.itemquality))
+                            {
+                                ai.itemquality = "0";
+                            }
+                            UserStorage usT = UserStorageService.selectAvaliableItem(request.user.gameentityid, ai.itemname, ai.itemquality, ai.type, "0");
+                            if (usT != null)
+                            {
+                                ai.extinfo6 = usT.storageCount + "";
+                            }
+                            else
+                            {
+                                ai.extinfo6 = "0";
+                            }
+                        }
+                        else if (ai.type.Equals("4"))
+                        {
+                            ai.extinfo6 = ui.money + "";
+
+                        }
+                        else if (ai.type.Equals("5"))
+                        {
+                            ai.extinfo6 = ui.credit + "";
+
+                        }
+
+                    }
+                    tmp.Add("award", ais);
                     result.Add(tmp);
                 }
                 ResponseUtils.ResponseSuccessWithData(response, result);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtils.Loger(e.Message);
+                LogUtils.Loger(e.StackTrace);
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
         }
