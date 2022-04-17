@@ -676,7 +676,7 @@ namespace HioldMod.src.HttpServer.service
                     switch (_ptype)
                     {
                         case HttpServer.bean.ProgressionType.DAILY:
-                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, daypair[0], daypair[1], LogType.doSignInfo)).Select();
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType in ('39','40') ", playerId, daypair[0], daypair[1])).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
@@ -694,7 +694,7 @@ namespace HioldMod.src.HttpServer.service
                             }
                             break;
                         case HttpServer.bean.ProgressionType.WEEK:
-                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType='{3}' ", playerId, weekpair[0], weekpair[1], LogType.doSignInfo)).Select();
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and actTime>='{1}' and actTime<='{2}' and t.actType in ('39','40') ", playerId, weekpair[0], weekpair[1])).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
@@ -712,7 +712,7 @@ namespace HioldMod.src.HttpServer.service
                             }
                             break;
                         case HttpServer.bean.ProgressionType.MAIN:
-                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.actType='{1}' ", playerId, LogType.doSignInfo)).Select();
+                            dt = DataBase.logdb.Ado.GetDataTable(string.Format("select count(*) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.actType in ('39','40') ", playerId)).Select();
                             //Console.WriteLine(dt);
                             foreach (DataRow row in dt)
                             {
