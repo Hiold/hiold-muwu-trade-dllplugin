@@ -113,6 +113,7 @@
     <Compile Include="src\HttpServer\action\FileUpload.cs" />
     <Compile Include="src\HttpServer\action\GameChunckContainerAction.cs" />
     <Compile Include="src\HttpServer\action\GameItemAction.cs" />
+    <Compile Include="src\HttpServer\action\SlotMachineAction.cs" />
     <Compile Include="src\HttpServer\action\UserRequireAction.cs" />
     <Compile Include="src\HttpServer\action\UserInfoAction.cs" />
     <Compile Include="src\HttpServer\action\LoginAction.cs" />

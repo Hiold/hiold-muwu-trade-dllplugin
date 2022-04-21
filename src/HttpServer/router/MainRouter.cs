@@ -728,6 +728,27 @@ namespace HioldMod.HttpServer.router
                         if (Filters.isAdminFilter(request, response))
                             ItemLimitConfigAction.updateItemLimitConfig(request, response);
             }
+            //水果机获取点数
+            else if (url.Equals("/api/GetSGJPoint"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SlotMachineAction.GetSGJPoint(request, response);
+            }
+            //水果机充值点数
+            else if (url.Equals("/api/ChargeSGJPoint"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SlotMachineAction.ChargeSGJPoint(request, response);
+            }
+            //水果机提取
+            else if (url.Equals("/api/ReleaseSGJPoint"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SlotMachineAction.ReleaseSGJPoint(request, response);
+            }
         }
     }
 }

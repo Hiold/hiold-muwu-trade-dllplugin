@@ -42,6 +42,18 @@ namespace HioldMod.src.HttpServer.service
 
 
         /// <summary>
+        /// 获取点数
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
+        public static UserConfig QuerySGJPoint(string gameentityid)
+        {
+            return DataBase.db.Queryable<UserConfig>().Where(string.Format("gameentityid = '{0}' and configType = '{1}' ", gameentityid, ConfigType.Sgj_Point)).First();
+        }
+
+
+        /// <summary>
         /// 获取玩家所有收藏信息
         /// </summary>
         /// <param name="username">用户名</param>

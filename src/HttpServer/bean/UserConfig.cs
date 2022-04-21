@@ -43,5 +43,6 @@ namespace HioldMod.src.HttpServer.bean
     {
         public static string Collect = "1";
         public static string Item_Limit = "2";
+        public static string Sgj_Point = "3";
     }
 }
