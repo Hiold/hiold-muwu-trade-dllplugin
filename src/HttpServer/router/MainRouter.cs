@@ -749,6 +749,13 @@ namespace HioldMod.HttpServer.router
                     if (Filters.UserLoginFilter(request, response))
                         SlotMachineAction.ReleaseSGJPoint(request, response);
             }
+            //开始roll
+            else if (url.Equals("/api/SGJRolling"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    if (Filters.UserLoginFilter(request, response))
+                        SlotMachineAction.SGJRolling(request, response);
+            }
         }
     }
 }

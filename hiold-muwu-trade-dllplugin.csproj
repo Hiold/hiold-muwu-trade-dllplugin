@@ -121,6 +121,7 @@
     <Compile Include="src\HttpServer\action\TradeManageAction.cs" />
     <Compile Include="src\HttpServer\action\TranslationAction.cs" />
     <Compile Include="src\HttpServer\action\UserTradeAction.cs" />
+    <Compile Include="src\HttpServer\attributes\HandlerAttribute.cs" />
     <Compile Include="src\HttpServer\bean\ActionLog.cs" />
     <Compile Include="src\HttpServer\bean\ItemExchange.cs" />
     <Compile Include="src\HttpServer\bean\HioldRequest.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="src\HttpServer\database\DataBase.cs" />
     <Compile Include="src\HttpServer\HanderThreadPool.cs" />
     <Compile Include="src\Commons\LogUtils.cs" />
+    <Compile Include="src\HttpServer\router\AttributeAnalysis.cs" />
     <Compile Include="src\HttpServer\router\Filters.cs" />
     <Compile Include="src\HttpServer\router\MainRouter.cs" />
     <Compile Include="src\HttpServer\Server.cs" />

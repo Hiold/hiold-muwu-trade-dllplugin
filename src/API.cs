@@ -17,6 +17,7 @@ using HioldMod.HttpServer;
 using NaiwaziServerKitInterface;
 using HioldMod.src.Commons;
 using System.Threading;
+using HioldMod.src.HttpServer.router;
 
 namespace HioldMod
 {
@@ -127,7 +128,10 @@ namespace HioldMod
                 {
                     int.TryParse(MainConfig.Port, out port);
                 }
-
+                //
+                LogUtils.Loger("开始初始化Action");
+                AttributeAnalysis.AnalysisStart();
+                //开启http服务器
                 HioldModServer.Server.RunServer(port);
                 //定时器发送心跳数据
                 LogUtils.Loger("正在初始化用户基础信息更新定时器");
