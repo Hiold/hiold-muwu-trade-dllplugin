@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.database;
@@ -14,8 +15,16 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class LotteryAction
     {
+        /// <summary>
+        /// 添加抽奖
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/postLottery")]
         public static void postLottery(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -77,7 +86,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 更新抽奖
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateLottery")]
         public static void updateLottery(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -133,7 +148,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 删除抽奖
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteLottery")]
         public static void deleteLottery(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -170,6 +191,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 获取抽奖
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getLottery")]
         public static void getLottery(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -192,6 +220,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/doLottery")]
         public static void doLottery(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -350,6 +380,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 获取抽奖次数
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/QueryLotteryCount")]
         public static void QueryLotteryCount(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数

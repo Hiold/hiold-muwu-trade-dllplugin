@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.database;
@@ -14,8 +15,16 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class SignInfoAction
     {
+        /// <summary>
+        /// 新增签到
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/postSignInfo")]
         public static void postSignInfo(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -100,7 +109,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 更新签到
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateSignInfo")]
         public static void updateSignInfo(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -159,7 +174,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 删除签到
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteSignInfo")]
         public static void deleteSignInfo(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -196,6 +217,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 获取签到
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getSignInfo")]
         public static void getSignInfo(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -218,6 +246,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/doSignInfo")]
         public static void doSignInfo(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -275,12 +305,13 @@ namespace HioldMod.src.HttpServer.action
             ResponseUtils.ResponseSuccessWithData(response, awards);
         }
 
-
         /// <summary>
-        /// 执行签到
+        /// 执行补签
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/doReSignInfo")]
         public static void doReSignInfo(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -389,7 +420,13 @@ namespace HioldMod.src.HttpServer.action
             ResponseUtils.ResponseSuccessWithData(response, awards);
         }
 
-
+        /// <summary>
+        /// 获取有效签到
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getAvailableSignInfo")]
         public static void getAvailableSignInfo(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -483,7 +520,13 @@ namespace HioldMod.src.HttpServer.action
             ResponseUtils.ResponseSuccessWithData(response, returnData);
         }
 
-
+        /// <summary>
+        /// 获取签到
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getSignLog")]
         public static void getSignLog(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数

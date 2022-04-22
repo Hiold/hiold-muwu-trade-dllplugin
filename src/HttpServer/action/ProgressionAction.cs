@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -13,8 +14,16 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class ProgressionTAction
     {
+        /// <summary>
+        /// 新增任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/postProgressionT")]
         public static void postProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -65,7 +74,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 更新任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateProgressionT")]
         public static void updateProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -111,7 +126,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 删除任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteProgressionT")]
         public static void deleteProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -148,7 +169,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 获取任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getProgressionT")]
         public static void getProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -167,6 +194,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 获取进度
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getProgressionProgress")]
         public static void getProgressionProgress(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -191,6 +225,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getPregressionPull")]
         public static void getPregressionPull(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -234,7 +270,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 领取任务奖励
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getPregressionAward")]
         public static void getPregressionAward(HioldRequest request, HttpListenerResponse response)
         {
             try

@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.ChunckLoader;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -13,8 +14,17 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+
+    [ActionAttribute]
     public class GameChunckContainerAction
     {
+        /// <summary>
+        /// 加载容器
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/loadContainerListAround")]
         public static void loadContainerListAround(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -44,6 +54,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getContainerItems")]
         public static void getContainerItems(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -84,12 +96,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
         /// <summary>
         /// 取走物品
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/TakeItem")]
         public static void TakeItem(HioldRequest request, HttpListenerResponse response)
         {
             try

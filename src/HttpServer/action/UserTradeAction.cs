@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -14,6 +15,7 @@ using static HioldMod.src.HttpServer.database.DataBase;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class UserTradeAction
     {
         /// <summary>
@@ -21,6 +23,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/buyItem")]
         public static void buyItem(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -446,6 +450,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/sellOutItem")]
         public static void sellOutItem(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -620,10 +626,12 @@ namespace HioldMod.src.HttpServer.action
 
 
         /// <summary>
-        /// 出售物品
+        /// 取回物品
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/TackBackItem")]
         public static void TackBackItem(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -747,6 +755,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/buyTradeItem")]
         public static void buyTradeItem(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -945,6 +955,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/supplyItem")]
         public static void supplyItem(HioldRequest request, HttpListenerResponse response)
         {
             try

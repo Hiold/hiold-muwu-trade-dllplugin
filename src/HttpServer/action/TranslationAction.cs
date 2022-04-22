@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class TranslationAction
     {
         /// <summary>
@@ -19,6 +21,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getTranslation")]
         public static void getTranslation(HioldRequest request, HttpListenerResponse response)
         {
             try

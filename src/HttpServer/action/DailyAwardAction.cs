@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -13,8 +14,17 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class DailyAwardAction
     {
+
+        /// <summary>
+        /// 新增每日奖励
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true,IsAdmin =true, url = "/api/postDailyAward")]
         public static void postDailyAward(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -67,7 +77,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 更新每日奖励
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateDailyAward")]
         public static void updateDailyAward(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -115,7 +131,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 删除每日奖励
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteDailyAward")]
         public static void deleteDailyAward(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -152,7 +174,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 领取每日奖励
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/pullDailyAward")]
         public static void pullDailyAward(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -293,6 +321,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 获取每日奖励日志
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getDailyAwardLog")]
         public static void getDailyAwardLog(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -311,7 +346,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 获取每日奖励
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getDailyAward")]
         public static void getDailyAward(HioldRequest request, HttpListenerResponse response)
         {
             try

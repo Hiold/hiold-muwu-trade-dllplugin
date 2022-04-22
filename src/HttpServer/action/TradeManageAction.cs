@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -15,6 +16,8 @@ namespace HioldMod.src.HttpServer.action
     /// <summary>
     /// 交易管理模块
     /// </summary>
+    /// 
+    [ActionAttribute]
     class TradeManageAction
     {
         /// <summary>
@@ -22,6 +25,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/addShopItem")]
         public static void addShopItem(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数并进行强制类型转换
@@ -104,14 +109,13 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
-
-
-
         /// <summary>
         /// 更新商品
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateShopItem")]
         public static void updateShopItem(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数并进行强制类型转换
@@ -211,6 +215,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteShopItem")]
         public static void deleteShopItem(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数并进行强制类型转换
@@ -261,13 +267,13 @@ namespace HioldMod.src.HttpServer.action
 
 
 
-
-
         /// <summary>
         /// 获取ShopItem
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/queryShopItem")]
         public static void queryShopItem(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -295,7 +301,7 @@ namespace HioldMod.src.HttpServer.action
 
                 if (!string.IsNullOrEmpty(id))
                 {
-                    List<TradeManageItem> ls = ShopTradeService.getShopItemByIdWithCollect(int.Parse(id),request.user);
+                    List<TradeManageItem> ls = ShopTradeService.getShopItemByIdWithCollect(int.Parse(id), request.user);
                     Dictionary<string, object> resultForid = new Dictionary<string, object>();
                     resultForid.Add("data", ls);
                     resultForid.Add("count", 1);

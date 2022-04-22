@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -12,8 +13,17 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class ItemLimitConfigAction
     {
+
+        /// <summary>
+        /// 获取交易限制
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true,  url = "/api/QueryItemLimitConfig")]
         public static void QueryItemLimitConfig(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -34,7 +44,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 新增交易限制
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/postItemLimitConfig")]
         public static void postItemLimitConfig(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -84,7 +100,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 更新交易限制
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateItemLimitConfig")]
         public static void updateItemLimitConfig(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -129,7 +151,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 删除交易限制
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteItemLimitConfig")]
         public static void deleteItemLimitConfig(HioldRequest request, HttpListenerResponse response)
         {
             try

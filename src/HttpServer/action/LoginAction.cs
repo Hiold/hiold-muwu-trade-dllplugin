@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class LoginAction
     {
         /// <summary>
@@ -21,6 +23,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/login")]
         public static void login(HioldRequest request, HttpListenerResponse response)
         {
             //LogUtils.Loger("进入naiwazi积分同步");
@@ -79,6 +83,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/ncodeLogin")]
         public static void ncodeLogin(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -149,6 +155,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/debug")]
         public static void debug(HioldRequest request, HttpListenerResponse response)
         {
             //FileStream fs = new FileStream("D:/test.txt", FileMode.OpenOrCreate);
@@ -166,7 +174,13 @@ namespace HioldMod.src.HttpServer.action
             response.Close();
         }
 
-
+        /// <summary>
+        /// 获取当前用户信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/getCurrentUser")]
         public static void getCurrentUser(HioldRequest request, HttpListenerResponse response)
         {
             if (request.user != null)

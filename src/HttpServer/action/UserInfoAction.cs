@@ -1,6 +1,7 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
 using HioldMod.src.Commons;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class UserInfoAction
     {
 
@@ -24,6 +26,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getUserInfo")]
         public static void getUserInfo(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -62,6 +66,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getdisCountTicket")]
         public static void getdisCountTicket(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -84,12 +90,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
         /// <summary>
         /// 获取用户库存
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getPlayerStorage")]
         public static void getPlayerStorage(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -128,13 +135,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
-
         /// <summary>
         /// 获取用户在售物品
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/getPlayerOnSell")]
         public static void getPlayerOnSell(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -175,13 +182,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
-
         /// <summary>
         /// 获取用户库存
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/dispachItemToGame")]
         public static void dispachItemToGame(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -314,12 +321,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
         /// <summary>
         /// 获取用户库存
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/deleteItem")]
         public static void deleteItem(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -380,13 +388,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
-
         /// <summary>
         /// 用户登录action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getItemBuyLimit")]
         public static void getItemBuyLimit(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -422,6 +430,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
         public static void debug(HttpListenerRequest request, HttpListenerResponse response)
         {
             FileStream fs = new FileStream("D:/test.txt", FileMode.OpenOrCreate);
@@ -435,13 +444,13 @@ namespace HioldMod.src.HttpServer.action
             response.Close();
         }
 
-
-
         /// <summary>
         /// 用户登录action
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/updateCollect")]
         public static void updateCollect(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -532,7 +541,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
+        /// <summary>
+        /// 获取玩家商店信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/getUserShopList")]
         public static void getUserShopList(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -565,13 +580,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
-
         /// <summary>
         /// 上传文件
         /// </summary>
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/updateUserInfo")]
         public static void updateUserInfo(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -691,12 +706,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
-
         /// <summary>
         /// 根据玩家gameentityid获取玩家数据
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getLogs")]
         public static void getLogs(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -733,12 +749,13 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
-
         /// <summary>
-        /// 根据玩家gameentityid获取玩家数据
+        /// 获取哦收藏物品
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getCollectItems")]
         public static void getCollectItems(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -778,12 +795,13 @@ namespace HioldMod.src.HttpServer.action
         }
 
 
-
         /// <summary>
         /// 点赞
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/like")]
         public static void like(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -833,6 +851,13 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        /// <summary>
+        /// 获取点赞数
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/likecount")]
         public static void likecount(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -852,7 +877,6 @@ namespace HioldMod.src.HttpServer.action
                 return;
             }
         }
-
 
         public class info
         {

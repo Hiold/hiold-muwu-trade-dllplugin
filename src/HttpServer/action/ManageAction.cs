@@ -1,5 +1,6 @@
 ﻿using HioldMod.HttpServer;
 using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
 using HioldMod.src.HttpServer.service;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class ManageAction
     {
         /// <summary>
@@ -19,6 +21,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getUserByPage")]
         public static void getUserByPage(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -45,6 +49,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateUserInfoParam")]
         public static void updateUserInfoParam(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -84,6 +89,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getStorageByPage")]
         public static void getStorageByPage(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -115,6 +121,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateUserStorageParam")]
         public static void updateUserStorageParam(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -152,6 +159,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getTradeByPage")]
         public static void getTradeByPage(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -182,6 +190,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateTradeeParam")]
         public static void updateTradeeParam(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -211,6 +220,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getActionByPage")]
         public static void getActionByPage(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -239,6 +249,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getGameActionByPage")]
         public static void getGameActionByPage(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -267,6 +278,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getDailyUser")]
         public static void getDailyUser(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -299,6 +311,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getDailyTrade")]
         public static void getDailyTrade(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数
@@ -331,6 +344,7 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/getDailySell")]
         public static void getDailySell(HioldRequest request, HttpListenerResponse response)
         {
             //获取参数

@@ -1,4 +1,5 @@
 ﻿using HioldMod.HttpServer.common;
+using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.action
 {
+    [ActionAttribute]
     class AuthAction
     {
         private static string ApiKey = "8523A031BCC59CA8EB27075AA7F53648";
@@ -20,6 +22,8 @@ namespace HioldMod.src.HttpServer.action
         /// </summary>
         /// <param name="returnUrl">返回链接</param>
         /// <returns></returns>
+        /// 
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/steamAuth")]
         public static void steamAuth(HioldRequest request, HttpListenerResponse response)
         {
             string authUrl = string.Empty;
@@ -99,6 +103,7 @@ namespace HioldMod.src.HttpServer.action
         }
 
         //登录成功返回
+        [RequestHandlerAttribute(IsServerReady = true, url = "/api/Verification")]
         public static void Verification(HioldRequest Request, HttpListenerResponse response)
         {
             if (IsFromSteam(Request.request))
