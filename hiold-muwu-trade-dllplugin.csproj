@@ -171,6 +171,8 @@
     <Compile Include="src\Commons\LocalizationUtils.cs" />
     <Compile Include="src\Commons\ChunkLoader.cs" />
     <Compile Include="src\Commons\UserAndItemCheck.cs" />
+    <Compile Include="src\Plugins\PluginInterface.cs" />
+    <Compile Include="src\Plugins\PluginsLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

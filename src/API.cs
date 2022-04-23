@@ -18,6 +18,7 @@ using NaiwaziServerKitInterface;
 using HioldMod.src.Commons;
 using System.Threading;
 using HioldMod.src.HttpServer.router;
+using HioldMod.src.Plugins;
 
 namespace HioldMod
 {
@@ -138,6 +139,9 @@ namespace HioldMod
                 System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback(HartBeatHandler.HandlePlayerHartbeat), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
                 LogUtils.Loger("正在初始化游戏记录入库定时器");
                 System.Threading.Timer Onlinetimer2 = new System.Threading.Timer(new TimerCallback(KillEntityHandler.AddEventLog), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+                //开始加载插件
+                PluginsLoader.LoadAllPlugins();
+
                 LogUtils.Loger("Init执行完毕");
             }
 

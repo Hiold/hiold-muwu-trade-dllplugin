@@ -40,11 +40,15 @@ namespace HioldMod.HttpServer.router
                 //获取接口信息
                 if (AttributeAnalysis.routers.TryGetValue(url, out AttributeAnalysis.RouterInfo router))
                 {
+                    long start = DateTime.Now.Ticks / 10000;
                     long timeStempStart = DateTime.Now.Ticks;
-                    Console.WriteLine(router.action.FullName);
+                    //Console.WriteLine(router.action.FullName);
                     //动态调用
                     object[] args = new object[] { request, response };
                     router.method.Invoke(router.action, args);
+                    long end = DateTime.Now.Ticks / 10000;
+                    string log = string.Format("{0} - - [{1}] \"{2} {3} {4}\" {5} {6}", request.request.UserHostAddress, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff"), request.request.HttpMethod, url, request.request.ProtocolVersion, response.StatusCode, (end - start));
+                    //Console.WriteLine(log);
                 }
                 else
                 {
