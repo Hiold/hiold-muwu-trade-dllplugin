@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\bin-lib\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LogLibrary">
+      <HintPath>..\bin-lib\LogLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,8 +47,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bot\Adaptor.cs" />
+    <Compile Include="bot\BOT.cs" />
+    <Compile Include="bot\model\Bind.cs" />
+    <Compile Include="bot\model\Message.cs" />
+    <Compile Include="bot\model\MessageCount.cs" />
+    <Compile Include="bot\model\message\FriendMessage.cs" />
+    <Compile Include="bot\model\message\GroupMessage.cs" />
+    <Compile Include="bot\model\message\MessageTypes.cs" />
+    <Compile Include="bot\model\message\OtherClientMessage.cs" />
+    <Compile Include="bot\model\message\StrangerMessage.cs" />
+    <Compile Include="bot\model\message\TempMessage.cs" />
+    <Compile Include="bot\model\Verify.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="utils\HttpUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hiold-muwu-trade-dllplugin.csproj">
