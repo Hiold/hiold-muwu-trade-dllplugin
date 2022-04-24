@@ -10,13 +10,21 @@ namespace QQ_BOTPlugin.bot
 {
     public class Adaptor
     {
-        public static string GetToken()
+        public static string GetToken(string key)
         {
-            VerifyRequest req = new VerifyRequest() { verifyKey = BOT.key };
+            VerifyRequest req = new VerifyRequest() { verifyKey = key };
             string response = HttpUtils.HttpPost(BOT.host + "/verify", SimpleJson2.SimpleJson2.SerializeObject(req));
             Console.WriteLine(response);
             VerifyResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<VerifyResponse>(response);
             return resp.session;
+        }
+
+        public static void Bind(string sessionKey, int qq)
+        {
+            BindRequest req = new BindRequest() { qq = qq, sessionKey = sessionKey };
+            string response = HttpUtils.HttpPost(BOT.host + "/bind", SimpleJson2.SimpleJson2.SerializeObject(req));
+            Console.WriteLine(response);
+            BindResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<BindResponse>(response);
         }
     }
 }
