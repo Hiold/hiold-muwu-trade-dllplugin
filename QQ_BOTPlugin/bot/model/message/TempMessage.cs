@@ -75,7 +75,7 @@ namespace QQ_BOTPlugin.bot.model.message
 
 
 
-    public class Root
+    public class TempMessage
     {
         /// <summary>
         /// 
@@ -90,7 +90,19 @@ namespace QQ_BOTPlugin.bot.model.message
         /// <summary>
         /// 
         /// </summary>
-        public List<string> messageChain { get; set; }
+        public List<object> messageChain { get; set; }
+
+        public TempMessage(string param)
+        {
+            TempMessage resp = SimpleJson2.SimpleJson2.DeserializeObject<TempMessage>(param);
+            this.type = resp.type;
+            this.sender = resp.sender;
+            this.messageChain = MessageParser.ParseMessage(resp.messageChain); ;            
+        }
+        public TempMessage()
+        {
+
+        }
 
     }
 

@@ -39,7 +39,19 @@ namespace QQ_BOTPlugin.bot.model.message
         /// <summary>
         /// 
         /// </summary>
-        public List<string> messageChain { get; set; }
+        public List<object> messageChain { get; set; }
+
+        public OtherClientMessage(string param)
+        {
+            OtherClientMessage resp = SimpleJson2.SimpleJson2.DeserializeObject<OtherClientMessage>(param);
+            this.type = resp.type;
+            this.sender = resp.sender;
+            this.messageChain = MessageParser.ParseMessage(resp.messageChain); ;
+        }
+        public OtherClientMessage()
+        {
+
+        }
 
     }
 

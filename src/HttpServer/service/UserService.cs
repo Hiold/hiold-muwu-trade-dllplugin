@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.service
 {
-    class UserService
+    public class UserService
     {
         /// <summary>
         /// 注册用户 web

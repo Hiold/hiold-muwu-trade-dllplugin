@@ -47,9 +47,9 @@ namespace QQ_BOTPlugin.utils
                     reader.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                Console.WriteLine(e.Message);
             }
             return responseStr;
         }
@@ -91,9 +91,9 @@ namespace QQ_BOTPlugin.utils
                     reader.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                Console.WriteLine(e.Message);
             }
             finally
             {
