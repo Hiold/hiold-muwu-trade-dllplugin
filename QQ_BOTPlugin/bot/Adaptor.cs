@@ -100,7 +100,7 @@ namespace QQ_BOTPlugin.bot
                 messageChain = msgList,
             };
             //发送请求
-            string response = HttpUtils.HttpPost(BOT.host + "/sendGroupMessage", SimpleJson2.SimpleJson2.SerializeObject(req));
+            string response = HttpUtils.HttpPost(BOT.host + "/sendTempMessage", SimpleJson2.SimpleJson2.SerializeObject(req));
             LogUtils.Loger(response);
             TempMessageResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<TempMessageResponse>(response);
             return resp;
