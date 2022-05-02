@@ -364,15 +364,15 @@ namespace HioldMod.src.HttpServer.action
             if (result == null)
             {
                 result = new List<int>();
-                for (int i = 0; i < 1000 * (6.7d / 100d); i++)
+                for (int i = 0; i < 1000 * (8.0d / 100d); i++)
                 {
                     result.Add(0);
                 }
-                for (int i = 0; i < 1000 * (6.0d / 100d); i++)
+                for (int i = 0; i < 1000 * (5.0d / 100d); i++)
                 {
                     result.Add(1);
                 }
-                for (int i = 0; i < 1000 * (5.7d / 100d); i++)
+                for (int i = 0; i < 1000 * (8.0d / 100d); i++)
                 {
                     result.Add(2);
                 }
@@ -384,19 +384,19 @@ namespace HioldMod.src.HttpServer.action
                 {
                     result.Add(4);
                 }
-                for (int i = 0; i < 1000 * (2d / 100d); i++)
+                for (int i = 0; i < 1000 * (0.3d / 100d); i++)
                 {
                     result.Add(5);
                 }
-                for (int i = 0; i < 1000 * (1d / 100d); i++)
+                for (int i = 0; i < 1000 * (0.1d / 100d); i++)
                 {
                     result.Add(6);
                 }
-                for (int i = 0; i < 1000 * (5d / 100d); i++)
+                for (int i = 0; i < 1000 * (5.0d / 100d); i++)
                 {
                     result.Add(7);
                 }
-                for (int i = 0; i < 1000 * (5.7d / 100d); i++)
+                for (int i = 0; i < 1000 * (8.0d / 100d); i++)
                 {
                     result.Add(8);
                 }
@@ -408,15 +408,15 @@ namespace HioldMod.src.HttpServer.action
                 {
                     result.Add(10);
                 }
-                for (int i = 0; i < 1000 * (5.7d / 100d); i++)
+                for (int i = 0; i < 1000 * (8.0d / 100d); i++)
                 {
                     result.Add(11);
                 }
-                for (int i = 0; i < 1000 * (5d / 100d); i++)
+                for (int i = 0; i < 1000 * (5.0d / 100d); i++)
                 {
                     result.Add(12);
                 }
-                for (int i = 0; i < 1000 * (5.7d / 100d); i++)
+                for (int i = 0; i < 1000 * (8.0d / 100d); i++)
                 {
                     result.Add(13);
                 }
@@ -428,19 +428,19 @@ namespace HioldMod.src.HttpServer.action
                 {
                     result.Add(15);
                 }
-                for (int i = 0; i < 1000 * (5.7d / 100d); i++)
+                for (int i = 0; i < 1000 * (8.0d / 100d); i++)
                 {
                     result.Add(16);
                 }
-                for (int i = 0; i < 1000 * (7.5d / 100d); i++)
+                for (int i = 0; i < 1000 * (2.0d / 100d); i++)
                 {
                     result.Add(17);
                 }
-                for (int i = 0; i < 1000 * (5d / 100d); i++)
+                for (int i = 0; i < 1000 * (5.0d / 100d); i++)
                 {
                     result.Add(18);
                 }
-                for (int i = 0; i < 1000 * (5.7d / 100d); i++)
+                for (int i = 0; i < 1000 * (8.0d / 100d); i++)
                 {
                     result.Add(19);
                 }
@@ -448,7 +448,7 @@ namespace HioldMod.src.HttpServer.action
                 {
                     result.Add(20);
                 }
-                for (int i = 0; i < 1000 * (7.5d / 100d); i++)
+                for (int i = 0; i < 1000 * (2.0d / 100d); i++)
                 {
                     result.Add(21);
                 }
