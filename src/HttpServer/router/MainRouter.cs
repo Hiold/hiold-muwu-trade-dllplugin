@@ -34,6 +34,11 @@ namespace HioldMod.HttpServer.router
                     GameItemAction.getStaticSource(request, response);
                 });
             }
+            else if (url.StartsWith("/api/image"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    GameItemAction.getImage(request, response);
+            }
             else
             {
                 //请求接口

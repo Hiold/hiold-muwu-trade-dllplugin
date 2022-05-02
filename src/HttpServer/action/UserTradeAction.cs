@@ -614,11 +614,14 @@ namespace HioldMod.src.HttpServer.action
                 ResponseUtils.ResponseSuccessWithData(response, "出售成功!");
                 //全服广播
                 HioldsCommons.BroadCast("有玩家上架了物品 （" + item.translate + "），有需要请前往交易系统查看");
+                //调用已注册事件
+                TradeSysEvents.TrigerOnSellEvent(request.user, userTrade);
                 return;
             }
             catch (Exception e)
             {
                 LogUtils.Loger(e.Message);
+                LogUtils.Loger(e.StackTrace);
                 ResponseUtils.ResponseFail(response, "参数异常");
             }
         }
@@ -934,6 +937,9 @@ namespace HioldMod.src.HttpServer.action
                         extinfo4 = priceAll + "",
                         desc = string.Format("从玩家交易购买{0}个{1}，消费{2}", userStorate.storageCount, userStorate.translate, priceAll),
                     });
+                    //事件触发
+                    TradeSysEvents.TrigerSellOutEvent(ui, seller, userStorate, priceAll);
+
                     ResponseUtils.ResponseSuccess(response);
                 }
                 else

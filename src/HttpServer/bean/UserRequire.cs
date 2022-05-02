@@ -9,7 +9,7 @@ namespace HioldMod.src.HttpServer.bean
 {
 
     [SugarTable("userrequire")]
-    class UserRequire
+    public class UserRequire
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]//数据库是自增才配自增
         public int id { get; set; }

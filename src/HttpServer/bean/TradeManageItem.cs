@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace HioldMod.src.HttpServer.bean
 {
     [SugarTable("shopitem")]
-    class TradeManageItem
+    public class TradeManageItem
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]//数据库是自增才配自增
         public int id { get; set; }

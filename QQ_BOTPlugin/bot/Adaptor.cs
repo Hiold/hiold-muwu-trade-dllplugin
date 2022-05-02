@@ -1,4 +1,5 @@
-﻿using QQ_BOTPlugin.bot.model;
+﻿using HioldMod.HttpServer;
+using QQ_BOTPlugin.bot.model;
 using QQ_BOTPlugin.bot.model.api;
 using QQ_BOTPlugin.bot.model.message;
 using QQ_BOTPlugin.utils;
@@ -21,7 +22,7 @@ namespace QQ_BOTPlugin.bot
         {
             VerifyRequest req = new VerifyRequest() { verifyKey = key };
             string response = HttpUtils.HttpPost(BOT.host + "/verify", SimpleJson2.SimpleJson2.SerializeObject(req));
-            Console.WriteLine(response);
+            LogUtils.Loger(response);
             VerifyResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<VerifyResponse>(response);
             return resp.session;
         }
@@ -35,7 +36,7 @@ namespace QQ_BOTPlugin.bot
         {
             BindRequest req = new BindRequest() { qq = qq, sessionKey = sessionKey };
             string response = HttpUtils.HttpPost(BOT.host + "/bind", SimpleJson2.SimpleJson2.SerializeObject(req));
-            Console.WriteLine(response);
+            LogUtils.Loger(response);
             BindResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<BindResponse>(response);
         }
 
@@ -47,7 +48,7 @@ namespace QQ_BOTPlugin.bot
         public static MessageCount GetMessageCount(string sessionKey)
         {
             string response = HttpUtils.HttpGet(BOT.host + "/countMessage?sessionKey=" + sessionKey);
-            Console.WriteLine(response);
+            LogUtils.Loger(response);
             MessageCount resp = SimpleJson2.SimpleJson2.DeserializeObject<MessageCount>(response);
             return resp;
         }
@@ -79,8 +80,29 @@ namespace QQ_BOTPlugin.bot
             };
             //发送请求
             string response = HttpUtils.HttpPost(BOT.host + "/sendGroupMessage", SimpleJson2.SimpleJson2.SerializeObject(req));
-            Console.WriteLine(response);
+            LogUtils.Loger(response);
             GroupMessageResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<GroupMessageResponse>(response);
+            return resp;
+        }
+
+
+        public static TempMessageResponse PostTempMessage(int qunNumber, int qq, string sessionKey, string msg)
+        {
+            Plain text = new Plain(msg);
+            List<object> msgList = new List<object>();
+            msgList.Add(text);
+            //构建需要发送的数据
+            TempMessageRequest req = new TempMessageRequest()
+            {
+                group = qunNumber,
+                qq = qq,
+                sessionKey = sessionKey,
+                messageChain = msgList,
+            };
+            //发送请求
+            string response = HttpUtils.HttpPost(BOT.host + "/sendGroupMessage", SimpleJson2.SimpleJson2.SerializeObject(req));
+            LogUtils.Loger(response);
+            TempMessageResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<TempMessageResponse>(response);
             return resp;
         }
 

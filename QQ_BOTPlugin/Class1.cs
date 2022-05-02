@@ -11,7 +11,10 @@ namespace QQ_BOTPlugin
     public class Class1 : HioldMod.src.Plugins.PluginInterface
     {
         public void InitPlugin()
-        {
+        { 
+
+            LogUtils.Loger("开始初始化QQBot插件");
+            bot.BOT.initBot();
             LogUtils.Loger("已加载QQBot插件");
         }
 

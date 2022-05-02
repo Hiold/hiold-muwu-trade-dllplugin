@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HioldMod.HttpServer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -49,7 +50,7 @@ namespace QQ_BOTPlugin.utils
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                LogUtils.Loger(e.Message);
             }
             return responseStr;
         }
@@ -93,7 +94,7 @@ namespace QQ_BOTPlugin.utils
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                LogUtils.Loger(e.Message);
             }
             finally
             {

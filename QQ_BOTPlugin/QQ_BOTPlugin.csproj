@@ -61,8 +61,10 @@
   <ItemGroup>
     <Compile Include="bot\Adaptor.cs" />
     <Compile Include="bot\BOT.cs" />
+    <Compile Include="bot\Events.cs" />
     <Compile Include="bot\MessageDispacher.cs" />
     <Compile Include="bot\model\api\GroupMessageBean.cs" />
+    <Compile Include="bot\model\api\TempMessageBean.cs" />
     <Compile Include="bot\model\Bind.cs" />
     <Compile Include="bot\model\Message.cs" />
     <Compile Include="bot\model\MessageCount.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utils\HttpUtils.cs" />
+    <Compile Include="utils\RegexUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hiold-muwu-trade-dllplugin.csproj">

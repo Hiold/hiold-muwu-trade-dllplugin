@@ -6,12 +6,20 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HioldMod.HttpServer.common
 {
     public class ServerUtils
     {
+        public static string ReplaceBBCode(string source)
+        {
+            source = Regex.Replace(source, @"([\\[][\w\/]*[\]])", "");
+            source = Regex.Replace(source, @"([\\{].*[\\}])", "");
+            return source;
+        }
+
         public static string GetRandomString(int length)
         {
             byte[] b = new byte[4];

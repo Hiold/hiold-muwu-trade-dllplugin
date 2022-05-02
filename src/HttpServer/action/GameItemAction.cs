@@ -139,7 +139,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
         /// 
-        [RequestHandlerAttribute(IsServerReady = true, url = "/api/getImage")]
+        //[RequestHandlerAttribute(IsServerReady = true, url = "/api/getImage")]
         public static void getImage(HioldRequest request, HttpListenerResponse response)
         {
             DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);

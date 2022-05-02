@@ -173,6 +173,7 @@
     <Compile Include="src\Commons\UserAndItemCheck.cs" />
     <Compile Include="src\Plugins\PluginInterface.cs" />
     <Compile Include="src\Plugins\PluginsLoader.cs" />
+    <Compile Include="src\TradeSysEvents.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
