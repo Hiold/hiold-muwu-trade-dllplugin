@@ -290,7 +290,13 @@ namespace HioldMod.src.HttpServer.action
                 if (target != null)
                 {
                     long process = ProgressionTService.getProgressionProgress(target.progressionType, target.type, request.user.gameentityid);
-                    if (process >= double.Parse(target.value))
+                    //如果目标奖励类型是在线时长 需要除3600转换为小时
+                    double vl = double.Parse(target.value);
+                    if (target.progressionType == ProgressionPType.ONLINE_TIME)
+                    {
+                        vl = vl / 3600.0;
+                    }
+                    if (process >= vl)
                     {
                         //校验是否已领取过
                         long count = 0;
@@ -312,7 +318,7 @@ namespace HioldMod.src.HttpServer.action
                         }
 
 
-                        if (count>0)
+                        if (count > 0)
                         {
                             ResponseUtils.ResponseFail(response, "已领取过，无法重复领取");
                             return;

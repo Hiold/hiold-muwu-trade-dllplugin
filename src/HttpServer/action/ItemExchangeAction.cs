@@ -193,11 +193,11 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("page", out string page);
                 queryRequest.TryGetValue("limit", out string limit);
                 UserInfo ui = UserService.getUserById(request.user.id + "")[0];
-                if (awardType.Equals("4"))
+                if (!string.IsNullOrEmpty(awardType) && awardType.Equals("4"))
                 {
                     name = "";
                 }
-                if (awardType.Equals("5"))
+                if (!string.IsNullOrEmpty(awardType) && awardType.Equals("5"))
                 {
                     name = "";
                 }
