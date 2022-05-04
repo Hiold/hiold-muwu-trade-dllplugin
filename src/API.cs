@@ -115,11 +115,13 @@ namespace HioldMod
                 {
                     Directory.CreateDirectory(API.ConfigPath);
                 }
-                //加载配置文件
-                LoadMainConfig.Load();
 
                 LogUtils.Loger("Host:" + MainConfig.Host + "  Port" + MainConfig.Port);
                 DataBase.InitDataBase();
+
+                //加载配置文件
+                LoadMainConfig.Load();
+
                 int port = 26911;
                 if (MainConfig.Port.Equals("auto"))
                 {

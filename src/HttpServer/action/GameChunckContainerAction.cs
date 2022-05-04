@@ -37,7 +37,7 @@ namespace HioldMod.src.HttpServer.action
                 }
                 else
                 {
-                    ResponseUtils.ResponseFail(response, "账号或密码错误");
+                    ResponseUtils.ResponseFail(response, "没有发现您和队友的领地,或者领地中无有效容器");
                     return;
                 }
             }

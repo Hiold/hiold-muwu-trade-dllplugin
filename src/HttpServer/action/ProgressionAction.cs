@@ -23,7 +23,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="request"></param>
         /// <param name="response"></param>
         /// 
-        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/postProgressionT")]
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/postProgression")]
         public static void postProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -80,7 +80,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="request"></param>
         /// <param name="response"></param>
         /// 
-        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateProgressionT")]
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/updateProgression")]
         public static void updateProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -132,7 +132,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="request"></param>
         /// <param name="response"></param>
         /// 
-        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteProgressionT")]
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/deleteProgression")]
         public static void deleteProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -175,7 +175,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="request"></param>
         /// <param name="response"></param>
         /// 
-        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getProgressionT")]
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/getProgression")]
         public static void getProgressionT(HioldRequest request, HttpListenerResponse response)
         {
             try

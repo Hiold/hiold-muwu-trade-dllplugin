@@ -66,7 +66,8 @@ namespace HioldMod.src.HttpServer.service
             else
             {
                 UserStorage stackableStorage = UserStorageService.selectStackableItem(storage.gameentityid, storage.name, storage.itemtype);
-                if (stackableStorage != null)
+                //堆叠修复
+                if (stackableStorage != null && (stackableStorage.quality <= 0 || stackableStorage == null))
                 {
                     stackableStorage.storageCount += storage.storageCount;
                     stackableStorage.itemGetChenal = UserStorageGetChanel.STACK;

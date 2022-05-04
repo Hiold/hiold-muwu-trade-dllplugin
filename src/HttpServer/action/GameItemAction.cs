@@ -302,7 +302,7 @@ namespace HioldMod.src.HttpServer.action
                 //{
                 //    response.AddHeader("max-age", "86400");
                 //}
-              
+
                 string appendUrl = "";
                 if (request.request.RawUrl.Equals("/"))
                 {
@@ -518,7 +518,39 @@ namespace HioldMod.src.HttpServer.action
                             {
                                 foreach (var item in query2.ToList())
                                 {
-                                    rs.Add("translate", item.Value);
+                                    string[] cache = item.Value;
+                                    string chinese = "";
+                                    if (cache[16] != null)
+                                    {
+                                        chinese = cache[16];
+                                    }
+                                    else if (cache[4] != null)
+                                    {
+                                        chinese = cache[4];
+                                    }
+                                    else
+                                    {
+                                        foreach (string tmp in cache)
+                                        {
+                                            if (tmp != null)
+                                            {
+                                                chinese = tmp;
+                                                break;
+                                            }
+                                        }
+                                        //仍未找到不在翻译
+                                        if (chinese.Equals(""))
+                                        {
+                                            chinese = itemN;
+                                        }
+                                    }
+
+                                    if (cache.Length < 16)
+                                    {
+                                        cache = new string[17];
+                                    }
+                                    cache[16] = chinese;
+                                    rs.Add("translate", cache);
                                 }
                             }
                         }
