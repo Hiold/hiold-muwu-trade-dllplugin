@@ -162,6 +162,7 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("id", out string id);
+                Console.WriteLine(id);
                 ItemExchangeService.deleteItemExchanges(id);
                 ResponseUtils.ResponseSuccess(response);
 
