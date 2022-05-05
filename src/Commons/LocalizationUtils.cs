@@ -24,42 +24,50 @@ namespace HioldMod.src.UserTools
                     ItemValue iv = ItemClass.GetItem(kvp.Key);
                     if (iv != null)
                     {
-                        string chinese = "";
-                        if (kvp.Value[16] != null)
+                        try
                         {
-                            chinese = kvp.Value[16];
-                        }
-                        else if (kvp.Value[4] != null)
-                        {
-                            chinese = kvp.Value[4];
-                        }
-                        else
-                        {
-                            foreach (string tmp in kvp.Value)
+
+
+                            string chinese = "";
+                            if (kvp.Value[16] != null)
                             {
-                                if (tmp != null)
+                                chinese = kvp.Value[16];
+                            }
+                            else if (kvp.Value[4] != null)
+                            {
+                                chinese = kvp.Value[4];
+                            }
+                            else
+                            {
+                                foreach (string tmp in kvp.Value)
                                 {
-                                    chinese = tmp;
-                                    break;
+                                    if (tmp != null)
+                                    {
+                                        chinese = tmp;
+                                        break;
+                                    }
+                                }
+                                //仍未找到不在翻译
+                                if (chinese.Equals(""))
+                                {
+                                    chinese = kvp.Key;
                                 }
                             }
-                            //仍未找到不在翻译
-                            if (chinese.Equals(""))
+
+                            if (!reverseTraslate.TryGetValue(chinese, out string existV))
                             {
-                                chinese = kvp.Key;
+
+                                reverseTraslate.Add(chinese, kvp.Key);
+                            }
+                            else
+                            {
+                                reverseTraslate[chinese] = existV + "," + kvp.Key;
                             }
                         }
-
-                        if (!reverseTraslate.TryGetValue(chinese, out string existV))
+                        catch (Exception)
                         {
 
-                            reverseTraslate.Add(chinese, kvp.Key);
                         }
-                        else
-                        {
-                            reverseTraslate[chinese] = existV + "," + kvp.Key;
-                        }
-
                     }
                 }
             }
@@ -100,29 +108,36 @@ namespace HioldMod.src.UserTools
             if (TranslateCache.TryGetValue(key, out string[] cacheHit))
             {
                 string chinese = "";
-                if (cacheHit[16] != null)
+                try
                 {
-                    chinese = cacheHit[16];
-                }
-                else if (cacheHit[4] != null)
-                {
-                    chinese = cacheHit[4];
-                }
-                else
-                {
-                    foreach (string tmp in cacheHit)
+                    if (cacheHit[16] != null)
                     {
-                        if (tmp != null)
+                        chinese = cacheHit[16];
+                    }
+                    else if (cacheHit[4] != null)
+                    {
+                        chinese = cacheHit[4];
+                    }
+                    else
+                    {
+                        foreach (string tmp in cacheHit)
                         {
-                            chinese = tmp;
-                            break;
+                            if (tmp != null)
+                            {
+                                chinese = tmp;
+                                break;
+                            }
+                        }
+                        //仍未找到不在翻译
+                        if (chinese.Equals(""))
+                        {
+                            chinese = key;
                         }
                     }
-                    //仍未找到不在翻译
-                    if (chinese.Equals(""))
-                    {
-                        chinese = key;
-                    }
+                }
+                catch (Exception)
+                {
+                    chinese = key;
                 }
                 return chinese;
             }
@@ -135,29 +150,36 @@ namespace HioldMod.src.UserTools
                 //存放缓存
                 TranslateCache.Add(key, ttl);
                 string chinese = "";
-                if (ttl[16] != null)
+                try
                 {
-                    chinese = ttl[16];
-                }
-                else if (ttl[4] != null)
-                {
-                    chinese = ttl[4];
-                }
-                else
-                {
-                    foreach (string tmp in ttl)
+                    if (ttl[16] != null)
                     {
-                        if (tmp != null)
+                        chinese = ttl[16];
+                    }
+                    else if (ttl[4] != null)
+                    {
+                        chinese = ttl[4];
+                    }
+                    else
+                    {
+                        foreach (string tmp in ttl)
                         {
-                            chinese = tmp;
-                            break;
+                            if (tmp != null)
+                            {
+                                chinese = tmp;
+                                break;
+                            }
+                        }
+                        //仍未找到不在翻译
+                        if (chinese.Equals(""))
+                        {
+                            chinese = key;
                         }
                     }
-                    //仍未找到不在翻译
-                    if (chinese.Equals(""))
-                    {
-                        chinese = key;
-                    }
+                }
+                catch (Exception)
+                {
+                    chinese = key;
                 }
                 return chinese;
             }
@@ -171,29 +193,37 @@ namespace HioldMod.src.UserTools
             if (TranslateCache.TryGetValue(key, out string[] cacheHit))
             {
                 string chinese = "";
-                if (cacheHit[16] != null)
+
+                try
                 {
-                    chinese = cacheHit[16];
-                }
-                else if (cacheHit[4] != null)
-                {
-                    chinese = cacheHit[4];
-                }
-                else
-                {
-                    foreach (string tmp in cacheHit)
+                    if (cacheHit[16] != null)
                     {
-                        if (tmp != null)
+                        chinese = cacheHit[16];
+                    }
+                    else if (cacheHit[4] != null)
+                    {
+                        chinese = cacheHit[4];
+                    }
+                    else
+                    {
+                        foreach (string tmp in cacheHit)
                         {
-                            chinese = tmp;
-                            break;
+                            if (tmp != null)
+                            {
+                                chinese = tmp;
+                                break;
+                            }
+                        }
+                        //仍未找到不在翻译
+                        if (chinese.Equals(""))
+                        {
+                            chinese = key;
                         }
                     }
-                    //仍未找到不在翻译
-                    if (chinese.Equals(""))
-                    {
-                        chinese = key;
-                    }
+                }
+                catch (Exception)
+                {
+                    chinese = key;
                 }
                 return chinese;
             }
@@ -206,29 +236,36 @@ namespace HioldMod.src.UserTools
                 //存放缓存
                 TranslateCache.Add(key, ttl);
                 string chinese = "";
-                if (ttl[16] != null)
+                try
                 {
-                    chinese = ttl[16];
-                }
-                else if (ttl[4] != null)
-                {
-                    chinese = ttl[4];
-                }
-                else
-                {
-                    foreach (string tmp in ttl)
+                    if (ttl[16] != null)
                     {
-                        if (tmp != null)
+                        chinese = ttl[16];
+                    }
+                    else if (ttl[4] != null)
+                    {
+                        chinese = ttl[4];
+                    }
+                    else
+                    {
+                        foreach (string tmp in ttl)
                         {
-                            chinese = tmp;
-                            break;
+                            if (tmp != null)
+                            {
+                                chinese = tmp;
+                                break;
+                            }
+                        }
+                        //仍未找到不在翻译
+                        if (chinese.Equals(""))
+                        {
+                            chinese = key;
                         }
                     }
-                    //仍未找到不在翻译
-                    if (chinese.Equals(""))
-                    {
-                        chinese = key;
-                    }
+                }
+                catch (Exception)
+                {
+                    chinese = key;
                 }
                 return chinese;
             }
