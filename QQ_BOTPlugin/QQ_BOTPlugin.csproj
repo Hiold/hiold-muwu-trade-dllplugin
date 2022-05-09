@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="bot\Adaptor.cs" />
     <Compile Include="bot\BOT.cs" />
+    <Compile Include="bot\CMD.cs" />
     <Compile Include="bot\Events.cs" />
     <Compile Include="bot\MessageDispacher.cs" />
     <Compile Include="bot\model\api\GroupMessageBean.cs" />

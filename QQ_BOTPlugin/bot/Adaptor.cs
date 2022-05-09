@@ -20,11 +20,18 @@ namespace QQ_BOTPlugin.bot
         /// <returns></returns>
         public static string GetToken(string key)
         {
-            VerifyRequest req = new VerifyRequest() { verifyKey = key };
-            string response = HttpUtils.HttpPost(BOT.host + "/verify", SimpleJson2.SimpleJson2.SerializeObject(req));
-            LogUtils.Loger(response);
-            VerifyResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<VerifyResponse>(response);
-            return resp.session;
+            try
+            {
+                VerifyRequest req = new VerifyRequest() { verifyKey = key };
+                string response = HttpUtils.HttpPost(BOT.host + "/verify", SimpleJson2.SimpleJson2.SerializeObject(req));
+                LogUtils.Loger(response);
+                VerifyResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<VerifyResponse>(response);
+                return resp.session;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -34,10 +41,16 @@ namespace QQ_BOTPlugin.bot
         /// <param name="qq"></param>
         public static void Bind(string sessionKey, int qq)
         {
-            BindRequest req = new BindRequest() { qq = qq, sessionKey = sessionKey };
-            string response = HttpUtils.HttpPost(BOT.host + "/bind", SimpleJson2.SimpleJson2.SerializeObject(req));
-            LogUtils.Loger(response);
-            BindResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<BindResponse>(response);
+            try
+            {
+                BindRequest req = new BindRequest() { qq = qq, sessionKey = sessionKey };
+                string response = HttpUtils.HttpPost(BOT.host + "/bind", SimpleJson2.SimpleJson2.SerializeObject(req));
+                LogUtils.Loger(response);
+                BindResponse resp = SimpleJson2.SimpleJson2.DeserializeObject<BindResponse>(response);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -47,10 +60,17 @@ namespace QQ_BOTPlugin.bot
         /// <returns></returns>
         public static MessageCount GetMessageCount(string sessionKey)
         {
-            string response = HttpUtils.HttpGet(BOT.host + "/countMessage?sessionKey=" + sessionKey);
-            LogUtils.Loger(response);
-            MessageCount resp = SimpleJson2.SimpleJson2.DeserializeObject<MessageCount>(response);
-            return resp;
+            try
+            {
+                string response = HttpUtils.HttpGet(BOT.host + "/countMessage?sessionKey=" + sessionKey);
+                LogUtils.Loger(response);
+                MessageCount resp = SimpleJson2.SimpleJson2.DeserializeObject<MessageCount>(response);
+                return resp;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>

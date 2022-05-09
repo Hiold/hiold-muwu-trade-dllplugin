@@ -170,7 +170,7 @@ namespace HioldMod.src.HttpServer.action
                 UserConfig target = UserConfigService.getUserConfigById(id);
                 if (target != null)
                 {
-                    target.configValue = "0";
+                    target.available = "0";
                 }
 
                 UserConfigService.updateConfig(target);

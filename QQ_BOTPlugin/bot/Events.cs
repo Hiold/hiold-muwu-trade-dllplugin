@@ -27,5 +27,44 @@ namespace QQ_BOTPlugin.bot
                 }
             }
         }
+
+        public static void Lottery(Lottery lo, UserInfo ui, List<AwardInfo> awards)
+        {
+            //启用了抽奖广播，广播信息
+            if (BOT.EnableLottery.Equals("True"))
+            {
+                StringBuilder awardinfo = new StringBuilder("");
+                foreach (AwardInfo ai in awards)
+                {
+                    //游戏内物品
+                    if (ai.type.Equals("1"))
+                    {
+                        awardinfo.Append(ai.itemchinese + "x" + ai.count + "\r\n");
+                    }
+                    //特殊物品
+                    if (ai.type.Equals("2"))
+                    {
+                        awardinfo.Append(ai.itemchinese + "x" + ai.count + "\r\n");
+                    }
+                    //指令
+                    if (ai.type.Equals("3"))
+                    {
+                        awardinfo.Append("一条神秘指令\r\n");
+                    }
+                    //积分
+                    if (ai.type.Equals("4"))
+                    {
+                        awardinfo.Append(ai.count + "积分\r\n");
+                    }
+                    //点券
+                    if (ai.type.Equals("5"))
+                    {
+                        awardinfo.Append(ai.count + "点券\r\n");
+                    }
+                }
+                string content = string.Format("玩家 [{0}] 通过抽奖获得奖励\r\n", ui.name) + awardinfo.ToString();
+                Adaptor.PostGroupMessage(BOT.qunNumber, BOT.token, content);
+            }
+        }
     }
 }

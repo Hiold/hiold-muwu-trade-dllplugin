@@ -25,6 +25,7 @@ namespace QQ_BOTPlugin.bot
         public static int qq = 0;
         public static string token = "";
         public static int qunNumber = 0;
+        public static string EnableLottery = "";
 
         //定时获取消息队列
         public static System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback(HandleMessage), null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
@@ -35,6 +36,7 @@ namespace QQ_BOTPlugin.bot
         /// </summary>
         public static void initBot()
         {
+            Console.WriteLine("正在初始化");
             //加载配置文件
             loadConfig();
             //初始化qqbot
@@ -44,6 +46,9 @@ namespace QQ_BOTPlugin.bot
             //注册监听事件
             TradeSysEvents.RegOnSellEvent(Events.OnSell);
             TradeSysEvents.RegSellOutEvent(Events.SellOut);
+            TradeSysEvents.RegLotteryEvent(Events.Lottery);
+            //运行qq
+            CMD.RunQQMCL();
         }
 
         /// <summary>
@@ -76,6 +81,7 @@ namespace QQ_BOTPlugin.bot
                 jsonMap.TryGetValue("key", out key);
                 jsonMap.TryGetValue("qq", out string qqStr);
                 jsonMap.TryGetValue("qunNumber", out string qunNumberStr);
+                jsonMap.TryGetValue("lottery", out EnableLottery);
                 if (!string.IsNullOrEmpty(qqStr))
                 {
                     int.TryParse(qqStr, out qq);

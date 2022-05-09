@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.Plugins
 {
-    class PluginsLoader
+    public class PluginsLoader
     {
         public static Dictionary<PluginInfo, Assembly> plugins = new Dictionary<PluginInfo, Assembly>();
         public static string PluginPath = string.Format("{0}/plugins/", HioldMod.API.getModDir());

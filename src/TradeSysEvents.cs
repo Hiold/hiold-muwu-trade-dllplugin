@@ -13,6 +13,8 @@ namespace HioldMod.src
         private static List<Action<UserInfo, UserTrade>> OnSellEvent = new List<Action<UserInfo, UserTrade>>();
         //物品被购买事件
         private static List<Action<UserInfo, UserInfo, UserStorage, double>> SellOutEvent = new List<Action<UserInfo, UserInfo, UserStorage, double>>();
+        //抽奖事件
+        private static List<Action<Lottery, UserInfo,List<AwardInfo>>> LotteryEvent = new List<Action<Lottery, UserInfo, List<AwardInfo>>>();
 
 
         public static void RegOnSellEvent(Action<UserInfo, UserTrade> action)
@@ -27,6 +29,10 @@ namespace HioldMod.src
             SellOutEvent.Add(action);
         }
 
+        public static void RegLotteryEvent(Action<Lottery, UserInfo, List<AwardInfo>> action)
+        {
+            LotteryEvent.Add(action);
+        }
 
         /// <summary>
         /// 触发出售
@@ -56,6 +62,22 @@ namespace HioldMod.src
                 Task.Run(() =>
                 {
                     delegateFunc(buyer, seller, ut, priceAll);
+                });
+            }
+        }
+
+        /// <summary>
+        /// 触发抽奖事件
+        /// </summary>
+        /// <param name="lottery"></param>
+        /// <param name="ui"></param>
+        public static void TrigerLotteryEvent(Lottery lottery, UserInfo ui, List<AwardInfo> awards)
+        {
+            foreach (Action<Lottery, UserInfo, List<AwardInfo>> delegateFunc in LotteryEvent)
+            {
+                Task.Run(() =>
+                {
+                    delegateFunc(lottery, ui, awards);
                 });
             }
         }
