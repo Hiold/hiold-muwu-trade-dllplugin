@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HioldMod.src.HttpServer.common
 {
-    class ResponseUtils
+    public class ResponseUtils
     {
         public static void setResponseJSON(HttpListenerResponse response)
         {

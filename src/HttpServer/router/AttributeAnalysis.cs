@@ -48,8 +48,14 @@ namespace HioldMod.src.HttpServer.router
                                             IsServerReady = attribute.IsServerReady,
                                             IsUserLogin = attribute.IsUserLogin,
                                         };
-                                        routers.Add(attribute.url, ri);
-                                        count++;
+
+                                        if (!routers.TryGetValue(attribute.url, out RouterInfo rie))
+                                        {
+                                            routers.Add(attribute.url, ri);
+                                            count++;
+                                        }
+
+                                       
                                     }
                                     catch (Exception e)
                                     {

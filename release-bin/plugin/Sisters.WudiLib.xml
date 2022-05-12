@@ -1,0 +1,1412 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sisters.WudiLib</name>
+    </assembly>
+    <members>
+        <member name="T:Sisters.WudiLib.ApiAccessException">
+            <summary>
+            访问 API 时出现的异常，例如，通过网络访问 API 失败。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.ApiAccessException.#ctor">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.ApiAccessException.#ctor(System.String,System.Exception)">
+            
+        </member>
+        <member name="T:Sisters.WudiLib.HttpApiClient">
+            <summary>
+            通过酷Q HTTP API实现QQ功能。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.HttpApiClient.AccessToken">
+            <summary>
+            API 访问 token。请详见插件文档。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.#ctor">
+            <summary>
+            构造 <see cref="T:Sisters.WudiLib.HttpApiClient"/> 的实例。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.#ctor(System.String)">
+            <summary>
+            构造 <see cref="T:Sisters.WudiLib.HttpApiClient"/> 的实例，并指定
+            <see cref="P:Sisters.WudiLib.HttpApiClient.ApiAddress"/>。请注意在此指定的值不会受子类重载影响。
+            </summary>
+            <param name="apiAddress"></param>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.#ctor(System.String,System.String)">
+            <summary>
+            构造 <see cref="T:Sisters.WudiLib.HttpApiClient"/> 的实例，并指定 <see cref="P:Sisters.WudiLib.HttpApiClient.ApiAddress"/> 和 <see cref="P:Sisters.WudiLib.HttpApiClient.AccessToken"/>。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.HttpApiClient.IsCleaningData">
+            <summary>
+            是否已设置定期清理图片缓存。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.HttpApiClient.ApiAddress">
+            <summary>
+            获取或设置 HTTP API 的监听地址
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.StartClean(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            开始定期访问清理图片的 API。
+            </summary>
+            <param name="intervalMinutes">间隔的毫秒数。</param>
+            <returns>成功开始则为 <c>true</c>，如果之前已经开始过，则为 <c>false</c>。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendPrivateMessageAsync(System.Int64,System.String)">
+            <summary>
+            发送私聊消息。
+            </summary>
+            <param name="userId">对方 QQ 号。</param>
+            <param name="message">要发送的内容（文本）。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendPrivateMessageAsync(System.Int64,Sisters.WudiLib.Message)">
+            <summary>
+            发送私聊消息。
+            </summary>
+            <param name="qq">对方 QQ 号。</param>
+            <param name="message">要发送的内容。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendGroupMessageAsync(System.Int64,System.String)">
+            <summary>
+            发送群消息。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="message">要发送的内容（文本）。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendGroupMessageAsync(System.Int64,Sisters.WudiLib.Message)">
+            <summary>
+            发送群消息。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="message">要发送的内容。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendDiscussMessageAsync(System.Int64,System.String)">
+            <summary>
+            发送讨论组消息。
+            </summary>
+            <param name="discussId">讨论组 ID。</param>
+            <param name="message">要发送的内容（文本）。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendDiscussMessageAsync(System.Int64,Sisters.WudiLib.Message)">
+            <summary>
+            发送讨论组消息。
+            </summary>
+            <param name="discussId">讨论组 ID。</param>
+            <param name="message">要发送的内容。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendMessageAsync(Sisters.WudiLib.Posts.Endpoint,Sisters.WudiLib.Message)">
+            <summary>
+            发送消息。
+            </summary>
+            <param name="endpoint">要发送到的终结点。</param>
+            <param name="message">要发送的消息。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SendMessageAsync(Sisters.WudiLib.Posts.Endpoint,System.String)">
+            <summary>
+            发送消息。
+            </summary>
+            <param name="endpoint">要发送到的终结点。</param>
+            <param name="message">要发送的消息（文本）。</param>
+            <returns>包含消息 ID 的响应数据。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.KickGroupMemberAsync(System.Int64,System.Int64)">
+            <summary>
+            群组踢人。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="userId">要踢的 QQ 号。</param>
+            <returns>是否成功。注意：酷 Q 未处理错误，所以无论是否成功都会返回<c>true</c>。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.RecallMessageAsync(Sisters.WudiLib.Responses.SendMessageResponseData)">
+            <summary>
+            撤回消息（需要Pro）。
+            </summary>
+            <param name="message">消息返回值。</param>
+            <returns>是否成功。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.RecallMessageAsync(System.Int32)">
+            <summary>
+            撤回消息（需要Pro）
+            </summary>
+            <param name="messageId">消息 ID。</param>
+            <returns>是否成功。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.BanGroupMember(System.Int64,System.Int64,System.Int32)">
+            <summary>
+            群组单人禁言。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="userId">要禁言的 QQ 号。</param>
+            <param name="duration">禁言时长，单位秒，0 表示取消禁言。</param>
+            <exception cref="T:Sisters.WudiLib.ApiAccessException"></exception>
+            <returns>如果操作成功，返回 <c>true</c>。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.BanMessageSource(System.Int64,Sisters.WudiLib.Posts.MessageSource,System.Int32)">
+            <summary>
+            自动识别发送者类型（普通/匿名）并禁言。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="messageSource">群消息上报的 <see cref="P:Sisters.WudiLib.Posts.Message.Source"/> 属性。</param>
+            <param name="duration">禁言时长，单位秒，0 表示取消禁言，无法取消匿名用户禁言。</param>
+            <returns>如果操作成功，返回 <c>true</c>。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.BanAnonymousMember(System.Int64,System.String,System.Int32)">
+            <summary>
+            群组匿名用户禁言。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="flag">要禁言的匿名用户的 flag。</param>
+            <param name="duration">禁言时长，单位秒，无法取消匿名用户禁言。</param>
+            <returns>如果操作成功，返回 <c>true</c>。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.BanAnonymousMember(System.Int64,Sisters.WudiLib.Posts.AnonymousInfo,System.Int32)">
+            <summary>
+            群组匿名用户禁言。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="anonymousInfo">要禁言的匿名用户对象（<see cref="P:Sisters.WudiLib.Posts.AnonymousMessage.Anonymous"/> 属性）。</param>
+            <param name="duration">禁言时长，单位秒，无法取消匿名用户禁言。</param>
+            <returns>如果操作成功，返回 <c>true</c>。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.BanWholeGroup(System.Int64,System.Boolean)">
+            <summary>
+            群组全员禁言。
+            </summary>
+            <param name="groupId"></param>
+            <param name="enable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.SetGroupCard(System.Int64,System.Int64,System.String)">
+            <summary>
+            设置群名片。
+            </summary>
+            <param name="groupId">群号。</param>
+            <param name="userId">要设置的 QQ 号。</param>
+            <param name="card">群名片内容，不填或空字符串表示删除群名片。</param>
+            <returns>是否成功。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.GetLoginInfoAsync">
+            <summary>
+            获取登录信息。
+            </summary>
+            <returns>登录信息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.GetFriendListAsync">
+            <summary>
+            获取好友列表。
+            </summary>
+            <returns>好友数组。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.GetGroupListAsync">
+            <summary>
+            获取群列表。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.GetGroupMemberInfoAsync(System.Int64,System.Int64)">
+            <summary>
+            获取群成员信息。
+            </summary>
+            <param name="group">群号。</param>
+            <param name="qq">QQ 号（不可以是登录号）。</param>
+            <returns>获取到的成员信息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.GetGroupMemberListAsync(System.Int64)">
+            <summary>
+            获取群成员列表。
+            </summary>
+            <param name="group">群号。</param>
+            <returns>响应内容为数组，每个元素的内容和上面的 GetGroupMemberInfoAsync() 方法相同，但对于同一个群组的同一个成员，获取列表时和获取单独的成员信息时，某些字段可能有所不同，例如 area、title 等字段在获取列表时无法获得，具体应以单独的成员信息为准。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.GetStatusAsync">
+            <summary>
+            获取插件运行状态。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.CleanImageData">
+            <summary>
+            清理数据目录中的图片。经测试可能无效。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.CallRawJObjectAsync(System.String,System.Object)">
+            <summary>
+            调用 API，并返回反序列化后的 <see cref="T:Newtonsoft.Json.Linq.JObject"/> 对象。默认情况下会调用
+            <see cref="M:Sisters.WudiLib.HttpApiClient.CallRawAsync(System.String,System.String)"/>，重写后也可以不调用。
+            </summary>
+            <param name="action">调用的 API，如 <c>send_msg</c>。</param>
+            <param name="data">参数对象。</param>
+            <exception cref="T:System.Exception">所有异常应由调用方处理。</exception>
+            <returns>由响应字符串反序列化成的 <see cref="T:Newtonsoft.Json.Linq.JObject"/> 对象。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.CallRawAsync(System.String,System.String)">
+            <summary>
+            调用 API，返回响应字符串。是最底层的方法，被
+            <see cref="M:Sisters.WudiLib.HttpApiClient.CallRawJObjectAsync(System.String,System.Object)"/> 使用。如果重写
+            <see cref="M:Sisters.WudiLib.HttpApiClient.CallRawJObjectAsync(System.String,System.Object)"/>，也可以不调用此方法。
+            </summary>
+            <param name="action">调用的 API，如 <c>send_msg</c>。</param>
+            <param name="json">序列化过的 JSON 参数。</param>
+            <exception cref="T:System.Exception">所有异常应由调用方处理。</exception>
+            <returns>响应的 JSON 字符串。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.PostAsync``1(System.String,System.Object)">
+            <summary>
+            通过 POST 请求访问API，返回数据
+            </summary>
+            <typeparam name="T">返回的数据类型</typeparam>
+            <param name="url">API请求地址</param>
+            <param name="data">请求参数</param>
+            <returns>从 HTTP API 返回的数据</returns>
+            <exception cref="T:Sisters.WudiLib.ApiAccessException">网络错误等。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>data</c> was null.</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.PostAsync(System.String,System.Object)">
+            <exception cref="T:Sisters.WudiLib.ApiAccessException">网络错误等。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>data</c> was null.</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.CallApiAsync``1(System.String,System.Object)">
+            <summary>
+            传入 <c>action</c> 和 <c>data</c> 的方法。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.CallAsync``1(System.String,System.Object)">
+            <summary>
+            调用指定 API，并指定返回数据。
+            </summary>
+            <typeparam name="T">返回数据类型。</typeparam>
+            <param name="action">要调用的 API 功能。</param>
+            <param name="data">参数数据。</param>
+            <returns>返回数据。如果不成功（但不是网络错误），则为 <c>default</c>。</returns>
+            <exception cref="T:Sisters.WudiLib.ApiAccessException">网络错误等。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>data</c> was null -or- <c>action</c> was null.</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.HttpApiClient.CallAsync(System.String,System.Object)">
+            <summary>
+            调用指定 API，返回是否成功。
+            </summary>
+            <param name="action">要调用的 API 功能。</param>
+            <param name="data">参数数据。</param>
+            <returns>是否成功（<see cref="P:Sisters.WudiLib.Responses.CqHttpApiResponse.IsAcceptableStatus"/> 为 <c>true</c>）。</returns>
+            <exception cref="T:Sisters.WudiLib.ApiAccessException">网络错误等。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>data</c> was null -or- <c>action</c> was null.</exception>
+        </member>
+        <member name="T:Sisters.WudiLib.Message">
+            <summary>
+            各种消息类型的基类。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Message.#ctor">
+            <summary>
+            构造 <see cref="T:Sisters.WudiLib.Message"/> 实例必须运行的方法。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Message.Serializing">
+            <summary>
+            返回发送时要序列化的对象。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Message.Raw">
+            <summary>
+            用字符串表示的原始消息。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.MessageEscapingExtensions.BeforeSend(System.String,System.Boolean)">
+            <summary>
+            转义（编码）。
+            </summary>
+            <param name="before">要编码的字符串。</param>
+            <param name="isCqCodeArg">是否是CQ码。如果为 <c>true</c>，也会转义逗号（<c>,</c>）；否则不会转义逗号。</param>
+            <returns>转义结果。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.MessageEscapingExtensions.AfterReceive(System.String)">
+            <summary>
+            反转义（解码）。
+            </summary>
+            <param name="received">要解码的字符串。</param>
+            <returns>解码结果。</returns>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.AnonymousInfo">
+            <summary>
+            匿名用户信息。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.AnonymousInfo.Flag">
+            <summary>匿名用户 flag，在调用禁言 API 时需要传入。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.AnonymousInfo.Id">
+            <summary>匿名用户 ID。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.AnonymousInfo.Name">
+            <summary>匿名用户名称。</summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.ApiPostListener">
+            <summary>
+            上报数据监听器。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ApiPostListener.ApiClient">
+            <summary>
+            获取或设置 HTTP API 客户端实例，将在发生事件时传给事件处理器。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ApiPostListener.PostAddress">
+            <summary>
+            获取或设置 HTTP API 的上报地址。如果已经开始监听，则设置无效。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ApiPostListener.ForwardTo">
+            <summary>
+            获取或设置转发地址。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.SetSecret(System.String)">
+            <summary>
+            设置 secret。用于验证上报数据是否来自插件。详见插件配置。
+            </summary>
+            <param name="secret">配置中的 secret 字段。</param>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ApiPostListener.IsListening">
+            <summary>
+            获取当前是否监听 HTTP API 的上报数据。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.#ctor">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.#ctor(System.String)">
+            <summary>
+            通过上报地址构造 <see cref="T:Sisters.WudiLib.Posts.ApiPostListener"/> 实例。
+            </summary>
+            <param name="address">要监听的上报地址。</param>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.#ctor(System.Int32)">
+            <summary>通过监听端口构造 <see cref="T:Sisters.WudiLib.Posts.ApiPostListener"/> 实例。所有发往该端口的数据都将被监听。</summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"><c>port</c> 小于等于 <see
+            cref="F:System.Net.IPEndPoint.MinPort"/>，或者大于 <see cref="F:System.Net.IPEndPoint.MaxPort"/>。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.StartListen">
+            <summary>
+            开始监听上报。
+            </summary>
+            <exception cref="T:System.Exception">启动时出现错误。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.GetContentAndForward(System.Net.HttpListenerRequest)">
+            <summary>
+            从请求中读取内容。
+            </summary>
+            <param name="request">收到的 Http 请求。</param>
+            <returns>读取到的内容。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.Verify(System.Byte[],System.String,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Secret 为 <c>null</c> 时直接返回 <c>true</c>。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.ForwardAsync(System.String,System.String)">
+            <summary>
+            异步通过 HTTP 转发上报事件。转发失败时不会有任何提示。
+            </summary>
+            <param name="content">转发内容。</param>
+            <param name="signature">HTTP 头部的签名。</param>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.ForwardAsync(System.Byte[],System.Text.Encoding,System.String)">
+            <summary>
+            异步通过 HTTP 转发上报事件。转发失败时不会有任何提示。
+            </summary>
+            <param name="content">转发内容。</param>
+            <param name="encoding">字符编码。</param>
+            <param name="signature">HTTP 头部的签名。</param>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.OnException">
+            <summary>
+            处理上报中发生了异常。可能是业务逻辑中的异常，也可能是数据传输或解析过程中的异常。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.OnExceptionWithRawContent">
+            <summary>
+            处理上报中发生了异常。可能是业务逻辑中的异常，也可能是数据传输或解析过程中的异常。此事件会包含上报的原始数据。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.LogException(System.Exception,System.String)">
+            <summary>
+            触发 <see cref="E:Sisters.WudiLib.Posts.ApiPostListener.OnException"/> 和 <see cref="E:Sisters.WudiLib.Posts.ApiPostListener.OnExceptionWithRawContent"/> 事件。
+            </summary>
+            <param name="e">异常。</param>
+            <param name="content">上报内容。</param>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.ProcessPost(System.String)">
+            <summary>
+            传入收到的 JSON 上报数据，调用处理器处理。
+            </summary>
+            <param name="content">收到的 JSON 数据。</param>
+            <returns>由处理器返回的数据。</returns>
+            <exception cref="T:System.Exception">处理时发生异常。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.ProcessPost(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            传入上报事件的 <see cref="T:Newtonsoft.Json.Linq.JObject"/>，调用处理器处理。
+            </summary>
+            <param name="contentObject">上报事件对应的 <see cref="T:Newtonsoft.Json.Linq.JObject"/>。</param>
+            <returns>响应。</returns>
+            <exception cref="T:System.Exception">处理时发生异常。</exception>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupFileUploadedEvent">
+            <summary>
+            群文件上传。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupAdminSetEvent">
+            <summary>
+            已设置新的群管理员。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupAdminUnsetEvent">
+            <summary>
+            已取消群管理员。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.FriendAddedEvent">
+            <summary>
+            好友添加。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupMemberDecreasedEvent">
+            <summary>
+            群成员减少。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.KickedEvent">
+            <summary>
+            被踢出群。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupMemberIncreasedEvent">
+            <summary>
+            群成员增加。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupAddedEvent">
+            <summary>
+            加入新群时发生的事件。注意此事件没有 <see cref="P:Sisters.WudiLib.Posts.GroupMemberChangeNotice.OperatorId"/> 的数据（至少 Invite 没有，Approve 不清楚）。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupBanEvent">
+            <summary>
+            群禁言事件。包括禁言和解除禁言。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupRequestEvent">
+            <summary>
+            收到加群请求事件。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupInviteEvent">
+            <summary>
+            收到加群邀请事件。此时 <see cref="P:Sisters.WudiLib.Posts.Request.Comment"/> 并不存在。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.FriendRequestEvent">
+            <summary>
+            收到好友请求事件。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.MessageEvent">
+            <summary>
+            收到消息事件。包括私聊、群聊和讨论组消息，但不包括匿名的群消息。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.AnonymousMessageEvent">
+            <summary>
+            收到匿名群消息事件。
+            </summary>
+        </member>
+        <member name="E:Sisters.WudiLib.Posts.ApiPostListener.GroupNoticeEvent">
+            <summary>
+            群聊信息事件。例如禁言等。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.ApproveAllGroupRequests(Sisters.WudiLib.HttpApiClient,Sisters.WudiLib.Posts.GroupRequest)">
+            <summary>
+            同意全部群组请求（请求、邀请）的事件处理器。
+            </summary>
+            <param name="api"></param>
+            <param name="groupRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.ApproveAllFriendRequests(Sisters.WudiLib.HttpApiClient,Sisters.WudiLib.Posts.FriendRequest)">
+            <summary>
+            同意全部好友请求的事件处理器。
+            </summary>
+            <param name="api"></param>
+            <param name="friendRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.RepeatAsync(Sisters.WudiLib.HttpApiClient,Sisters.WudiLib.Posts.Message)">
+            <summary>
+            复读的事件处理器。并没有什么卵用。
+            </summary>
+            <param name="api"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ApiPostListener.Say(System.String)">
+            <summary>
+            当收到消息时，在同一处发送指定内容消息的事件处理器。并没有什么卵用。
+            </summary>
+            <param name="something"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.Endpoint">
+            <summary>
+            表示要将消息发送至的地点的类。可以通过 <see cref="T:Sisters.WudiLib.Posts.Endpoint"/> 实例唯一确定要将消息发送至哪里。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.Endpoint.Equals(System.Object)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.Endpoint.Equals(Sisters.WudiLib.Posts.Endpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.Endpoint.GetHashCode">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.Endpoint.ToString">
+            <summary>
+            获取形如 {EndpointType}/{Id} 的字符串。
+            </summary>
+            <returns>形如 {EndpointType}/{Id} 的字符串。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.Endpoint.op_Equality(Sisters.WudiLib.Posts.Endpoint,Sisters.WudiLib.Posts.Endpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.Endpoint.op_Inequality(Sisters.WudiLib.Posts.Endpoint,Sisters.WudiLib.Posts.Endpoint)">
+            
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.PrivateEndpoint">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.PrivateEndpoint.#ctor(System.Int64)">
+            
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.PrivateEndpoint.UserId">
+            <summary>
+            用户 QQ 号。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.PrivateEndpoint.Equals(System.Object)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.PrivateEndpoint.Equals(Sisters.WudiLib.Posts.PrivateEndpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.PrivateEndpoint.GetHashCode">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.PrivateEndpoint.op_Equality(Sisters.WudiLib.Posts.PrivateEndpoint,Sisters.WudiLib.Posts.PrivateEndpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.PrivateEndpoint.op_Inequality(Sisters.WudiLib.Posts.PrivateEndpoint,Sisters.WudiLib.Posts.PrivateEndpoint)">
+            
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.GroupEndpoint">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupEndpoint.#ctor(System.Int64)">
+            
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.GroupEndpoint.GroupId">
+            <summary>
+            群号。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupEndpoint.Equals(System.Object)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupEndpoint.Equals(Sisters.WudiLib.Posts.GroupEndpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupEndpoint.GetHashCode">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupEndpoint.op_Equality(Sisters.WudiLib.Posts.GroupEndpoint,Sisters.WudiLib.Posts.GroupEndpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupEndpoint.op_Inequality(Sisters.WudiLib.Posts.GroupEndpoint,Sisters.WudiLib.Posts.GroupEndpoint)">
+            
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.DiscussEndpoint">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.DiscussEndpoint.#ctor(System.Int64)">
+            
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.DiscussEndpoint.DiscussId">
+            <summary>
+            讨论组 ID。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.DiscussEndpoint.Equals(System.Object)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.DiscussEndpoint.Equals(Sisters.WudiLib.Posts.DiscussEndpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.DiscussEndpoint.GetHashCode">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.DiscussEndpoint.op_Equality(Sisters.WudiLib.Posts.DiscussEndpoint,Sisters.WudiLib.Posts.DiscussEndpoint)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.DiscussEndpoint.op_Inequality(Sisters.WudiLib.Posts.DiscussEndpoint,Sisters.WudiLib.Posts.DiscussEndpoint)">
+            
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.GroupBanType">
+            <summary>
+            表示禁言类型（禁言或解除禁言）。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.GroupBanType.Ban">
+            <summary>
+            禁言。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.GroupBanType.LiftBan">
+            <summary>
+            解除禁言。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.MessageSource">
+            <summary>
+            表示消息发送人。可能是普通来源或匿名来源。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.MessageSource.IsAnonymous">
+            <summary>
+            消息发送者是否匿名。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.MessageSource.Anonymous">
+            <summary>匿名用户名称。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.MessageSource.AnonymousFlag">
+            <summary>匿名用户 flag，在调用禁言 API 时需要传入。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.MessageSource.UserId">
+            <summary>
+            发送者 QQ 号。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.MessageSource.Equals(System.Object)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.MessageSource.Equals(Sisters.WudiLib.Posts.MessageSource)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.MessageSource.GetHashCode">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.MessageSource.op_Equality(Sisters.WudiLib.Posts.MessageSource,Sisters.WudiLib.Posts.MessageSource)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.MessageSource.op_Inequality(Sisters.WudiLib.Posts.MessageSource,Sisters.WudiLib.Posts.MessageSource)">
+            
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.Message.PrivateType">
+            <summary>
+            表示此消息为私聊消息。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.Message.GroupType">
+            <summary>
+            表示此消息为群聊消息。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.Message.DiscussType">
+            <summary>
+            表示此消息为讨论组消息。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.Message.MessageType">
+            <summary>
+            消息类型（群、私聊、讨论组）。不建议使用本属性判断类型，请使用 <c>is</c> 运算符进行判断。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.GroupMessage.Sender">
+            <summary>
+            发送人信息。需要 CoolQ HTTP API 插件版本 >= 4.5.0，部分字段需要 >= 4.7.0。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.GroupBanNotice">
+            <summary>
+            群组禁言事件。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.GroupBanNotice.Type">
+            <summary>
+            禁言类型（禁言或解除禁言）。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.GroupBanNotice.Duration">
+            <summary>
+            禁言时长（秒）。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.GroupMemberIncreaseNotice.AdminApprove">
+            <summary>
+            表示管理员已同意入群。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.GroupMemberIncreaseNotice.AdminInvite">
+            <summary>
+            表示管理员邀请入群。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.GroupMemberDecreaseNotice.Leave">
+            <summary>
+            表示主动退群。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.GroupMemberDecreaseNotice.Kick">
+            <summary>
+            成员被踢。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.ReceivedMessage">
+            <summary>
+            从上报中收到的消息。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.ReceivedMessage.CqCodePattern">
+            <summary>
+            也在 <see cref="F:Sisters.WudiLib.Section.CqCodeTypePattern"/> 中提到。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Posts.ReceivedMessage._message">
+            <summary>
+            如果上报格式是 string，则表示原始内容；否则为 <c>null</c>。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ReceivedMessage.Sections">
+            <summary>
+            获取 <see cref="T:Sisters.WudiLib.Section"/> 列表。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ReceivedMessage.#ctor(System.Object)">
+            <exception cref="T:System.InvalidOperationException">传入参数不符合要求。</exception>
+            <param name="o">应为 <see cref="T:System.String"/> 类型或者 <see cref="T:Newtonsoft.Json.Linq.JArray"/> 类型。</param>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ReceivedMessage.IsPlaintext">
+            <summary>
+            获取消息是否是纯文本。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ReceivedMessage.Raw">
+            <summary>
+            获取不经处理的原始消息内容。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ReceivedMessage.Fix">
+            <summary>
+            获取固定消息。可以将此字符串保存到本地，在任何时候发送时，都可以发送此消息，不用担心缓存被清或者文件过期。
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.AggregateException">多半是网络错误。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ReceivedMessage.GetFixedImageSection(System.String)">
+            <summary>
+            获取<c>url</c>指向图片的固定消息。
+            </summary>
+            <param name="url">指向图片的url。</param>
+            <returns>可以发送该图片的消息。</returns>
+            <exception cref="T:System.AggregateException">网络错误。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>url</c>是<c>null</c>。</exception>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.ReceivedMessage.Text">
+            <summary>
+            获取消息的文本部分。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ReceivedMessage.TryGetPlainText(System.String@)">
+            <summary>
+            判断消息内容是否是纯文本，如果是纯文本，则获取此文本内容。使用 string
+            上报类型时比查询两次属性快；array 上报类型时与先查询 <see cref="P:Sisters.WudiLib.Posts.ReceivedMessage.IsPlaintext"
+            /> 属性，再查询 <see cref="P:Sisters.WudiLib.Posts.ReceivedMessage.Text"/> 属性没有区别。
+            </summary>
+            <param name="text">如果是纯文本，则为文本内容；否则为 <c>null</c>。</param>
+            <returns>是否为纯文本。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ReceivedMessage.Forward">
+            <summary>
+            转发：转换成可以发送的格式。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.ReceivedMessage.GetSections">
+            <summary>
+            获取 <see cref="T:Sisters.WudiLib.Section"/> 。
+            </summary>
+            <returns><see cref="T:Sisters.WudiLib.Section"/> 列表。如果上报格式不是数组，则为 <c>null</c>。</returns>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.Response">
+            <summary>
+            上报响应数据。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.Response.Block">
+            <summary>
+            是否拦截事件（不再让后面的插件处理）。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.RequestResponse">
+            <summary>
+            请求响应数据。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.RequestResponse.#ctor">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.RequestResponse.#ctor(System.Boolean)">
+            <summary>
+            构造同意或者拒绝请求的响应。一般用于同意请求。
+            </summary>
+            <param name="approve">是否同意请求。</param>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.RequestResponse.Approve">
+            <summary>
+            是否同意请求。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.GroupRequestResponse">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupRequestResponse.#ctor">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupRequestResponse.#ctor(System.String)">
+            <summary>
+            构造拒绝请求的响应。
+            </summary>
+            <param name="reason">拒绝理由。</param>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.GroupRequestResponse.Reason">
+            <summary>
+            拒绝理由（仅在拒绝时有效）。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupRequestResponse.op_Implicit(System.Boolean)~Sisters.WudiLib.Posts.GroupRequestResponse">
+            <summary>
+            从 <see cref="T:System.Boolean"/> 转换 <see cref="T:Sisters.WudiLib.Posts.GroupRequestResponse"/>。
+            </summary>
+            <param name="approve"></param>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.GroupRequestResponse.op_Implicit(System.String)~Sisters.WudiLib.Posts.GroupRequestResponse">
+            <summary>
+            从 <see cref="T:System.String"/> 转换 <see cref="T:Sisters.WudiLib.Posts.GroupRequestResponse"/>。转换为拒绝请求。
+            </summary>
+            <param name="reason">拒绝理由。</param>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.FriendRequestResponse">
+            <summary>
+            加好友请求响应。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.FriendRequestResponse.#ctor">
+            <summary>
+            构造加好友响应。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.FriendRequestResponse.#ctor(System.String)">
+            <summary>
+            构造接受请求响应。
+            </summary>
+            <param name="remark">好友备注。</param>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.FriendRequestResponse.Remark">
+            <summary>
+            添加后的好友备注（仅在同意时有效）。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Posts.FriendRequestResponse.op_Implicit(System.Boolean)~Sisters.WudiLib.Posts.FriendRequestResponse">
+            <summary>
+            从 <see cref="T:System.Boolean"/> 转换 <see cref="T:Sisters.WudiLib.Posts.FriendRequestResponse"/>。
+            </summary>
+            <param name="approve"></param>
+        </member>
+        <member name="T:Sisters.WudiLib.Posts.SenderInfo">
+            <summary>群消息发送人信息。需要 CoolQ HTTP API 插件版本 >= 4.5.0，部分字段需要 >= 4.7.0。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.UserId">
+            <summary>发送者 QQ 号。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.Sex">
+            <summary>性别。可能会在以后改为枚举。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.Nickname">
+            <summary>昵称。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.Age">
+            <summary>年龄。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.InGroupName">
+            <summary>群名片／备注。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.Area">
+            <summary>地区。需要 CoolQ HTTP API 插件版本 >= 4.7.0。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.Level">
+            <summary>成员等级。需要 CoolQ HTTP API 插件版本 >= 4.7.0。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.Authority">
+            <summary>角色。需要 CoolQ HTTP API 插件版本 >= 4.7.0。</summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Posts.SenderInfo.Title">
+            <summary>专属头衔。需要 CoolQ HTTP API 插件版本 >= 4.7.0。</summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.CqHttpApiResponse`1">
+            <summary>
+            包含泛型的响应。
+            </summary>
+            <typeparam name="T">响应数据类型。</typeparam>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.CqHttpApiResponse">
+            <summary>
+            响应。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.CqHttpApiResponse.IsOk">
+            <summary>
+            如果 <see cref="P:Sisters.WudiLib.Responses.CqHttpApiResponse.Retcode"/> 是 <c>0</c>，则为 <c>true</c>；否则为 <c>false</c>。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.CqHttpApiResponse.IsAcceptableStatus">
+            <summary>
+            如果 <see cref="P:Sisters.WudiLib.Responses.CqHttpApiResponse.Retcode"/> 是 <c>0</c> 或 <c>1</c>，则为 <c>true</c>；否则为 <c>false</c>。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.Friend">
+            <summary>
+            好友。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Friend.UserId">
+            <summary>
+            QQ 号。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Friend.Remark">
+            <summary>
+            备注或昵称。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Friend.Nickname">
+            <summary>
+            昵称。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.GroupInfo">
+            <summary>
+            <c>get_group_list</c> 返回的群信息。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.GroupInfo.Id">
+            <summary>
+            群号。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.GroupInfo.Name">
+            <summary>
+            群名称。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.GroupMemberInfo.Sex">
+            <summary>
+            性别。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.GroupMemberInfo.Area">
+            <summary>
+            地区。<see cref="M:Sisters.WudiLib.HttpApiClient.GetGroupMemberListAsync(System.Int64)"/> 中无法获取。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.GroupMemberInfo.Level">
+            <summary>
+            成员等级。<see cref="M:Sisters.WudiLib.HttpApiClient.GetGroupMemberListAsync(System.Int64)"/> 中无法获取。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.GroupMemberInfo.IsUnfriendly">
+            <summary>
+            是否不良记录成员。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.GroupMemberInfo.Title">
+            <summary>
+            专属头衔。<see cref="M:Sisters.WudiLib.HttpApiClient.GetGroupMemberListAsync(System.Int64)"/> 中无法获取。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.LoginInfo">
+            <summary>
+            包含 QQ 号和昵称的登录信息
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.SendDiscussMessageResponseData">
+            <summary>
+            发送讨论组消息后返回的信息
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.SendGroupMessageResponseData">
+            <summary>
+            发送群消息后返回的信息
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.SendMessageResponseData">
+            <summary>
+            发送消息后返回的数据
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.SendMessageResponseData.MessageId">
+            <summary>
+            消息 ID
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.SendPrivateMessageResponseData">
+            <summary>
+            发送私聊消息后返回的信息
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.Sex">
+            <summary>
+            性别。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Responses.Sex.Unknown">
+            <summary>
+            未知。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Responses.Sex.Male">
+            <summary>
+            男性。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Responses.Sex.Female">
+            <summary>
+            女性。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Responses.Status">
+            <summary>
+            表示 CQ HTTP 插件运行状态。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Status.AppEnabled">
+            <summary>
+            HTTP API 插件已启用。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Status.AppGood">
+            <summary>
+            HTTP API 插件正常运行（已初始化、已启用、各内部插件正常运行）。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Status.AppInitialized">
+            <summary>
+            HTTP API 插件已初始化。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Status.Good">
+            <summary>
+            HTTP API 插件状态符合预期，意味着插件已初始化，内部插件都在正常运行，且 QQ 在线。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Status.Online">
+            <summary>
+            当前 QQ 在线，<c>null</c> 表示无法查询到在线状态。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Responses.Status.PluginsGood">
+            <summary>
+            HTTP API 的各内部插件是否正常运行。
+            </summary>
+        </member>
+        <member name="T:Sisters.WudiLib.Section">
+            <summary>
+            消息段。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.Section.Type">
+            <summary>
+            仅支持大小写字母、数字、短横线（-）、下划线（_）及点号（.）。
+            </summary>
+        </member>
+        <member name="F:Sisters.WudiLib.Section.CqCodeTypePattern">
+            <summary>
+            被 <see cref="F:Sisters.WudiLib.Posts.ReceivedMessage.CqCodePattern"/> 包含。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.CheckArguments(System.String,System.String)">
+            <exception cref="T:System.ArgumentException">类型或key不符合CQ码规范。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.#ctor(System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
+            <exception cref="T:System.ArgumentNullException"><c>data</c> or <c>type</c> was null.</exception>
+            <exception cref="T:System.ArgumentException">类型或key不符合CQ码规范。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.#ctor(System.String,System.ValueTuple{System.String,System.String}[])">
+            <exception cref="T:System.ArgumentNullException"><c>data</c> or <c>type</c> was null.</exception>
+            <exception cref="T:System.ArgumentException">类型或key不符合CQ码规范。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <param name="jObject"></param>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.Equals(System.Object)">
+            
+        </member>
+        <member name="M:Sisters.WudiLib.Section.Equals(Sisters.WudiLib.Section)">
+            <summary>
+            确定给定消息段是否等于当前消息段。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.ToString">
+            <summary>
+            将消息段转换为 <see cref="T:System.String"/>。如果类型为 <see cref="F:Sisters.WudiLib.Section.TextType"/>，则为文本内容（不转义）；否则与 CQ 码形式相同。
+            </summary>
+            <returns>转换后的 <see cref="T:System.String"/>。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.Text(System.String)">
+            <summary>
+            构造文本消息段。
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.At(System.Int64)">
+            <summary>
+            构造 At 消息段。
+            </summary>
+            <param name="qq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.AtAll">
+            <summary>
+            构造 At 全体成员消息段。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.LocalImage(System.String)">
+            <summary>
+            构造本地图片消息段。
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.NetImage(System.String)">
+            <summary>
+            构造网络图片消息段。
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.NetImage(System.String,System.Boolean)">
+            <summary>
+            构造网络图片消息段。可以指定是否使用缓存。
+            </summary>
+            <param name="url"></param>
+            <param name="noCache">是否使用缓存。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Section.MusicCustom(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            构造音乐自定义分享消息段。
+            </summary>
+            <param name="introductionUrl">分享链接，即点击分享后进入的音乐页面（如歌曲介绍页）。</param>
+            <param name="audioUrl">音频链接（如mp3链接）。</param>
+            <param name="title">音乐的标题，建议12字以内。</param>
+            <param name="profile">音乐的简介，建议30字以内。该参数可被忽略。</param>
+            <param name="imageUrl">音乐的封面图片链接。若参数为空或被忽略，则显示默认图片。</param>
+            <exception cref="T:System.ArgumentException"><c>introductionUrl</c>或<c>audioUrl</c>或<c>title</c>为空。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>introductionUrl</c>或<c>audioUrl</c>或<c>title</c>为<c>null</c>。</exception>
+            <returns></returns>
+        </member>
+        <member name="T:Sisters.WudiLib.SectionMessage">
+            <summary>
+            旧设计，正计划修改。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.SectionMessage.#ctor(System.Collections.Generic.IEnumerable{Sisters.WudiLib.Section})">
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Sisters.WudiLib.SectionMessage.#ctor(Sisters.WudiLib.Section[])">
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="T:Sisters.WudiLib.SendingMessage">
+            <summary>
+            表示将要发送的消息。
+            </summary>
+        </member>
+        <member name="P:Sisters.WudiLib.SendingMessage.CanConcat">
+            <summary>
+            指示此 <see cref="T:Sisters.WudiLib.SendingMessage"/> 是否可以与其他 <see cref="T:Sisters.WudiLib.SendingMessage"/> 连接。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.#ctor">
+            <summary>
+            构造新的消息实例。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.#ctor(System.Collections.Generic.IEnumerable{Sisters.WudiLib.Section})">
+            <summary>
+            从 <see cref="T:System.Collections.Generic.IEnumerable`1"/> 创建消息。
+            </summary>
+            <param name="sections"></param>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.#ctor(System.String)">
+            <summary>
+            从文本构造新的消息实例。
+            </summary>
+            <param name="text">消息内容文本。</param>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.#ctor(Sisters.WudiLib.SendingMessage,Sisters.WudiLib.SendingMessage)">
+            <summary>
+            从两个 <see cref="T:Sisters.WudiLib.SendingMessage"/> 实例创建消息。
+            </summary>
+            <param name="message1">在前面的消息。</param>
+            <param name="message2">在后面的消息。</param>
+            <exception cref="T:System.InvalidOperationException">有无法连接的消息。</exception>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.#ctor(Sisters.WudiLib.Section)">
+            <summary>
+            从 <see cref="T:Sisters.WudiLib.Section"/> 实例创建消息。
+            </summary>
+            <param name="section">包含的消息段。</param>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.At(System.Int64)">
+            <summary>
+            构造 At 群、讨论组成员消息。
+            </summary>
+            <param name="qq">要 At 的 QQ 号。</param>
+            <returns>构造的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.AtAll">
+            <summary>
+            构造 At 群、讨论组全体成员的消息。
+            </summary>
+            <returns>构造的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.LocalImage(System.String)">
+            <summary>
+            构造包含本地图片的消息。
+            </summary>
+            <param name="path">本地图片的路径。</param>
+            <returns>构造的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.LocalImage(System.String,System.Boolean)">
+            <summary>
+            构造包含本地图片的消息。可以把文件转换成 base64 形式，以便在其他机器上发送。
+            </summary>
+            <param name="path">本地图片的路径。</param>
+            <param name="convertToBase64">是否要把图片消息转换为 base64 形式。</param>
+            <exception cref="T:System.Exception">详见 <see cref="M:System.IO.File.ReadAllBytes(System.String)"/> 所引发的异常。</exception>
+            <returns>构造的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.ByteArrayImage(System.Byte[])">
+            <summary>
+            从 <see cref="T:System.Byte"/> 数组构造消息。
+            </summary>
+            <param name="bytes">图片 <see cref="T:System.Byte"/> 数组。</param>
+            <exception cref="T:System.ArgumentNullException"><c>bytes</c> 为 <c>null</c>。</exception>
+            <returns>构造的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.NetImage(System.String)">
+            <summary>
+            构造一条消息，包含来自网络的图片。
+            </summary>
+            <param name="url">网络图片 URL。</param>
+            <returns>构造的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.NetImage(System.String,System.Boolean)">
+            <summary>
+            构造一条消息，包含来自网络的图片。可以指定是否不使用缓存。
+            </summary>
+            <param name="url">网络图片 URL。</param>
+            <param name="noCache">是否不使用缓存（默认使用）。</param>
+            <returns>构造的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.NetRecord(System.String,System.Boolean)">
+            <summary>
+            网络语音。
+            </summary>
+            <param name="url">网络语音 URL。</param>
+            <param name="noCache">是否不使用缓存（默认使用）。</param>
+            <returns>网络语音消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.NetRecord(System.String)">
+            <summary>
+            网络语音。
+            </summary>
+            <param name="url">网络语音 URL。</param>
+            <returns>网络语音消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.MusicCustom(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            构造一条消息，包含音乐自定义分享，该分享指定了分享链接、音频链接、标题、简介和封面图片链接。
+            </summary>
+            <param name="introductionUrl">分享链接，即点击分享后进入的音乐页面（如歌曲介绍页）。</param>
+            <param name="audioUrl">音频链接（如mp3链接）。</param>
+            <param name="title">音乐的标题，建议12字以内。</param>
+            <param name="profile">音乐的简介，建议30字以内。该参数可被忽略。</param>
+            <param name="imageUrl">音乐的封面图片链接。若参数为空或被忽略，则显示默认图片。</param>
+            <exception cref="T:System.ArgumentException"><c>introductionUrl</c>或<c>audioUrl</c>或<c>title</c>为空。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>introductionUrl</c>或<c>audioUrl</c>或<c>title</c>为<c>null</c>。</exception>
+            <returns>包含该音乐自定义分享的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.MusicCustom(System.String,System.String,System.String)">
+            <summary>
+            构造一条消息，包含音乐自定义分享，该分享指定了分享链接、音频链接和标题。
+            </summary>
+            <param name="introductionUrl">分享链接，即点击分享后进入的音乐页面（如歌曲介绍页）。</param>
+            <param name="audioUrl">音频链接（如mp3链接）。</param>
+            <param name="title">音乐的标题，建议12字以内。</param>
+            <exception cref="T:System.ArgumentException"><c>introductionUrl</c>或<c>audioUrl</c>或<c>title</c>为空。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>introductionUrl</c>或<c>audioUrl</c>或<c>title</c>为<c>null</c>。</exception>
+            <returns>包含该音乐自定义分享的消息。</returns>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.Shake">
+            <summary>
+            戳一戳。
+            </summary>
+        </member>
+        <member name="M:Sisters.WudiLib.SendingMessage.op_Addition(Sisters.WudiLib.SendingMessage,Sisters.WudiLib.SendingMessage)">
+            <summary>
+            使用 <c>+</c> 连接两条消息。
+            </summary>
+            <param name="left"></param>
+            <param name="right"></param>
+            <exception cref="T:System.InvalidOperationException">一个或多个消息不可连接。</exception>
+            <returns></returns>
+        </member>
+        <member name="M:Sisters.WudiLib.Utilities.CheckStringArgument(System.String,System.String)">
+            <summary>
+            检查<see cref="T:System.String"/>是否为<c>null</c>或空值，并抛出相应的异常。
+            </summary>
+            <param name="argument">要检查的<see cref="T:System.String"/>。</param>
+            <param name="paramName">TODO</param>
+            <exception cref="T:System.ArgumentException"><c>argument</c>为空。</exception>
+            <exception cref="T:System.ArgumentNullException"><c>argument</c>为<c>null</c>。</exception>
+        </member>
+    </members>
+</doc>

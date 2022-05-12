@@ -1,6 +1,8 @@
 ﻿using HioldMod.src;
+using HioldMod.src.HttpServer.router;
 using QQ_BOTPlugin.bot.model;
 using QQ_BOTPlugin.bot.model.message;
+using QQ_BOTPlugin.bot.websocket;
 using SimpleJson2;
 using System;
 using System.Collections.Generic;
@@ -26,9 +28,13 @@ namespace QQ_BOTPlugin.bot
         public static string token = "";
         public static int qunNumber = 0;
         public static string EnableLottery = "";
+        public static string password = "";
+        public static bool isAlive = false;
 
         //定时获取消息队列
-        public static System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback(HandleMessage), null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+        //public static System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback(HandleMessage), null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+        //超过一分钟没有心跳数据收到，暂停功能
+        public static System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback((object c) => { isAlive = false; }), null, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
 
 
         /// <summary>
@@ -37,18 +43,22 @@ namespace QQ_BOTPlugin.bot
         public static void initBot()
         {
             Console.WriteLine("正在初始化");
+            //分析载入插件后的接口数据
+            AttributeAnalysis.AnalysisStart();
             //加载配置文件
             loadConfig();
             //初始化qqbot
-            token = Adaptor.GetToken(key);
-            Adaptor.Bind(token, qq);
-            MessageCount mc = Adaptor.GetMessageCount(token);
+            //token = Adaptor.GetToken(key);
+            //Adaptor.Bind(token, qq);
+            //MessageCount mc = Adaptor.GetMessageCount(token);
             //注册监听事件
             TradeSysEvents.RegOnSellEvent(Events.OnSell);
             TradeSysEvents.RegSellOutEvent(Events.SellOut);
             TradeSysEvents.RegLotteryEvent(Events.Lottery);
             //运行qq
             CMD.RunQQMCL();
+            //初始化websocket
+            WebSocketHelper.InitWebSocket();
         }
 
         /// <summary>
@@ -82,6 +92,7 @@ namespace QQ_BOTPlugin.bot
                 jsonMap.TryGetValue("qq", out string qqStr);
                 jsonMap.TryGetValue("qunNumber", out string qunNumberStr);
                 jsonMap.TryGetValue("lottery", out EnableLottery);
+                jsonMap.TryGetValue("password", out password);
                 if (!string.IsNullOrEmpty(qqStr))
                 {
                     int.TryParse(qqStr, out qq);

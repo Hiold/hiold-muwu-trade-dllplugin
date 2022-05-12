@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bot\action\ManageAction.cs" />
     <Compile Include="bot\Adaptor.cs" />
     <Compile Include="bot\BOT.cs" />
     <Compile Include="bot\CMD.cs" />
@@ -78,6 +79,11 @@
     <Compile Include="bot\model\message\TempMessage.cs" />
     <Compile Include="bot\model\Verify.cs" />
     <Compile Include="bot\service\UserService.cs" />
+    <Compile Include="bot\websocket\bean\GroupMessage.cs" />
+    <Compile Include="bot\websocket\bean\HeartBeat.cs" />
+    <Compile Include="bot\websocket\WebSocket.cs" />
+    <Compile Include="bot\websocket\WebSocketHelper.cs" />
+    <Compile Include="bot\websocket\WebSocketMessageHandler.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utils\HttpUtils.cs" />
@@ -88,6 +94,10 @@
       <Project>{81da7f87-1a66-4920-aada-6eaf1971f8d0}</Project>
       <Name>hiold-muwu-trade-dllplugin</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
