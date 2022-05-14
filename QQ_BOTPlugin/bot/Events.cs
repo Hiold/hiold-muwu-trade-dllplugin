@@ -1,4 +1,5 @@
 ﻿using HioldMod.src.HttpServer.bean;
+using QQ_BOTPlugin.bot.websocket;
 using QQ_BOTPlugin.utils;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,9 @@ namespace QQ_BOTPlugin.bot
     {
         public static void OnSell(UserInfo ui, UserTrade ut)
         {
+            CMD.sbConsole.AppendLine("触发上架事件群号为:"+BOT.qunNumber);
             string content = string.Format("{0} 上架了{1}个{2}，单价{3}", ui.name, ut.stock, RegexUtils.ReplaceBBCode(ut.translate), ut.price);
-            Adaptor.PostGroupMessage(BOT.qunNumber, BOT.token, content);
+            MessagePostUtils.PostGroupMessage(BOT.qunNumber, content);
         }
 
         public static void SellOut(UserInfo buyer, UserInfo seller, UserStorage us, double priceAll)
@@ -30,6 +32,7 @@ namespace QQ_BOTPlugin.bot
 
         public static void Lottery(Lottery lo, UserInfo ui, List<AwardInfo> awards)
         {
+            CMD.sbConsole.AppendLine("触发抽奖广播");
             //启用了抽奖广播，广播信息
             if (BOT.EnableLottery.Equals("True"))
             {
@@ -63,7 +66,7 @@ namespace QQ_BOTPlugin.bot
                     }
                 }
                 string content = string.Format("玩家 [{0}] 通过抽奖获得奖励\r\n", ui.name) + awardinfo.ToString();
-                Adaptor.PostGroupMessage(BOT.qunNumber, BOT.token, content);
+                MessagePostUtils.PostGroupMessage(BOT.qunNumber, content);
             }
         }
     }

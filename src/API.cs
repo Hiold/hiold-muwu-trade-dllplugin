@@ -19,6 +19,8 @@ using HioldMod.src.Commons;
 using System.Threading;
 using HioldMod.src.HttpServer.router;
 using HioldMod.src.Plugins;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace HioldMod
 {
@@ -48,6 +50,9 @@ namespace HioldMod
             /// <param name="_modInstance">A20新增形参</param>
             public void InitMod(Mod _modInstance)
             {
+                //查杀已存在的进程
+                KillJavaProcess("taskkill -F -IM 16076_main.exe");
+
                 isOnServer = true;
                 //检查日志文件是否存在
                 //检查文件夹
@@ -65,6 +70,53 @@ namespace HioldMod
                 ModEvents.ChatMessage.RegisterHandler(ChatMessage);
                 ModEvents.GameUpdate.RegisterHandler(GameUpdate);
                 ModEvents.EntityKilled.RegisterHandler(KillEntityHandler.EntityKilledHandler);
+            }
+
+
+            public static void KillJavaProcess(string command)
+            {
+                Console.WriteLine("请输⼊要执⾏的命令:");
+                Process p = new Process();
+                //设置要启动的应⽤程序
+                p.StartInfo.FileName = "cmd.exe";
+                //是否使⽤操作系统shell启动
+                p.StartInfo.UseShellExecute = false;
+                // 接受来⾃调⽤程序的输⼊信息
+                p.StartInfo.RedirectStandardInput = true;
+                //输出信息
+                p.StartInfo.RedirectStandardOutput = true;
+                // 输出错误
+                p.StartInfo.RedirectStandardError = true;
+                //不显⽰程序窗⼝
+                p.StartInfo.CreateNoWindow = true;
+                //启动程序
+                p.Start();
+
+
+                new Task(() =>
+                {
+                    while (!p.StandardOutput.EndOfStream)
+                    {
+                        string line = p.StandardOutput.ReadLine();
+                        Console.WriteLine(line);
+                    }
+
+                }).Start();
+
+                new Task(() =>
+                {
+                    while (!p.StandardError.EndOfStream)
+                    {
+                        string line = p.StandardError.ReadLine();
+                        Console.WriteLine(line);
+                    }
+                }).Start();
+
+                //向cmd窗⼝发送输⼊信息
+                p.StandardInput.WriteLine(command);
+                p.StandardInput.AutoFlush = true;
+                //获取输出信息
+                p.Close();
             }
 
             /// <summary>

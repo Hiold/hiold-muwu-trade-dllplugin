@@ -19,7 +19,7 @@ namespace QQ_BOTPlugin.bot
         public static StringBuilder sbConsole = new StringBuilder();
         public static StringBuilder sbError = new StringBuilder();
         //定时清理日志
-        private static System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback((object c) => { sbConsole.Clear();sbError.Clear(); }), null, TimeSpan.FromHours(1), TimeSpan.FromHours(1));
+        private static System.Threading.Timer Onlinetimer = new System.Threading.Timer(new TimerCallback((object c) => { sbConsole.Clear(); sbError.Clear(); }), null, TimeSpan.FromHours(1), TimeSpan.FromHours(1));
 
         public static void RunQQMCL()
         {
@@ -39,6 +39,24 @@ namespace QQ_BOTPlugin.bot
             {
                 File.Copy(exePaht, exePah);
             }
+            //检查配置是否完整
+            string tokenPath = API.AssemblyPath + @"plugins\Robot\session.token";
+            string devicePath = API.AssemblyPath + @"plugins\Robot\device.json";
+
+            if (!File.Exists(tokenPath) || !File.Exists(devicePath))
+            {
+                LogUtils.Loger("QQBOT配置文件不完整，无法启动请完成配置");
+                sbConsole.Append("QQBOT配置文件不完整，无法启动请完成配置");
+                return;
+            }
+
+            LogUtils.Loger("Qrcode路径:" + qrcodepath);
+            if (File.Exists(qrcodepath))
+            {
+                File.Delete(qrcodepath);
+            }
+
+
             //启动进程
             p = new Process();
             p.StartInfo.FileName = exePah;

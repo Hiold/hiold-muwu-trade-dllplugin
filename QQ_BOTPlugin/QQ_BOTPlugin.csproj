@@ -78,9 +78,12 @@
     <Compile Include="bot\model\message\StrangerMessage.cs" />
     <Compile Include="bot\model\message\TempMessage.cs" />
     <Compile Include="bot\model\Verify.cs" />
+    <Compile Include="bot\proxy\Program.cs" />
+    <Compile Include="bot\proxy\Proxy.cs" />
     <Compile Include="bot\service\UserService.cs" />
     <Compile Include="bot\websocket\bean\GroupMessage.cs" />
     <Compile Include="bot\websocket\bean\HeartBeat.cs" />
+    <Compile Include="bot\websocket\MessagePostUtils.cs" />
     <Compile Include="bot\websocket\WebSocket.cs" />
     <Compile Include="bot\websocket\WebSocketHelper.cs" />
     <Compile Include="bot\websocket\WebSocketMessageHandler.cs" />

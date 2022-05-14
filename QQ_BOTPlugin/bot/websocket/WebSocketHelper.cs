@@ -5,30 +5,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.Threading;
+using HioldMod.HttpServer;
 
 namespace QQ_BOTPlugin.bot.websocket
 {
     public class WebSocketHelper
     {
         public static ClientWebSocket client;
+        public static bool isSocketOk = false;
         public static void InitWebSocket()
         {
             new Task(() =>
             {
                 while (true)
                 {
-                    if (client == null)
+                    if (!isSocketOk)
                     {
                         try
                         {
                             client = new ClientWebSocket();
                             client.ConnectAsync(new Uri("ws://127.0.0.1:8999/event/"), CancellationToken.None).Wait();
+                            isSocketOk = true;
                             //client.ConnectAsync(new Uri("ws://localhost:4567/ws/"), CancellationToken.None).Wait();
                             StartReceiving(client);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-
+                            CMD.sbConsole.AppendLine("监听启动异常：" + e.Message);
                         }
                     }
                     Thread.Sleep(10000);

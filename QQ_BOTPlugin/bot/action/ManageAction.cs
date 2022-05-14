@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using TcpProxy;
 using static HioldMod.HioldMod;
 
 namespace QQ_BOTPlugin.bot.action
@@ -26,10 +27,6 @@ namespace QQ_BOTPlugin.bot.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 queryRequest.TryGetValue("lottery", out string containerid);
-                queryRequest.TryGetValue("host", out string funcid);
-                queryRequest.TryGetValue("key", out string key);
-                queryRequest.TryGetValue("qq", out string qq);
-                queryRequest.TryGetValue("password", out string password);
                 queryRequest.TryGetValue("qunNumber", out string qunNumber);
                 //
                 string path = string.Format("{0}/plugins/bot.json", HioldMod.HioldMod.API.AssemblyPath);
@@ -111,10 +108,17 @@ namespace QQ_BOTPlugin.bot.action
             }
             CMD.sbConsole.Clear();
             CMD.sbError.Clear();
-            CMD.RunQQMCL();
+            CMD.KillJavaProcess("taskkill -F -IM 16076_main.exe");
+            BOT.initBot();
             ResponseUtils.ResponseSuccess(response);
         }
 
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/startProxy")]
+        public static void startProxy(HioldRequest request, HttpListenerResponse response)
+        {
+            ProxyInterface.startProxy();
+            ResponseUtils.ResponseSuccess(response);
+        }
 
         [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/resetBOT")]
         public static void restresetBOTartBOT(HioldRequest request, HttpListenerResponse response)
@@ -127,6 +131,7 @@ namespace QQ_BOTPlugin.bot.action
             {
 
             }
+            CMD.KillJavaProcess("taskkill -F -IM 16076_main.exe");
             //删除文件
             string qrcodepath = API.AssemblyPath + @"plugins\Robot\device.json";
             LogUtils.Loger("Qrcode路径:" + qrcodepath);
@@ -176,5 +181,49 @@ namespace QQ_BOTPlugin.bot.action
             }
         }
 
+
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/uploadConfigFile")]
+        public static void uploadFile(HioldRequest request, HttpListenerResponse response)
+        {
+            List<string> result = new List<string>();
+            string basepath = "";
+
+            try
+            {
+                
+                if (API.isOnServer)
+                {
+                    basepath = string.Format(@"{0}plugins\Robot\", API.AssemblyPath);
+                }
+
+                //检查路径
+                if (!Directory.Exists(basepath))
+                {
+                    Directory.CreateDirectory(basepath);
+                }
+
+
+                FileUploadUtils fuu = new FileUploadUtils(request.request, Encoding.UTF8);
+                List<MultipartFormItem> files = fuu.ParseIntoElementList();
+                for (int i = 0; i < files.Count; i++)
+                {
+                    FileStream fs = new FileStream(basepath + files[i].FileName, FileMode.Create);
+                    fs.Write(files[i].Data, 0, files[i].Data.Length);
+                    fs.Flush();
+                    fs.Close();
+                }
+
+                response.StatusCode = 200;
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = 500;
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+                LogUtils.Loger("读取文件异常:" + e.Message);
+            }
+        }
     }
 }
