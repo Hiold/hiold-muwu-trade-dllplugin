@@ -372,7 +372,7 @@ namespace HioldMod.src.HttpServer.action
                     desc = "抽奖获得 （" + target.desc + "） 奖品：" + awardinfo
                 });
                 //触发抽奖事件
-                TradeSysEvents.TrigerLotteryEvent(target, request.user, awards);
+                TradeSysEvents.TrigerLotteryEvent(target, request.user, resultAward);
 
                 ResponseUtils.ResponseSuccessWithData(response, resultAward);
             }

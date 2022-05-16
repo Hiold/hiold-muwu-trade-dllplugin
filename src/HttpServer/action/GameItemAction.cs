@@ -144,7 +144,7 @@ namespace HioldMod.src.HttpServer.action
         {
             DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);
             string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Data/ItemIcons/";
-            string basepath2 = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
+            string basepath2 = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/";
             string url = request.request.RawUrl.Replace("/api/image/", "");
             response.ContentType = "image/png";
             try
@@ -152,7 +152,7 @@ namespace HioldMod.src.HttpServer.action
                 if (HioldMod.API.isOnServer)
                 {
                     basepath = di.Parent.Parent.FullName + "/Data/ItemIcons/";
-                    basepath2 = string.Format("{0}/image/", HioldMod.API.AssemblyPath);
+                    basepath2 = di.Parent.Parent.FullName + "/Mods/";
                 }
 
 
@@ -181,35 +181,42 @@ namespace HioldMod.src.HttpServer.action
                     response.OutputStream.Flush();
                     response.OutputStream.Close();
                 }
-                else if (File.Exists(basepath2 + url))
+                else
                 {
-                    FileInfo fi = new FileInfo(basepath + url);
-                    string modified = request.request.Headers.Get("if-modified-since");
-                    //Console.WriteLine(modified);
-                    if (modified != null && DateTime.Parse(modified).ToString().Equals(fi.LastWriteTime.ToString()))
+
+                    string[] files = Directory.GetFiles(basepath2, url, SearchOption.AllDirectories);
+                    if (files != null && files.Length > 0)
                     {
-                        response.StatusCode = 304;
+                        FileInfo fi = new FileInfo(files[0]);
+                        string modified = request.request.Headers.Get("if-modified-since");
+                        //Console.WriteLine(modified);
+                        if (modified != null && DateTime.Parse(modified).ToString().Equals(fi.LastWriteTime.ToString()))
+                        {
+                            response.StatusCode = 304;
+                            response.OutputStream.Flush();
+                            response.OutputStream.Close();
+                            return;
+                        }
+                        else
+                        {
+                            response.Headers.Add("Last-Modified", fi.LastWriteTime.ToString());
+                        }
+                        FileStream fs = File.OpenRead(files[0]);
+                        fs.CopyTo(response.OutputStream);
+                        fs.Flush();
+                        fs.Close();
                         response.OutputStream.Flush();
                         response.OutputStream.Close();
-                        return;
                     }
                     else
                     {
-                        response.Headers.Add("Last-Modified", fi.LastWriteTime.ToString());
+                        response.StatusCode = 404;
+                        response.OutputStream.Flush();
+                        response.OutputStream.Close();
                     }
-                    FileStream fs = File.OpenRead(basepath2 + url);
-                    fs.CopyTo(response.OutputStream);
-                    fs.Flush();
-                    fs.Close();
-                    response.OutputStream.Flush();
-                    response.OutputStream.Close();
+
                 }
-                else
-                {
-                    response.StatusCode = 404;
-                    response.OutputStream.Flush();
-                    response.OutputStream.Close();
-                }
+
 
 
             }

@@ -14,7 +14,6 @@ namespace QQ_BOTPlugin.bot.websocket
     {
         public static void HandleMessage(string msg)
         {
-            //LogUtils.Loger(msg);
             //心跳数据
             if (msg.Contains("\"meta_event_type\":\"heartbeat\""))
             {
@@ -25,6 +24,7 @@ namespace QQ_BOTPlugin.bot.websocket
             //群消息
             if (msg.Contains("\"message_type\":\"group\""))
             {
+                CMD.sbConsole.AppendLine("群消息：" + msg);
                 GroupMessage groupMessage = SimpleJson2.SimpleJson2.DeserializeObject<GroupMessage>(msg);
                 HandleGrouopMessage(groupMessage);
             }

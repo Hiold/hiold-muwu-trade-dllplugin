@@ -43,7 +43,7 @@ namespace HioldMod.src.HttpServer.action
                 {
                     itemtype = addRequest.itemType,
                     name = addRequest.itemName,
-                    itemicon = addRequest.itemIcon,
+                    itemicon = string.IsNullOrEmpty(addRequest.itemIcon) ? addRequest.itemName + ".png" : addRequest.itemIcon,
                     itemtint = addRequest.itemTint,
                     quality = addRequest.quality,
                     num = int.Parse(addRequest.itemnum),
