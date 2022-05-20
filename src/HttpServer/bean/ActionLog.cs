@@ -134,7 +134,7 @@ namespace HioldMod.src.HttpServer.bean
         public static int doReSignInfo = 40;
         //点赞
         public static int Like = 41;
-        //点赞
+        //物品制作
         public static int CraftItem = 42;
 
         //添加奖品
@@ -143,6 +143,12 @@ namespace HioldMod.src.HttpServer.bean
         public static int editItemLimitConfig = 44;
         //删除奖品
         public static int deleteItemLimitConfig = 45;
+
+        //水果机相关
+        public static int slotMachineChargePoint = 46;
+        public static int slotMachineReleasePoint = 47;
+        public static int slotMachineRollingNotHit = 48;
+        public static int slotMachineRollingHit = 49;
 
     }
 }

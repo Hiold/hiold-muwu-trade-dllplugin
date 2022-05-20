@@ -37,7 +37,7 @@ namespace HioldMod.src.HttpServer.service
         /// <returns></returns>
         public static List<AwardInfo> getAwardInfos(string containerid, string funcid)
         {
-            return DataBase.db.Queryable<AwardInfo>().Where(string.Format("status = '1' and containerid = {0} and funcid={1}", containerid, funcid)).ToList();
+            return DataBase.db.Queryable<AwardInfo>().Where(string.Format("status = '1' and containerid = '{0}' and funcid={1}", containerid, funcid)).ToList();
         }
 
         /// <summary>

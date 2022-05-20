@@ -3,6 +3,7 @@ using HioldMod.HttpServer.common;
 using HioldMod.src.HttpServer.attributes;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.src.HttpServer.common;
+using HioldMod.src.HttpServer.database;
 using HioldMod.src.HttpServer.service;
 using System;
 using System.Collections.Generic;
@@ -369,6 +370,36 @@ namespace HioldMod.src.HttpServer.action
             {
                 LogUtils.Loger(e.Message);
                 ResponseUtils.ResponseFail(response, "参数异常");
+            }
+        }
+
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, IsAdmin = true, url = "/api/exeDBCommand")]
+        public static void exeDBCommand(HioldRequest request, HttpListenerResponse response)
+        {
+            //获取参数
+            try
+            {
+                string postData = ServerUtils.getPostData(request.request);
+                Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
+                queryRequest.TryGetValue("db", out string db);
+                queryRequest.TryGetValue("command", out string command);
+                if (db.Equals("db"))
+                {
+                    DataBase.db.Ado.ExecuteCommand(command);
+                }
+                if (db.Equals("logdb"))
+                {
+                    DataBase.logdb.Ado.ExecuteCommand(command);
+                }
+                if (db.Equals("gameeventdb"))
+                {
+                    DataBase.gameeventdb.Ado.ExecuteCommand(command);
+                }
+                ResponseUtils.ResponseSuccess(response);
+            }
+            catch (Exception e)
+            {
+                ResponseUtils.ResponseFail(response, "执行异常："+e.Message);
             }
         }
     }

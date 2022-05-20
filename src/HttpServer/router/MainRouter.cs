@@ -39,12 +39,44 @@ namespace HioldMod.HttpServer.router
                 if (Filters.IsServerReady(request, response))
                     GameItemAction.getImage(request, response);
             }
+            //动态获取图片
+            else if (url.StartsWith("/api/getimagetint"))
+            {
+                if (Filters.IsServerReady(request, response))
+                    GameItemAction.getImageTint(request, response);
+            }
             else
             {
                 //请求接口
                 //获取接口信息
                 if (AttributeAnalysis.routers.TryGetValue(url, out AttributeAnalysis.RouterInfo router))
                 {
+
+                    //检查用户是否登录
+                    if (router.IsServerReady)
+                    {
+                        if (!Filters.IsServerReady(request, response))
+                        {
+                            return;
+                        }
+                    }
+                    //检查用户是否登录
+                    if (router.IsUserLogin)
+                    {
+                        if (!Filters.UserLoginFilter(request, response))
+                        {
+                            return;
+                        }
+                    }
+                    //检查是否管理员
+                    if (router.IsAdmin)
+                    {
+                        if (!Filters.isAdminFilter(request, response))
+                        {
+                            return;
+                        }
+                    }
+                    //
                     long start = DateTime.Now.Ticks / 10000;
                     long timeStempStart = DateTime.Now.Ticks;
                     //Console.WriteLine(router.action.FullName);

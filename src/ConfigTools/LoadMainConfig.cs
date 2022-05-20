@@ -29,6 +29,8 @@ namespace ConfigTools
             public static string password;
             public static string killevent = "False";
             public static string BroadCast = "True";
+            public static string TradeFee = "0";
+            public static string SlotMachineRate = "10000";
         }
 
 
@@ -132,6 +134,22 @@ namespace ConfigTools
                                 }
                                 MainConfig.BroadCast = _line.GetAttribute("value");
                                 break;
+                            case "TradeFee":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.TradeFee = _line.GetAttribute("value");
+                                break;
+                            case "SlotMachineRate":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.SlotMachineRate = _line.GetAttribute("value");
+                                break;
 
                         }
                     }
@@ -229,6 +247,10 @@ namespace ConfigTools
                 sw.WriteLine(string.Format("        <Option Name=\"KillEvent\" value=\"{0}\" />", "False"));
                 sw.WriteLine(string.Format("        <!--是否开启全服广播-->"));
                 sw.WriteLine(string.Format("        <Option Name=\"BroadCast\" value=\"{0}\" />", "True"));
+                sw.WriteLine(string.Format("        <!--交易手续费，百分比值主要在0~100之间，支持小数-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"TradeFee\" value=\"{0}\" />", "0"));
+                sw.WriteLine(string.Format("        <!--水果机充值比例，多少积分兑换一百水果机点数-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"SlotMachineRate\" value=\"{0}\" />", "10000"));
                 sw.WriteLine("    </HioldMod>");
                 sw.WriteLine("</HioldModConfig>");
                 //配置文件结束

@@ -11,7 +11,7 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int age { get; set; }
+        public long age { get; set; }
 
         /// <summary>
         /// 
@@ -51,7 +51,7 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int user_id { get; set; }
+        public long user_id { get; set; }
 
     }
 
@@ -67,12 +67,12 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int font { get; set; }
+        public long font { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int group_id { get; set; }
+        public long group_id { get; set; }
 
         /// <summary>
         /// 还在做 你当然看不到[CQ:image,file=37ac5d6ff56619e88ec1bad8204a128b.image,url=https://gchat.qpic.cn/gchatpic_new/960269073/4190687713-2768013990-37AC5D6FF56619E88EC1BAD8204A128B/0?term=3,subType=1]
@@ -82,12 +82,12 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int message_id { get; set; }
+        public long message_id { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int message_seq { get; set; }
+        public long message_seq { get; set; }
 
         /// <summary>
         /// 
@@ -107,7 +107,7 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int self_id { get; set; }
+        public long self_id { get; set; }
 
         /// <summary>
         /// 
@@ -122,12 +122,12 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int time { get; set; }
+        public long time { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int user_id { get; set; }
+        public long user_id { get; set; }
 
     }
 

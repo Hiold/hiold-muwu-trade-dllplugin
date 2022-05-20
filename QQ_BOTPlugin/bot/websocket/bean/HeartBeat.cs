@@ -13,42 +13,42 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int PacketReceived { get; set; }
+        public long PacketReceived { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int PacketSent { get; set; }
+        public long PacketSent { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int PacketLost { get; set; }
+        public long PacketLost { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int MessageReceived { get; set; }
+        public long MessageReceived { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int MessageSent { get; set; }
+        public long MessageSent { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int LastMessageTime { get; set; }
+        public long LastMessageTime { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int DisconnectTimes { get; set; }
+        public long DisconnectTimes { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public int LostTimes { get; set; }
+        public long LostTimes { get; set; }
 
     }
 
@@ -100,7 +100,7 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int interval { get; set; }
+        public long interval { get; set; }
 
         /// <summary>
         /// 
@@ -115,7 +115,7 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int self_id { get; set; }
+        public long self_id { get; set; }
 
         /// <summary>
         /// 
@@ -125,7 +125,7 @@ namespace QQ_BOTPlugin.bot.websocket.bean
         /// <summary>
         /// 
         /// </summary>
-        public int time { get; set; }
+        public long time { get; set; }
 
     }
 }

@@ -33,19 +33,20 @@ namespace QQ_BOTPlugin.bot.websocket
 
         public static void HandleGrouopMessage(GroupMessage message)
         {
-            GroupMessage msg = (GroupMessage)message;
 
             //判断是否处理该群消息
-            if (BOT.qunNumber == null || msg.group_id != BOT.qunNumber)
+            if (BOT.qunNumber == null || message.group_id != BOT.qunNumber)
             {
+                CMD.sbConsole.AppendLine("来自群" + message.group_id + "的群消息，当前配置" + BOT.qunNumber + "不处理");
                 return;
             }
 
             //校验完成继续处理
-
             string command = message.message;
+            CMD.sbConsole.AppendLine("响应指令：" + command);
             //循环处理完毕
             //Adaptor.PostGroupMessage(BOT.qunNumber, BOT.token, "复读机:" + command);
+
             if (command.Equals("在线玩家"))
             {
                 string content = "";

@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace HioldMod.HttpServer.common
 {
@@ -24,7 +25,7 @@ namespace HioldMod.HttpServer.common
         {
             byte[] b = new byte[4];
             new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
-            Random r = new Random(BitConverter.ToInt32(b, 0));
+            System.Random r = new System.Random(BitConverter.ToInt32(b, 0));
             string s = null, str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             for (int i = 0; i < length; i++)
             {
@@ -37,7 +38,7 @@ namespace HioldMod.HttpServer.common
         {
             byte[] b = new byte[4];
             new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
-            Random r = new Random(BitConverter.ToInt32(b, 0));
+            System.Random r = new System.Random(BitConverter.ToInt32(b, 0));
             string s = null, str = "0123456789";
             for (int i = 0; i < length; i++)
             {
@@ -338,7 +339,7 @@ namespace HioldMod.HttpServer.common
             weekPair[1] = lastDay.ToString("yyyy-MM-dd") + " 23:59:59";
             return weekPair;
         }
-        
+
         public static string[] getDayOfToday()
         {
             DateTime currentDate = DateTime.Now.Date;
@@ -451,6 +452,23 @@ namespace HioldMod.HttpServer.common
             byte[] buf = bytes.ToArray();
             bytes = null;
             return e.GetString(buf);
+        }
+
+        public static System.Drawing.Bitmap loadItemIcon(string filename, double mr, double mg, double mb)
+        {
+            System.Drawing.Bitmap img = new System.Drawing.Bitmap(filename);
+            //逐一处理图片数据
+            for (int x = 0; x < img.Width; x++)
+            {
+                for (int y = 0; y < img.Height; y++)
+                {
+                    System.Drawing.Color tempc = img.GetPixel(x, y);
+                    System.Drawing.Color cnew = System.Drawing.Color.FromArgb(tempc.A, (int)(tempc.R * mr), (int)(tempc.G * mg), (int)(tempc.B * mb));
+                    img.SetPixel(x, y, cnew);
+                }
+            }
+            //missingIcon.png
+            return img;
         }
     }
 }

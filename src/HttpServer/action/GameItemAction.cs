@@ -143,8 +143,8 @@ namespace HioldMod.src.HttpServer.action
         public static void getImage(HioldRequest request, HttpListenerResponse response)
         {
             DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);
-            string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Data/ItemIcons/";
-            string basepath2 = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/";
+            string basepath = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server/Data/ItemIcons/";
+            string basepath2 = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server/Mods/";
             string url = request.request.RawUrl.Replace("/api/image/", "");
             response.ContentType = "image/png";
             try
@@ -229,6 +229,207 @@ namespace HioldMod.src.HttpServer.action
             }
         }
 
+        public static string TryGetItemIconFile(string itemname)
+        {
+            string basepathSystemIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Data\ItemIcons\";
+            string basepathModIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Mods\";
+            string basepathcustomIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Mods\hiold-muwu-trade-dllplugin_funcs\customimage\";
+            string filepath = "";
+            //替换basepath路径
+            if (HioldMod.API.isOnServer)
+            {
+                DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);
+                basepathSystemIcon = di.Parent.Parent.FullName + "/Data/ItemIcons/";
+                basepathModIcon = di.Parent.Parent.FullName + "/Mods/";
+                basepathcustomIcon = di.Parent.Parent.FullName + "/Mods/hiold-muwu-trade-dllplugin_funcs/customimage/";
+            }
+
+            if (File.Exists(basepathSystemIcon + itemname + ".png"))
+            {
+                filepath = basepathSystemIcon + itemname + ".png";
+            }
+            //在自定义icon库中
+            else if (File.Exists(basepathcustomIcon + itemname + ".png"))
+            {
+                filepath = basepathcustomIcon + itemname + ".png";
+            }
+            else
+            {
+                try
+                {
+                    string[] files = Directory.GetFiles(basepathModIcon, itemname + ".png", SearchOption.AllDirectories);
+                    //在拓展mod库中
+                    if (files != null && files.Length > 0)
+                    {
+                        filepath = files[0];
+                    }
+                }
+                catch (Exception)
+                {
+                    filepath = "";
+                }
+            }
+            return filepath;
+        }
+
+        public static string TryGetItemIconFileOrg(string itemname)
+        {
+            string basepathSystemIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Data\ItemIcons\";
+            string basepathModIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Mods\";
+            string basepathcustomIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Mods\hiold-muwu-trade-dllplugin_funcs\customimage\";
+            string filepath = "";
+            //替换basepath路径
+            if (HioldMod.API.isOnServer)
+            {
+                DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);
+                basepathSystemIcon = di.Parent.Parent.FullName + "/Data/ItemIcons/";
+                basepathModIcon = di.Parent.Parent.FullName + "/Mods/";
+                basepathcustomIcon = di.Parent.Parent.FullName + "/Mods/hiold-muwu-trade-dllplugin_funcs/customimage/";
+            }
+
+            if (File.Exists(basepathSystemIcon + itemname))
+            {
+                filepath = basepathSystemIcon + itemname;
+            }
+            //在自定义icon库中
+            else if (File.Exists(basepathcustomIcon + itemname))
+            {
+                filepath = basepathcustomIcon + itemname;
+            }
+            else
+            {
+                try
+                {
+                    string[] files = Directory.GetFiles(basepathModIcon, itemname, SearchOption.AllDirectories);
+                    //在拓展mod库中
+                    if (files != null && files.Length > 0)
+                    {
+                        filepath = files[0];
+                    }
+                }
+                catch (Exception)
+                {
+                    filepath = "";
+                }
+            }
+            return filepath;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void getImageTint(HioldRequest request, HttpListenerResponse response)
+        {
+            DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);
+            string basepathSystemIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server/Data/ItemIcons/";
+            string basepathModIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server/Mods/";
+            string basepathcustomIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/customimage/";
+            string itemname = request.request.RawUrl.Replace("/api/getimagetint/", "");
+
+            //替换数据
+            if (itemname.EndsWith(".png"))
+            {
+                itemname = itemname.Replace(".png", "");
+            }
+            string itemnameOrg = ServerUtils.UrlDecode(itemname);
+            itemname = itemnameOrg.Replace(":", "-");
+            response.ContentType = "image/png";
+            try
+            {
+                //替换basepath路径
+                if (HioldMod.API.isOnServer)
+                {
+                    basepathSystemIcon = di.Parent.Parent.FullName + "/Data/ItemIcons/";
+                    basepathModIcon = di.Parent.Parent.FullName + "/Mods/";
+                    basepathcustomIcon = di.Parent.Parent.FullName + "/Mods/hiold-muwu-trade-dllplugin_funcs/customimage/";
+                }
+
+
+                string filepath = TryGetItemIconFile(itemname);
+                if (string.IsNullOrEmpty(filepath))
+                {
+                    filepath = TryGetItemIconFileOrg(itemname);
+                }
+                //LogUtils.Loger(itemname + "获取到路径为:" + filepath);
+                if (string.IsNullOrEmpty(filepath))
+                {
+                    ItemClass _class = ItemClass.GetItemClass(itemnameOrg, true);
+                    if (_class != null)
+                    {
+                        string newfilename = _class.CustomIcon.Value + ".png";
+                        //LogUtils.Loger("获取到文件名为:" + newfilename);
+                        string newiconpath = TryGetItemIconFile(newfilename);
+                        //LogUtils.Loger("获取到文件路径为:" + filepath);
+                        if (!string.IsNullOrEmpty(newiconpath))
+                        {
+                            double mr = (_class.CustomIconTint == null || _class.CustomIconTint.r == null) ? 1 : _class.CustomIconTint.r;
+                            double mg = (_class.CustomIconTint == null || _class.CustomIconTint.g == null) ? 1 : _class.CustomIconTint.g;
+                            double mb = (_class.CustomIconTint == null || _class.CustomIconTint.b == null) ? 1 : _class.CustomIconTint.b;
+                            //计算图标
+                            System.Drawing.Bitmap iconbitmap = ServerUtils.loadItemIcon(newiconpath, mr, mg, mb);
+                            //判断文件夹是否存在
+                            if (!Directory.Exists(basepathcustomIcon))
+                            {
+                                Directory.CreateDirectory(basepathcustomIcon);
+                            }
+                            //保存图片
+                            iconbitmap.Save(basepathcustomIcon + itemname + ".png");
+                            //赋值图片路径数据
+                            filepath = basepathcustomIcon + itemname + ".png";
+
+                        }
+                        else
+                        {
+                            filepath = basepathSystemIcon + "missingIcon.png";
+                        }
+                    }
+                    else
+                    //没有找到对应ItemClass
+                    {
+                        filepath = basepathSystemIcon + "missingIcon.png";
+                    }
+                }
+
+
+
+                FileInfo fi = new FileInfo(filepath);
+                string modified = request.request.Headers.Get("if-modified-since");
+                //Console.WriteLine(modified);
+                if (modified != null && DateTime.Parse(modified).ToString().Equals(fi.LastWriteTime.ToString()))
+                {
+                    response.StatusCode = 304;
+                    response.OutputStream.Flush();
+                    response.OutputStream.Close();
+                    return;
+                }
+                else
+                {
+                    response.Headers.Add("Last-Modified", fi.LastWriteTime.ToString());
+                }
+
+                FileStream fs = File.OpenRead(filepath);
+                fs.CopyTo(response.OutputStream);
+                fs.Flush();
+                fs.Close();
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+
+
+
+
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = 404;
+                response.OutputStream.Flush();
+                response.OutputStream.Close();
+                LogUtils.Loger("读取文件异常:" + e.Message);
+                LogUtils.Loger(e.StackTrace);
+            }
+        }
+
         /// <summary>
         /// 获取自定义图片
         /// </summary>
@@ -240,7 +441,7 @@ namespace HioldMod.src.HttpServer.action
         {
             string url = request.request.RawUrl.Replace("/api/iconImage/", "");
             response.ContentType = "image/png";
-            string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
+            string basepath = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/image/";
             try
             {
                 if (HioldMod.API.isOnServer)
@@ -278,7 +479,7 @@ namespace HioldMod.src.HttpServer.action
         {
             //string url = request.request.RawUrl.Replace("/api/iconImage/", "");
             //response.ContentType = "image/png";
-            string basepath = "D:/Steam/steamapps/common/7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/web";
+            string basepath = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server/Mods/hiold-muwu-trade-dllplugin_funcs/web";
             try
             {
                 if (HioldMod.API.isOnServer)

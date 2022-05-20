@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static ConfigTools.LoadMainConfig;
 using static HioldMod.src.HttpServer.database.DataBase;
 
 namespace HioldMod.src.HttpServer.action
@@ -391,7 +392,7 @@ namespace HioldMod.src.HttpServer.action
                         itemGetChenal = UserStorageGetChanel.SHOP_BUY,
                         itemStatus = UserStorageStatus.NORMAL_STORAGED,
                         //拓展属性
-                        extinfo1 = "",
+                        extinfo1 = _buy.count,
                         extinfo2 = "",
                         extinfo3 = "",
                         extinfo4 = "",
@@ -796,6 +797,8 @@ namespace HioldMod.src.HttpServer.action
 
                     //首先计算总价格
                     double priceAll;
+                    double priceAllForSeller = 0;
+                    double feecount = 0;
                     if (int.TryParse(_buy.count, out int intCount))
                     {
                         priceAll = ut.price * intCount;
@@ -804,6 +807,24 @@ namespace HioldMod.src.HttpServer.action
                     {
                         ResponseUtils.ResponseFail(response, "购买数量异常，请检查数量");
                         return;
+                    }
+                    //计算扣除书续费后的价格
+                    if (!string.IsNullOrEmpty(MainConfig.TradeFee))
+                    {
+                        double.TryParse(MainConfig.TradeFee, out double fee);
+                        if (fee > 0)
+                        {
+                            feecount = fee;
+                            priceAllForSeller = priceAll - (priceAll * (fee / 100));
+                        }
+                        else
+                        {
+                            priceAllForSeller = priceAll;
+                        }
+                    }
+                    else
+                    {
+                        priceAllForSeller = priceAll;
                     }
 
                     //检查请求购买物品的库存数量
@@ -888,7 +909,7 @@ namespace HioldMod.src.HttpServer.action
                     }
 
                     //出售方加钱
-                    database.DataBase.MoneyEditor(seller, MoneyType.Money, EditType.Add, priceAll);
+                    database.DataBase.MoneyEditor(seller, MoneyType.Money, EditType.Add, priceAllForSeller);
 
 
 
@@ -921,7 +942,7 @@ namespace HioldMod.src.HttpServer.action
                         extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(userStorate),
                         extinfo3 = SimpleJson2.SimpleJson2.SerializeObject(_buy),
                         extinfo4 = priceAll + "",
-                        desc = string.Format("玩家：{0} ，购买{1}个你上架的{2}，获得{3}", request.user.name, userStorate.storageCount, userStorate.translate, priceAll),
+                        desc = string.Format("玩家：{0} ，购买{1}个你上架的{2}，获得，扣除手续费后你获得{3}", request.user.name, userStorate.storageCount, userStorate.translate, priceAllForSeller),
                     });
 
 

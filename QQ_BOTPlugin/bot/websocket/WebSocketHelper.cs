@@ -56,9 +56,9 @@ namespace QQ_BOTPlugin.bot.websocket
                         WebSocketMessageHandler.HandleMessage(msg);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    CMD.sbConsole.AppendLine("消息处理异常：" + e.Message);
+                    //CMD.sbConsole.AppendLine("消息处理异常：" + e.Message);
                 }
             }
         }

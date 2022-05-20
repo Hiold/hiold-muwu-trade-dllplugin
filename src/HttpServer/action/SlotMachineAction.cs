@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static ConfigTools.LoadMainConfig;
 
 namespace HioldMod.src.HttpServer.action
 {
@@ -23,7 +24,7 @@ namespace HioldMod.src.HttpServer.action
         /// <param name="request">请求</param>
         /// <param name="response">响应</param>
         /// 
-        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true,url = "/api/GetSGJPoint")]
+        [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/GetSGJPoint")]
         public static void GetSGJPoint(HioldRequest request, HttpListenerResponse response)
         {
             try
@@ -32,7 +33,11 @@ namespace HioldMod.src.HttpServer.action
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
                 //queryRequest.TryGetValue("id", out string id);
-                ResponseUtils.ResponseSuccessWithData(response, UserConfigService.QuerySGJPoint(request.user.gameentityid));
+                UserConfig uc = UserConfigService.QuerySGJPoint(request.user.gameentityid);
+                Dictionary<string, object> result = new Dictionary<string, object>();
+                result.Add("point",uc);
+                result.Add("rate", MainConfig.SlotMachineRate);
+                ResponseUtils.ResponseSuccessWithData(response, result);
                 return;
             }
             catch (Exception e)
@@ -65,7 +70,10 @@ namespace HioldMod.src.HttpServer.action
                     ResponseUtils.ResponseFail(response, "数量异常");
                     return;
                 }
-                if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Money, DataBase.EditType.Sub, intcount * 10000))
+                //获取转换比例
+                int rete = int.Parse(MainConfig.SlotMachineRate);
+
+                if (!DataBase.MoneyEditor(request.user, DataBase.MoneyType.Money, DataBase.EditType.Sub, intcount * rete))
                 {
                     ResponseUtils.ResponseFail(response, "积分不足");
                     return;
@@ -73,7 +81,7 @@ namespace HioldMod.src.HttpServer.action
                 UserConfig uc = UserConfigService.QuerySGJPoint(request.user.gameentityid);
                 if (uc == null)
                 {
-                    //添加新的每日奖励
+                    //添加玩家点数信息
                     UserConfigService.addConfig(new UserConfig()
                     {
                         gameentityid = request.user.gameentityid,
@@ -96,6 +104,18 @@ namespace HioldMod.src.HttpServer.action
                     uc.configValue = (leftCount + intcount * 100) + "";
                     UserConfigService.updateConfig(uc);
                 }
+                //记录用户购买数据
+                ActionLogService.addLog(new ActionLog()
+                {
+                    actTime = DateTime.Now,
+                    actType = LogType.slotMachineChargePoint,
+                    atcPlayerEntityId = request.user.gameentityid,
+                    extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                    extinfo2 = (intcount * 100) + "",
+                    desc = string.Format("水果机点数充值{0}，消耗积分{1}", intcount * 100, intcount * rete)
+                });
+
+
                 //返回成功
                 ResponseUtils.ResponseSuccess(response);
             }
@@ -119,6 +139,8 @@ namespace HioldMod.src.HttpServer.action
         {
             try
             {
+                //获取转换比例
+                int rete = int.Parse(MainConfig.SlotMachineRate);
                 //获取参数
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
@@ -138,7 +160,17 @@ namespace HioldMod.src.HttpServer.action
                         uc.configValue = (points - (intcount * 100)) + "";
                         UserConfigService.updateConfig(uc);
                         //添加积分
-                        DataBase.MoneyEditor(request.user, DataBase.MoneyType.Money, DataBase.EditType.Add, intcount * 10000);
+                        DataBase.MoneyEditor(request.user, DataBase.MoneyType.Money, DataBase.EditType.Add, intcount * rete);
+                        //记录日志
+                        ActionLogService.addLog(new ActionLog()
+                        {
+                            actTime = DateTime.Now,
+                            actType = LogType.slotMachineReleasePoint,
+                            atcPlayerEntityId = request.user.gameentityid,
+                            extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                            extinfo2 = (intcount * 100) + "",
+                            desc = string.Format("水果机点数提取{0}，获得消耗{1}", intcount * 100, intcount * rete)
+                        });
                         //返回成功
                         ResponseUtils.ResponseSuccess(response);
                     }
@@ -340,6 +372,32 @@ namespace HioldMod.src.HttpServer.action
                 }
                 //计算最后量
                 final += baster;
+                //记录日志
+                if (baster > 0)
+                {
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.slotMachineRollingHit,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                        extinfo2 = (baster * 100) + "",
+                        desc = string.Format("水果机摇中了{0}分，最终获得{1}分", baster, final)
+                    });
+                }
+                else
+                {
+                    ActionLogService.addLog(new ActionLog()
+                    {
+                        actTime = DateTime.Now,
+                        actType = LogType.slotMachineRollingNotHit,
+                        atcPlayerEntityId = request.user.gameentityid,
+                        extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(queryRequest),
+                        extinfo2 = (baster * 100) + "",
+                        desc = string.Format("水果机没摇中，最终获得{1}分", baster, final)
+                    });
+                }
+
                 //更新数据
                 int leftCount = int.Parse(uc.configValue);
                 uc.configValue = (leftCount + final) + "";
