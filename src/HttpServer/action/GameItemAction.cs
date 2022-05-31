@@ -236,6 +236,11 @@ namespace HioldMod.src.HttpServer.action
             string basepathcustomIcon = @"E:\SteamLibrary\steamapps\common\7 Days to Die Dedicated Server\Mods\hiold-muwu-trade-dllplugin_funcs\customimage\";
             string filepath = "";
             //替换basepath路径
+            //替换数据
+            if (itemname.EndsWith(".png"))
+            {
+                itemname = itemname.Replace(".png", "");
+            }
             if (HioldMod.API.isOnServer)
             {
                 DirectoryInfo di = new DirectoryInfo(HioldMod.API.AssemblyPath);
@@ -352,16 +357,16 @@ namespace HioldMod.src.HttpServer.action
                 {
                     filepath = TryGetItemIconFileOrg(itemname);
                 }
-                //LogUtils.Loger(itemname + "获取到路径为:" + filepath);
+                LogUtils.Loger(itemname + "获取到路径为:" + filepath);
                 if (string.IsNullOrEmpty(filepath))
                 {
                     ItemClass _class = ItemClass.GetItemClass(itemnameOrg, true);
                     if (_class != null)
                     {
                         string newfilename = _class.CustomIcon.Value + ".png";
-                        //LogUtils.Loger("获取到文件名为:" + newfilename);
+                        LogUtils.Loger("获取到文件名为:" + newfilename);
                         string newiconpath = TryGetItemIconFile(newfilename);
-                        //LogUtils.Loger("获取到文件路径为:" + filepath);
+                        LogUtils.Loger("获取到文件路径为:" + filepath);
                         if (!string.IsNullOrEmpty(newiconpath))
                         {
                             double mr = (_class.CustomIconTint == null || _class.CustomIconTint.r == null) ? 1 : _class.CustomIconTint.r;
