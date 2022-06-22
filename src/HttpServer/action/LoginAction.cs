@@ -94,6 +94,12 @@ namespace HioldMod.src.HttpServer.action
                 string ncode = "";
                 queryRequest.TryGetValue("ncode", out ncode);
 
+                if (string.IsNullOrEmpty(ncode))
+                {
+                    ResponseUtils.ResponseFail(response, "Ncode错误，快捷登录失败");
+                    return;
+                }
+
                 List<UserInfo> uiss = UserService.getUserByNcode(ncode);
                 if (uiss == null || uiss.Count <= 0)
                 {
