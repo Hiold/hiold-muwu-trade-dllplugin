@@ -7,44 +7,29 @@ using System.Threading;
 using HarmonyLib;
 using UnityEngine;
 using XMLData.Item;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace HioldMod
 {
-
-    public class JsonContractResolver : DefaultContractResolver
-    {
-        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-        {
-
-            IList<JsonProperty> lst = base.CreateProperties(type, memberSerialization);
-            List<JsonProperty> result = new List<JsonProperty>();
-            foreach (JsonProperty tmp in lst)
-            {
-                if (!string.IsNullOrEmpty(tmp.PropertyName))
-                {
-                    result.Add(tmp);
-                }
-            }
-            return result;
-        }
-    }
-
     public class APIHiold : IModApi
     {
         public void InitMod(Mod _modInstance)
         {
+            //注册事件
+            ModEvents.GameStartDone.RegisterHandler(GameStartDone);
+        }
+
+
+        private static void GameStartDone()
+        {
             Harmony harmony = new Harmony("net.hiold.patch.damagefixer");
-            //xml发送拦截
-            MethodInfo original = AccessTools.Method(typeof(NetPackageDamageEntity), "ProcessPackage");
+            MethodInfo original = AccessTools.Method(typeof(EntityAlive), "ProcessDamageResponseLocal");
             if (original == null)
             {
-                Log.Out(string.Format("[HioldDamageFixer] 注入失败: NetPackageDamageEntity.ProcessPackage 未找到"));
+                Log.Out(string.Format("[HioldDamageFixer] 注入失败: EntityAlive.ProcessDamageResponseLocal 未找到"));
             }
             else
             {
-                MethodInfo prefix = typeof(APIHiold).GetMethod("ProcessPackage_fix");
+                MethodInfo prefix = typeof(APIHiold).GetMethod("ProcessDamageResponseLocal_fix");
                 if (prefix == null)
                 {
                     Log.Out(string.Format("[HioldDamageFixer] 注入失败: Injections.SendXmlsToClient_postfix"));
@@ -53,8 +38,125 @@ namespace HioldMod
                 harmony.Patch(original, new HarmonyMethod(prefix), null);
             }
 
-            //Harmony.CreateAndPatchAll(typeof(PostPrefix));
+            /*
+            Log.Out("[HioldDamageFixer] Hook了原版");
+            Harmony harmony = new Harmony("net.hiold.patch.damagefixer");
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly anticheat = null;
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                if (assemblies[i].GetName().Name.Contains("Naiwazi_AntiCheat"))
+                {
+                    Log.Out(string.Format("[HioldDamageFixer] 发现Naiwazi_AntiCheat改用适配注入"));
+                    anticheat = assemblies[i];
+                }
+            }
+
+            
+            if (anticheat != null)
+            {
+                Type zHandler = anticheat.GetType("NAIWAZI.AntiCheat.z", false, true);
+                MethodInfo original = AccessTools.Method(zHandler, "b03c91d7970040f397b608a7fcc3f2c1");
+                if (original == null)
+                {
+                    Log.Out(string.Format("[HioldDamageFixer] 注入失败: NAIWAZI.AntiCheat.z.b03c91d7970040f397b608a7fcc3f2c1 未找到"));
+                }
+                else
+                {
+                    MethodInfo prefix = typeof(APIHiold).GetMethod("b03c91d7970040f397b608a7fcc3f2c1_fix");
+                    if (prefix == null)
+                    {
+                        Log.Out(string.Format("[HioldDamageFixer] 注入失败: APIHiold.b03c91d7970040f397b608a7fcc3f2c1_fix"));
+                        return;
+                    }
+                    harmony.Patch(original, new HarmonyMethod(prefix), null);
+                }
+                Log.Out("[HioldDamageFixer] Hook了NAIWAZI.AntiCheat");
+
+            }
+            else
+            {
+                MethodInfo original = AccessTools.Method(typeof(NetPackageDamageEntity), "ProcessPackage");
+                if (original == null)
+                {
+                    Log.Out(string.Format("[HioldDamageFixer] 注入失败: NetPackageDamageEntity.ProcessPackage 未找到"));
+                }
+                else
+                {
+                    MethodInfo prefix = typeof(APIHiold).GetMethod("ProcessPackage_fix");
+                    if (prefix == null)
+                    {
+                        Log.Out(string.Format("[HioldDamageFixer] 注入失败: Injections.SendXmlsToClient_postfix"));
+                        return;
+                    }
+                    harmony.Patch(original, new HarmonyMethod(prefix), null);
+                }
+                Log.Out("[HioldDamageFixer] Hook了原版");
+            }
+            */
             Log.Out("[HioldDamageFixer] Hook初始化完毕");
+        }
+
+
+
+        public static void b03c91d7970040f397b608a7fcc3f2c1_fix(ref DamageResponse _dmResponse)
+        {
+            Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
+            Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
+            var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
+            EntityPlayer _player = (EntityPlayer)(EntityPlayer)GameManager.Instance.World.GetEntity(ownerEntityId);
+            int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
+            Log.Out("[HioldDamageFixer] 修正 " + damage);
+            if (damage == 65535)
+            {
+                damage++;
+            }
+            _dmResponse.Strength = damage;
+        }
+
+
+        public static void ProcessDamageResponseLocal_fix(ref DamageResponse _dmResponse)
+        {
+            if (_dmResponse.Strength == 65535)
+            {
+                Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
+                Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
+                var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
+                EntityPlayer _player = (EntityPlayer)(EntityPlayer)GameManager.Instance.World.GetEntity(ownerEntityId);
+                int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
+                Log.Out("[HioldDamageFixer] 修正 " + damage);
+                if (damage == 65535)
+                {
+                    damage++;
+                }
+                _dmResponse.Strength = damage;
+            }
+        }
+
+        public static bool ProcessDamageResponse_fix(DamageResponse _dmResponse, EntityAlive __instance)
+        {
+            //修正数据
+            if (_dmResponse.Strength == 65535)
+            {
+                Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
+                Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
+                var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
+                EntityPlayer _player = (EntityPlayer)__instance.world.GetEntity(ownerEntityId);
+                int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
+                Log.Out("[HioldDamageFixer] 修正 " + damage);
+                if (damage == 65535)
+                {
+                    damage++;
+                }
+                _dmResponse.Strength = damage;
+                __instance.ProcessDamageResponse(_dmResponse);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
         }
 
 
@@ -96,31 +198,6 @@ namespace HioldMod
 
 
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            settings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            settings.MaxDepth = 3;
-            settings.ContractResolver = new JsonContractResolver();
-            settings.MissingMemberHandling = MissingMemberHandling.Ignore;
-
-
-            Log.Out("[HioldDamageFixer] __instance " + JsonConvert.SerializeObject(__instance, settings));
-
-            if (strength == 65535)
-            {
-                EntityPlayer _player = (EntityPlayer)_world.GetEntity(attackerEntityId);
-
-                Log.Out("[HioldDamageFixer] _player " + JsonConvert.SerializeObject(_player, settings));
-                ItemClass icc = _player.inventory.holdingItemData.item;
-                Log.Out("[HioldDamageFixer] 当前手持武器为 " + icc.GetItemName());
-                Log.Out("[HioldDamageFixer] holdingItemData " + JsonConvert.SerializeObject(_player.inventory.holdingItemData, settings));
-                ItemData _itemd = icc;
-                DataItem<AttributesData> fixData = Traverse.Create(_itemd).Field("pAttributes").GetValue<DataItem<AttributesData>>();
-                Log.Out("[HioldDamageFixer] 当前手持武器pAttributes " + fixData);
-                Log.Out("[HioldDamageFixer] 当前手持武器pAttributes.Value " + fixData.Value);
-                Log.Out("[HioldDamageFixer] 修正伤害值应为 " + fixData.Value.EntityDamage.Value);
-            }
 
 
 
