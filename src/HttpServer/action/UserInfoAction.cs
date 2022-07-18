@@ -14,6 +14,7 @@ using System.Net;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using static ConfigTools.LoadMainConfig;
 
 namespace HioldMod.src.HttpServer.action
 {
@@ -191,6 +192,12 @@ namespace HioldMod.src.HttpServer.action
         [RequestHandlerAttribute(IsServerReady = true, IsUserLogin = true, url = "/api/dispachItemToGame")]
         public static void dispachItemToGame(HioldRequest request, HttpListenerResponse response)
         {
+            if (MainConfig.banObtain.Equals("True"))
+            {
+                ResponseUtils.ResponseFail(response, "交易系统已关闭此功能，如有疑问请联系管理员！");
+                return;
+            }
+
             try
             {
                 //获取参数

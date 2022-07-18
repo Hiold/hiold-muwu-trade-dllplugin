@@ -75,7 +75,7 @@ namespace HioldMod
 
             public static void KillJavaProcess(string command)
             {
-                Console.WriteLine("请输⼊要执⾏的命令:");
+                //Console.WriteLine("请输⼊要执⾏的命令:");
                 Process p = new Process();
                 //设置要启动的应⽤程序
                 p.StartInfo.FileName = "cmd.exe";

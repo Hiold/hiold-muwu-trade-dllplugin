@@ -20,7 +20,7 @@ namespace ConfigTools
         public static FileSystemWatcher fileWatcher = new FileSystemWatcher(HioldMod.HioldMod.API.ConfigPath, configFile);
         public static string OldXmlDirectory = "";
 
-
+        
         public static class MainConfig
         {
             public static string Host;
@@ -31,6 +31,13 @@ namespace ConfigTools
             public static string BroadCast = "True";
             public static string TradeFee = "0";
             public static string SlotMachineRate = "10000";
+            //禁止某些功能
+            public static string banSellOut = "False";
+            public static string banTradeBuy = "False";
+            public static string banStore = "False";
+            public static string banObtain = "False";
+            public static string banLoadUnknownContainer = "False";
+            public static string banLoadTeam = "False";
         }
 
 
@@ -150,6 +157,54 @@ namespace ConfigTools
                                 }
                                 MainConfig.SlotMachineRate = _line.GetAttribute("value");
                                 break;
+                            case "banSellOut":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.banSellOut = _line.GetAttribute("value");
+                                break;
+                            case "banTradeBuy":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.banTradeBuy = _line.GetAttribute("value");
+                                break;
+                            case "banStore":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.banStore = _line.GetAttribute("value");
+                                break;
+                            case "banObtain":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.banObtain = _line.GetAttribute("value");
+                                break;
+                            case "banLoadUnknownContainer":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.banLoadUnknownContainer = _line.GetAttribute("value");
+                                break;
+                            case "banLoadTeam":
+                                if (!_line.HasAttribute("value"))
+                                {
+                                    Log.Warning(string.Format("[HioldMod] Ignoring Action entry because of missing 'Enable' attribute: {0}", subChild.OuterXml));
+                                    continue;
+                                }
+                                MainConfig.banLoadTeam = _line.GetAttribute("value");
+                                break;
 
                         }
                     }
@@ -251,6 +306,18 @@ namespace ConfigTools
                 sw.WriteLine(string.Format("        <Option Name=\"TradeFee\" value=\"{0}\" />", "0"));
                 sw.WriteLine(string.Format("        <!--水果机充值比例，多少积分兑换一百水果机点数-->"));
                 sw.WriteLine(string.Format("        <Option Name=\"SlotMachineRate\" value=\"{0}\" />", "10000"));
+                sw.WriteLine(string.Format("        <!--是否禁止上架 True禁止 False允许-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"banSellOut\" value=\"{0}\" />", "False"));
+                sw.WriteLine(string.Format("        <!--是否禁止购买玩家上架物品 True禁止 False允许-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"banTradeBuy\" value=\"{0}\" />", "False"));
+                sw.WriteLine(string.Format("        <!--是否禁止从游戏中保存物品到交易系统 True禁止 False允许-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"banStore\" value=\"{0}\" />", "False"));
+                sw.WriteLine(string.Format("        <!--是否禁止从交易系统提取物品到游戏中 True禁止 False允许-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"banObtain\" value=\"{0}\" />", "False"));
+                sw.WriteLine(string.Format("        <!--是否禁止加载未知归属的容器（请特别注意，如果你的mod有容器本身就是不支持归属者的，将无法加载，此项建议不禁止） True禁止 False允许-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"banLoadUnknownContainer\" value=\"{0}\" />", "False"));
+                sw.WriteLine(string.Format("        <!--是否禁止加载队友容器 True禁止 False允许-->"));
+                sw.WriteLine(string.Format("        <Option Name=\"banLoadTeam\" value=\"{0}\" />", "False"));
                 sw.WriteLine("    </HioldMod>");
                 sw.WriteLine("</HioldModConfig>");
                 //配置文件结束

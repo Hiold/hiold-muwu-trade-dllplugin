@@ -12,6 +12,7 @@ using static HioldMod.src.CommonUtils.UserAndItemCheck;
 using HioldMod.src.HttpServer.service;
 using HioldMod.src.HttpServer.bean;
 using HioldMod.HttpServer;
+using static ConfigTools.LoadMainConfig;
 
 namespace HioldMod.src.ChunckLoader
 {
@@ -42,14 +43,17 @@ namespace HioldMod.src.ChunckLoader
             }
 
             //获取ACL 友军相关信息
-            if (ppdd.ACL != null)
+            if (MainConfig.banLoadTeam.Equals("False"))
             {
-                foreach (PlatformUserIdentifierAbs sts in ppdd.ACL)
+                if (ppdd.ACL != null)
                 {
-                    PersistentPlayerData tempPdd = HioldsCommons.GetPersistentPlayerDataBySteamId(sts);
-                    if (tempPdd != null && tempPdd.LPBlocks != null)
+                    foreach (PlatformUserIdentifierAbs sts in ppdd.ACL)
                     {
-                        AllLppoition.AddRange(loadPosSurround(tempPdd.LPBlocks));
+                        PersistentPlayerData tempPdd = HioldsCommons.GetPersistentPlayerDataBySteamId(sts);
+                        if (tempPdd != null && tempPdd.LPBlocks != null)
+                        {
+                            AllLppoition.AddRange(loadPosSurround(tempPdd.LPBlocks));
+                        }
                     }
                 }
             }
@@ -155,6 +159,11 @@ namespace HioldMod.src.ChunckLoader
                                             }
                                             catch (Exception)
                                             {
+                                                //跳过加载未知容器
+                                                if (MainConfig.banLoadUnknownContainer.Equals("True"))
+                                                {
+                                                    continue;
+                                                }
                                                 lt.Add("pw", "0");
                                                 lt.Add("locked", "0");
                                                 lt.Add("owner", "");

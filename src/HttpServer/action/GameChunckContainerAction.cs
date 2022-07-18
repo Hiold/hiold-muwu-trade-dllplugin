@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static ConfigTools.LoadMainConfig;
 
 namespace HioldMod.src.HttpServer.action
 {
@@ -107,6 +108,12 @@ namespace HioldMod.src.HttpServer.action
         {
             try
             {
+                if (MainConfig.banStore.Equals("True"))
+                {
+                    ResponseUtils.ResponseFail(response, "交易系统已关闭此功能，如有疑问请联系管理员！");
+                    return;
+                }
+
                 //获取参数
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
