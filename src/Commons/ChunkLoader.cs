@@ -135,6 +135,16 @@ namespace HioldMod.src.ChunckLoader
                                             try
                                             {
                                                 ILockable lockable = (ILockable)_tile;
+
+                                                //跳过加载未知容器
+                                                if (MainConfig.banLoadUnknownContainer.Equals("True"))
+                                                {
+                                                    if (!lockable.GetOwner().ReadablePlatformUserIdentifier.Equals(eosid))
+                                                    {
+                                                        continue;
+                                                    }
+                                                }
+
                                                 //密码
                                                 if (lockable.HasPassword())
                                                 {
