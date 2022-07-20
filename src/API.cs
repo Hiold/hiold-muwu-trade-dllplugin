@@ -312,6 +312,33 @@ namespace HioldMod
                         Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
                     }
                 }
+
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/rmtest"))
+                {
+                    string[] command = _msg.Split(' ');
+                    //命令参数不正确
+                    if (command.Length < 2)
+                    {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[ff0000]注册失败,格式错误,正确格式为/pmreg 密码", "[87CEFA]交易系统", false, null));
+                    }
+                    if (_cInfo != null)
+                    {
+                        string newpw = command[1];
+                        int ta = int.Parse(newpw);
+                        EntityAlive target = (EntityAlive)GameManager.Instance.World.GetEntity(_cInfo.entityId);
+                        NetPackagePlayerStats nps = NetPackageManager.GetPackage<NetPackagePlayerStats>().Setup(target);
+                        Traverse.Create(nps).Field("holdingItemIndex").SetValue((byte)ta);
+                        Traverse.Create(nps).Field("holdingItemStack").SetValue(ItemStack.Empty.Clone());
+                        _cInfo.SendPackage(nps);
+                    }
+                    else
+                    {
+                        Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
+                    }
+                }
+
             }
 
             private static void OnFastRestartPrepared()
