@@ -332,11 +332,37 @@ namespace HioldMod
                         Traverse.Create(nps).Field("holdingItemIndex").SetValue((byte)ta);
                         Traverse.Create(nps).Field("holdingItemStack").SetValue(ItemStack.Empty.Clone());
                         _cInfo.SendPackage(nps);
+                        BlockValue bv = Block.GetBlockValue("terrStone");
+                        Vector3i pos = new Vector3i(target.position);
+                        GameManager.Instance.World.SetBlockRPC(pos, bv);
                     }
                     else
                     {
                         Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
                     }
+                }
+
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/setb"))
+                {
+
+                    EntityAlive target = (EntityAlive)GameManager.Instance.World.GetEntity(_cInfo.entityId);
+                    BlockValue bv = Block.GetBlockValue("terrStone");
+                    Vector3i pos = new Vector3i(target.position);
+                    GameManager.Instance.World.SetBlockRPC(pos, bv);
+
+                }
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/rmb"))
+                {
+
+                    EntityAlive target = (EntityAlive)GameManager.Instance.World.GetEntity(_cInfo.entityId);
+                    BlockValue bv = Block.GetBlockValue("air");
+                    Vector3i pos = new Vector3i(target.position);
+                    GameManager.Instance.World.SetBlockRPC(pos, bv);
+
                 }
 
             }
