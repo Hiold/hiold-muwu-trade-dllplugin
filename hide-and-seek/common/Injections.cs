@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace hide_and_seek.common
 {
     public class Injections
     {
         /// <summary>
-        /// Block类下OnBlockDamaged方法
+        /// GameManager类下OnBlockDamaged方法
         /// </summary>
         /// <param name="_world"></param>
         /// <param name="_clrIdx"></param>
@@ -22,8 +23,9 @@ namespace hide_and_seek.common
         /// <param name="_bBypassMaxDamage"></param>
         /// <param name="_recDepth"></param>
         /// <returns></returns>
-        public static bool ChangeBlocks(GameManager __instance, PlatformUserIdentifierAbs persistentPlayerId, List<BlockChangeInfo> _blocksToChange)
+        public static bool ChangeBlocks_fix(GameManager __instance, PlatformUserIdentifierAbs persistentPlayerId, List<BlockChangeInfo> _blocksToChange)
         {
+            Log.Out("进入ChangeBlocks_fix");
             //判断打击的是否为玩家伪装的方块
             int i = 0;
             while (i < _blocksToChange.Count)
@@ -49,7 +51,7 @@ namespace hide_and_seek.common
                         return false;
                     }
                 }
-
+                i++;
             }
             //放行
             return true;
@@ -60,8 +62,10 @@ namespace hide_and_seek.common
         public static bool ProcessPackage_fix(NetPackageEntityRelPosAndRot __instance, World _world, GameManager _callbacks)
         {
             int pid = Traverse.Create(__instance).Field("entityId").GetValue<int>();
+            Log.Out("当前执行者ID为:" + pid);
             if (MainController.Hiders.Contains(pid))
             {
+                Log.Out("进入ProcessPackage_fix");
                 Entity entity = _world.GetEntity(pid);
                 if (entity == null)
                 {
@@ -87,6 +91,31 @@ namespace hide_and_seek.common
             //放行
             return true;
         }
+
+
+        public static bool SetPosAndQRotFromNetwork_fix(Entity __instance, Vector3 _pos, Quaternion _rot, int _steps)
+        {
+            int pid = __instance.entityId;
+            Log.Out("当前执行者ID为:" + pid);
+            if (MainController.Hiders.Contains(pid))
+            {
+                Log.Out("进入SetPosAndQRotFromNetwork_fix");
+                Vector3i newPos = new Vector3i(_pos);
+                Vector3i oldPos = MainController.HidersPos[pid];
+                //如果位置发生变化，更新目标位置 burntWoodRoof
+                if (newPos != oldPos)
+                {
+                    BlockTools.RemoveBlock(oldPos);
+                    BlockTools.SetBlock(newPos, "burntWoodRoof");
+                }
+                //阻止玩家移动
+                return false;
+            }
+            //放行
+            return true;
+        }
+
+
 
 
 

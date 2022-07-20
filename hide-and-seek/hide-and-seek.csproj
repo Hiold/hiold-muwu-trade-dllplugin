@@ -98,6 +98,7 @@
     <Compile Include="common\BlockTools.cs" />
     <Compile Include="common\Injections.cs" />
     <Compile Include="common\MainController.cs" />
+    <Compile Include="common\NaiwaziInterface.cs" />
     <Compile Include="common\UserTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

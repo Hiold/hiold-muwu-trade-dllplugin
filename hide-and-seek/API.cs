@@ -7,6 +7,8 @@ using System.Threading;
 using HarmonyLib;
 using UnityEngine;
 using XMLData.Item;
+using NaiwaziServerKitInterface;
+using hide_and_seek.common;
 
 namespace HioldMod
 {
@@ -21,8 +23,74 @@ namespace HioldMod
 
         private static void GameStartDone()
         {
-            
-            Log.Out("[HioldDamageFixer] 伤害修正Hook初始化完毕");
+            Harmony harmony = new Harmony("net.hiold.hideandseek");
+            //xml发送拦截
+            MethodInfo original = AccessTools.Method(typeof(GameManager), "ChangeBlocks");
+            if (original == null)
+            {
+                Log.Out(string.Format("[HioldMod] 注入失败: WorldStaticData.SendXmlsToClient 未找到"));
+            }
+            else
+            {
+                MethodInfo prefix = typeof(Injections).GetMethod("ChangeBlocks_fix");
+                if (prefix == null)
+                {
+                    Log.Out(string.Format("[HioldMod] 注入失败: Injections.SendXmlsToClient_postfix"));
+                    return;
+                }
+                harmony.Patch(original, new HarmonyMethod(prefix), null);
+            }
+
+
+
+
+            MethodInfo original2 = AccessTools.Method(typeof(Entity), "SetPosAndQRotFromNetwork");
+            if (original2 == null)
+            {
+                Log.Out(string.Format("[HioldMod] 注入失败: WorldStaticData.SendXmlsToClient 未找到"));
+            }
+            else
+            {
+                MethodInfo prefix2 = typeof(Injections).GetMethod("SetPosAndQRotFromNetwork_fix");
+                if (prefix2 == null)
+                {
+                    Log.Out(string.Format("[HioldMod] 注入失败: Injections.SendXmlsToClient_postfix"));
+                    return;
+                }
+                harmony.Patch(original2, new HarmonyMethod(prefix2), null);
+            }
+
+           
+
+
+            int ret = ChatInterface.ChatWatcher_Register(OnChatMessage, "HioldMuwu");
+            Log.Out("[HideAndSeek] 游戏已加载");
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_cInfo"></param>
+        /// <param name="_msg"></param>
+        /// <param name="_type"></param>
+        /// <param name=""></param>
+        private static void OnChatMessage(ClientInfo _cInfo, string _msg, /*uint _timeStamp,*/ EChatType _type)
+        {
+            Log.Out("接收到消息:"+ _msg);
+            if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/seek"))
+            {
+                MainController.Seekers.Add(_cInfo.entityId);
+            }
+
+
+            if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/hide"))
+            {
+                MainController.Hiders.Add(_cInfo.entityId);
+                Entity entity = GameManager.Instance.World.GetEntity(_cInfo.entityId);
+
+                MainController.HidersPos.Add(_cInfo.entityId, new Vector3i(entity.position));
+            }
+        } 
     }
 }
