@@ -28,30 +28,34 @@ namespace hide_and_seek.common
             Log.Out("进入ChangeBlocks_fix");
             //判断打击的是否为玩家伪装的方块
             int i = 0;
-            while (i < _blocksToChange.Count)
+            //获取寻找者ID
+            int pid = UserTools.GetEntityPlatformUserIdentifierAbs(persistentPlayerId);
+            //检查是寻找者
+            if (pid != -1 && MainController.Seekers.Contains(pid))
             {
-                BlockChangeInfo blockChangeInfo = _blocksToChange[i];
-
-                foreach (KeyValuePair<int, Vector3i> tempdt in MainController.HidersPos)
+                while (i < _blocksToChange.Count)
                 {
-                    if (MainController.HidersPos.Values.Contains(blockChangeInfo.pos))
+                    BlockChangeInfo blockChangeInfo = _blocksToChange[i];
+                    foreach (KeyValuePair<int, Vector3i> tempdt in MainController.HidersPos)
                     {
-                        //找到了躲藏者
-                        //移除躲藏者数据
-                        MainController.Hiders.Remove(tempdt.Key);
-                        MainController.HidersPos.Remove(tempdt.Key);
-                        //给躲藏者发送消息
-                        ClientInfo _cinfoHider = UserTools.GetClientInfoFromEntityId(tempdt.Key);
-                        _cinfoHider.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "你被找到了!", "[87CEFA]躲猫猫", false, null));
+                        if (MainController.HidersPos.Values.Contains(blockChangeInfo.pos))
+                        {
+                            //找到了躲藏者
+                            //移除躲藏者数据
+                            MainController.Hiders.Remove(tempdt.Key);
+                            MainController.HidersPos.Remove(tempdt.Key);
+                            //给躲藏者发送消息
+                            ClientInfo _cinfoHider = UserTools.GetClientInfoFromEntityId(tempdt.Key);
+                            _cinfoHider.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "你被找到了!", "[87CEFA]躲猫猫", false, null));
 
-                        //获取寻找者ID
-                        int pid = UserTools.GetEntityPlatformUserIdentifierAbs(persistentPlayerId);
-                        ClientInfo _cinfoSeeker = UserTools.GetClientInfoFromEntityId(pid);
-                        _cinfoSeeker.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "你找到一名躲藏者!", "[87CEFA]躲猫猫", false, null));
-                        return false;
+
+                            ClientInfo _cinfoSeeker = UserTools.GetClientInfoFromEntityId(pid);
+                            _cinfoSeeker.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "你找到一名躲藏者!", "[87CEFA]躲猫猫", false, null));
+                            return false;
+                        }
                     }
+                    i++;
                 }
-                i++;
             }
             //放行
             return true;
@@ -107,6 +111,30 @@ namespace hide_and_seek.common
                 {
                     BlockTools.RemoveBlock(oldPos);
                     BlockTools.SetBlock(newPos, "burntWoodRoof");
+                }
+                //阻止玩家移动
+                return false;
+            }
+            //放行
+            return true;
+        }
+
+
+        public static bool SetPosAndRotFromNetwork_fix(Entity __instance, Vector3 _pos, Vector3 _rot, int _steps)
+        {
+            int pid = __instance.entityId;
+            Log.Out("当前执行者ID为:" + pid);
+            if (MainController.Hiders.Contains(pid))
+            {
+                Log.Out("进入SetPosAndQRotFromNetwork_fix");
+                Vector3i newPos = new Vector3i(_pos);
+                Vector3i oldPos = MainController.HidersPos[pid];
+                //如果位置发生变化，更新目标位置 burntWoodRoof
+                if (newPos != oldPos)
+                {
+                    BlockTools.RemoveBlock(oldPos);
+                    BlockTools.SetBlock(newPos, "burntWoodRoof");
+                    MainController.HidersPos[pid] = newPos;
                 }
                 //阻止玩家移动
                 return false;

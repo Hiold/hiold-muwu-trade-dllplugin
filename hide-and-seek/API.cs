@@ -60,7 +60,26 @@ namespace HioldMod
                 harmony.Patch(original2, new HarmonyMethod(prefix2), null);
             }
 
-           
+
+
+
+            MethodInfo original3 = AccessTools.Method(typeof(Entity), "SetPosAndRotFromNetwork");
+            if (original3 == null)
+            {
+                Log.Out(string.Format("[HioldMod] 注入失败: WorldStaticData.SendXmlsToClient 未找到"));
+            }
+            else
+            {
+                MethodInfo prefix3 = typeof(Injections).GetMethod("SetPosAndRotFromNetwork_fix");
+                if (prefix3 == null)
+                {
+                    Log.Out(string.Format("[HioldMod] 注入失败: Injections.SendXmlsToClient_postfix"));
+                    return;
+                }
+                harmony.Patch(original3, new HarmonyMethod(prefix3), null);
+            }
+
+
 
 
             int ret = ChatInterface.ChatWatcher_Register(OnChatMessage, "HioldMuwu");

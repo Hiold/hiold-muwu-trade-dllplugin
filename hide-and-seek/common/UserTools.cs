@@ -15,14 +15,21 @@ namespace hide_and_seek.common
         /// <returns></returns>
         public static int GetEntityPlatformUserIdentifierAbs(PlatformUserIdentifierAbs pf)
         {
-            foreach (ClientInfo _info in ConnectionManager.Instance.Clients.List)
+            try
             {
-                if (_info.PlatformId.ReadablePlatformUserIdentifier.Equals(pf.ReadablePlatformUserIdentifier))
+                foreach (ClientInfo _info in ConnectionManager.Instance.Clients.List)
                 {
-                    return _info.entityId;
+                    if (_info.PlatformId.ReadablePlatformUserIdentifier.Equals(pf.ReadablePlatformUserIdentifier))
+                    {
+                        return _info.entityId;
+                    }
                 }
+                return -1;
             }
-            return -1;
+            catch (Exception)
+            {
+                return -1;
+            }
         }
 
 
@@ -42,5 +49,5 @@ namespace hide_and_seek.common
         }
     }
 
-    
+
 }
