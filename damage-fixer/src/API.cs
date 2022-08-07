@@ -37,7 +37,6 @@ namespace HioldMod
                 }
                 harmony.Patch(original, new HarmonyMethod(prefix), null);
             }
-
             /*
             Log.Out("[HioldDamageFixer] Hook了原版");
             Harmony harmony = new Harmony("net.hiold.patch.damagefixer");
@@ -105,7 +104,7 @@ namespace HioldMod
             //Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
             var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
             EntityPlayer _player = (EntityPlayer)(EntityPlayer)GameManager.Instance.World.GetEntity(ownerEntityId);
-            int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
+            int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, _dmResponse.Source.DamageTypeTag, true, true, true, true, 1, true);
             //Log.Out("[HioldDamageFixer] 修正 " + damage);
             if (damage == 65535)
             {
@@ -115,20 +114,45 @@ namespace HioldMod
         }
 
 
-        public static void ProcessDamageResponseLocal_fix(ref DamageResponse _dmResponse)
+        public static void ProcessDamageResponseLocal_fix(ref DamageResponse _dmResponse, EntityAlive __instance)
         {
             if (_dmResponse.Strength == 65535)
             {
                 //Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
                 //Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
+
+
                 var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
-                EntityPlayer _player = (EntityPlayer)(EntityPlayer)GameManager.Instance.World.GetEntity(ownerEntityId);
-                int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
-                //Log.Out("[HioldDamageFixer] 修正 " + damage);
+                EntityPlayer _player = (EntityPlayer)GameManager.Instance.World.GetEntity(ownerEntityId);
+                FastTags ft = FastTags.Parse(_dmResponse.Source.GetEntityDamageEquipmentSlotGroup(_player).ToStringCached<EnumEquipmentSlotGroup>()) | _player.inventory.holdingItemItemValue.ItemClass.ItemTags | _player.EntityClass.Tags;
+                Log.Out("[HioldDamageFixer] 修正Tag: " + ft.ToString());
+                int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null,
+                    ft
+                    , true, true, true, true, 1, true);
+                Log.Out("[HioldDamageFixer] 修正原始值: " + damage);
+                damage = (int)EffectManager.GetValue(PassiveEffects.DamageModifier, _player.inventory.holdingItemItemValue, damage, _player, null,
+                   ft
+                   , true, true, true, true, 1, true);
+                Log.Out("[HioldDamageFixer] 修正修正后值: " + damage);
+                int a1 = _dmResponse.ArmorDamage;
+
+                __instance.equipment.CalcDamage(ref damage, ref a1, _dmResponse.Source.DamageTypeTag, _player.MinEventContext.Other, _player.inventory.holdingItemItemValue);
+                Log.Out("[HioldDamageFixer] 修正盔甲影响后的值: " + damage);
+
+                _dmResponse.ArmorDamage = a1;
+
+                if (_dmResponse.Source.DamageTypeTag.GetTagNames() != null && _dmResponse.Source.DamageTypeTag.GetTagNames().Count > 0)
+                {
+                    foreach (string tg in _dmResponse.Source.DamageTypeTag.GetTagNames())
+                    {
+                        //Log.Out("[HioldDamageFixer] 修正 " + tg);
+                    }
+                }
                 if (damage == 65535)
                 {
                     damage++;
                 }
+                Log.Out("[HioldDamageFixer] 修正: " + damage);
                 _dmResponse.Strength = damage;
             }
         }
@@ -142,8 +166,14 @@ namespace HioldMod
                 //Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
                 var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
                 EntityPlayer _player = (EntityPlayer)__instance.world.GetEntity(ownerEntityId);
-                int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
-                //Log.Out("[HioldDamageFixer] 修正 " + damage);
+                int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, _dmResponse.Source.DamageTypeTag, true, true, true, true, 1, true);
+                if (_dmResponse.Source.DamageTypeTag.GetTagNames() != null && _dmResponse.Source.DamageTypeTag.GetTagNames().Count > 0)
+                {
+                    foreach (string tg in _dmResponse.Source.DamageTypeTag.GetTagNames())
+                    {
+                        Log.Out("[HioldDamageFixer] 修正 " + tg);
+                    }
+                }                //Log.Out("[HioldDamageFixer] 修正 " + damage);
                 if (damage == 65535)
                 {
                     damage++;

@@ -86,8 +86,8 @@ namespace hide_and_seek.common
                 //如果位置发生变化，更新目标位置 burntWoodRoof
                 if (newPos != oldPos)
                 {
-                    BlockTools.RemoveBlock(oldPos);
-                    BlockTools.SetBlock(newPos, "burntWoodRoof");
+                    BlockTools.RemoveBlock(pid, oldPos);
+                    BlockTools.SetBlock(entity, newPos, "burntWoodRoof");
                 }
                 //阻止玩家移动
                 return false;
@@ -109,8 +109,8 @@ namespace hide_and_seek.common
                 //如果位置发生变化，更新目标位置 burntWoodRoof
                 if (newPos != oldPos)
                 {
-                    BlockTools.RemoveBlock(oldPos);
-                    BlockTools.SetBlock(newPos, "burntWoodRoof");
+                    BlockTools.RemoveBlock(pid, oldPos);
+                    BlockTools.SetBlock(__instance, newPos, "burntWoodRoof");
                 }
                 //阻止玩家移动
                 return false;
@@ -132,9 +132,9 @@ namespace hide_and_seek.common
                 //如果位置发生变化，更新目标位置 burntWoodRoof
                 if (newPos != oldPos)
                 {
-                    BlockTools.RemoveBlock(oldPos);
-                    BlockTools.SetBlock(newPos, "burntWoodRoof");
-                    MainController.HidersPos[pid] = newPos;
+                    BlockTools.RemoveBlock(pid, oldPos);
+                    BlockTools.SetBlock(__instance, newPos, "burntWoodRoof");
+                    //MainController.HidersPos[pid] = newPos;
                 }
                 //阻止玩家移动
                 return false;
