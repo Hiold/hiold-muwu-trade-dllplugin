@@ -1006,6 +1006,11 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("id", out string id);
                 UserRequire ur = UserRequireService.selectUserRequireByid(id);
 
+                if (ur.Status!= UserRequireConfig.NORMAL_REQUIRE)
+                {
+                    ResponseUtils.ResponseFail(response, "状态校验异常，无法供货");
+                    return;
+                }
 
                 if (ur == null)
                 {
