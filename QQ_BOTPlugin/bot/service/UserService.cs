@@ -58,5 +58,10 @@ namespace QQ_BOTPlugin.bot.service
             return DataBase.db.Queryable<UserInfo>().Where(string.Format("gameentityid = '{0}' ", steamid)).ToList();
         }
 
+        public static UserInfo getUserByQQ(string qq)
+        {
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("qq = '{0}' ", qq)).First;
+        }
+
     }
 }

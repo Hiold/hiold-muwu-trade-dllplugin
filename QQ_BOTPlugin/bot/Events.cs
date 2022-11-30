@@ -13,7 +13,7 @@ namespace QQ_BOTPlugin.bot
     {
         public static void OnSell(UserInfo ui, UserTrade ut)
         {
-            CMD.sbConsole.AppendLine("触发上架事件群号为:"+BOT.qunNumber);
+            CMD.sbConsole.AppendLine("触发上架事件群号为:" + BOT.qunNumber);
             string content = string.Format("{0} 上架了{1}个{2}，单价{3}", ui.name, ut.stock, RegexUtils.ReplaceBBCode(ut.translate), ut.price);
             MessagePostUtils.PostGroupMessage(BOT.qunNumber, content);
         }
@@ -67,6 +67,19 @@ namespace QQ_BOTPlugin.bot
                 }
                 string content = string.Format("玩家 [{0}] 通过抽奖获得奖励\r\n", ui.name) + awardinfo.ToString();
                 MessagePostUtils.PostGroupMessage(BOT.qunNumber, content);
+            }
+        }
+
+        /// <summary>
+        /// 聊天
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="_info"></param>
+        public static void OnChat(string msg, ClientInfo _info)
+        {
+            if (BOT.chat)
+            {
+                MessagePostUtils.PostGroupMessage(BOT.qunNumber, string.Format("Game [{0}]：{1}", _info.playerName, msg));
             }
         }
     }

@@ -21,6 +21,7 @@ using HioldMod.src.HttpServer.router;
 using HioldMod.src.Plugins;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using HioldMod.src;
 
 namespace HioldMod
 {
@@ -270,8 +271,9 @@ namespace HioldMod
             /// <param name=""></param>
             private static void OnChatMessage(ClientInfo _cInfo, string _msg, /*uint _timeStamp,*/ EChatType _type)
             {
+                TradeSysEvents.TrigerChatEvent(_msg, _cInfo);
                 //监听[/sa]命令
-                if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
+                if (!string.IsNullOrEmpty(_msg) && _msg.Contains("/shop"))
                 {
                     LogUtils.Loger("正在执行shop");
                     if (_cInfo != null)
@@ -285,7 +287,7 @@ namespace HioldMod
                 }
 
                 //监听[/pmreg]命令
-                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/pmreg"))
+                if (!string.IsNullOrEmpty(_msg) && _msg.Contains("/pmreg"))
                 {
                     string[] command = _msg.Split(' ');
                     //命令参数不正确

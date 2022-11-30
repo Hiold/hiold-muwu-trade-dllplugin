@@ -14,7 +14,9 @@ namespace HioldMod.src
         //物品被购买事件
         private static List<Action<UserInfo, UserInfo, UserStorage, double>> SellOutEvent = new List<Action<UserInfo, UserInfo, UserStorage, double>>();
         //抽奖事件
-        private static List<Action<Lottery, UserInfo,List<AwardInfo>>> LotteryEvent = new List<Action<Lottery, UserInfo, List<AwardInfo>>>();
+        private static List<Action<Lottery, UserInfo, List<AwardInfo>>> LotteryEvent = new List<Action<Lottery, UserInfo, List<AwardInfo>>>();
+        //抽奖事件
+        private static List<Action<string, ClientInfo>> chatEvent = new List<Action<string, ClientInfo>>();
 
 
         public static void RegOnSellEvent(Action<UserInfo, UserTrade> action)
@@ -32,6 +34,12 @@ namespace HioldMod.src
         public static void RegLotteryEvent(Action<Lottery, UserInfo, List<AwardInfo>> action)
         {
             LotteryEvent.Add(action);
+        }
+
+        public static void RegChatEvent(Action<string, ClientInfo> action)
+        {
+            //委托方法加入列表
+            chatEvent.Add(action);
         }
 
         /// <summary>
@@ -78,6 +86,21 @@ namespace HioldMod.src
                 Task.Run(() =>
                 {
                     delegateFunc(lottery, ui, awards);
+                });
+            }
+        }
+
+        /// <summary>
+        /// 触发聊天事件
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void TrigerChatEvent(string msg, ClientInfo _info)
+        {
+            foreach (Action<string, ClientInfo> delegateFunc in chatEvent)
+            {
+                Task.Run(() =>
+                {
+                    delegateFunc(msg, _info);
                 });
             }
         }

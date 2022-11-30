@@ -42,6 +42,14 @@ namespace QQ_BOTPlugin.bot.websocket
                 return;
             }
 
+            //发送聊天数据
+            if (BOT.chat)
+            {
+                UserInfo info = QQ_BOTPlugin.bot.service.UserService.getUserByQQ(message.sender.user_id + "");
+                BOT.sendToPlayer(info.gameentityid, message.sender.nickname + "：" + message);
+            }
+
+
             //校验完成继续处理
             string command = message.message;
             CMD.sbConsole.AppendLine("响应指令：" + command);
@@ -126,7 +134,7 @@ namespace QQ_BOTPlugin.bot.websocket
                 string qq = message.sender.user_id + "";
                 if (BOT.bindUser.TryGetValue(qq, out string steamid))
                 {
-                    
+
                 }
                 else
                 {

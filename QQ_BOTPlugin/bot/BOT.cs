@@ -34,6 +34,10 @@ namespace QQ_BOTPlugin.bot
         public static bool isAlive = false;
         //心跳数据
         public static HeartBeat heartBeat;
+        //签到qdCount
+        public static int qdCount = 0;
+        //同步chat
+        public static bool chat = false;
 
         public static Dictionary<string, string> bindUser = new Dictionary<string, string>();
 
@@ -84,6 +88,8 @@ namespace QQ_BOTPlugin.bot
             TradeSysEvents.RegOnSellEvent(Events.OnSell);
             //TradeSysEvents.RegSellOutEvent(Events.SellOut);
             TradeSysEvents.RegLotteryEvent(Events.Lottery);
+            //注册聊天同步方法
+            TradeSysEvents.RegChatEvent(Events.OnChat);
             //运行qq
             CMD.RunQQMCL();
             //初始化websocket
@@ -213,8 +219,11 @@ namespace QQ_BOTPlugin.bot
                 }
                 Dictionary<string, string> jsonMap = new Dictionary<string, string>();
                 jsonMap = SimpleJson2.SimpleJson2.DeserializeObject<Dictionary<string, string>>(jsonContent);
-                jsonMap.TryGetValue("qdCount", out string count);
-                
+                jsonMap.TryGetValue("qdCount", out string qdCountStr);
+                jsonMap.TryGetValue("chat", out string chatStr);
+                int.TryParse(qdCountStr, out qdCount);
+                bool.TryParse(chatStr, out chat);
+
 
             }
             catch (Exception e)
@@ -224,5 +233,34 @@ namespace QQ_BOTPlugin.bot
 
         }
 
+
+        /// <summary>
+        /// 获取玩家ClientInfo数据
+        /// </summary>
+        /// <param name="_playerId"></param>
+        /// <returns></returns>
+        public static ClientInfo GetClientInfoByEOSorSteamid(string _playerId)
+        {
+            ClientInfoCollection cic = ConnectionManager.Instance.Clients;
+            //Log.Out("[HioldMod]服务器中总玩家数为:" + _persistentPlayerList.Players.Count);
+            foreach (ClientInfo clientInfo in cic.List)
+            {
+                //Log.Out("[HioldMod]Identify=" + pls.Key.CombinedString);
+                if (clientInfo.PlatformId.ReadablePlatformUserIdentifier.Equals(_playerId) || clientInfo.CrossplatformId.ReadablePlatformUserIdentifier.Equals(_playerId))
+                {
+                    return clientInfo;
+                }
+            }
+            return null;
+        }
+
+        public static void sendToPlayer(string steamid, string msg)
+        {
+            ClientInfo _cInfo = GetClientInfoByEOSorSteamid(steamid);
+            if (_cInfo != null)
+            {
+                _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]群聊天消息", false, null));
+            }
+        }
     }
 }
