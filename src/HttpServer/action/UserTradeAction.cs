@@ -107,7 +107,7 @@ namespace HioldMod.src.HttpServer.action
                     string tdEnd = DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59";
                     Int64 tdCount = ActionLogService.QueryItemLogCount(ui.gameentityid, item.id + "", LogType.BuyItem, tdStart, tdEnd);
                     Int64 allCount = ActionLogService.QueryItemLogCount(ui.gameentityid, item.id + "", LogType.BuyItem, null, null);
-                    if ((item.xglevel.Equals("2") || item.xglevel.Equals("3")) && int.TryParse(item.xgdayset, out int intxgdayset))
+                    if ((item.xgday.Equals("2") || item.xgday.Equals("3")) && int.TryParse(item.xgdayset, out int intxgdayset))
                     {
                         if (tdCount + intCount > intxgdayset)
                         {
@@ -426,6 +426,8 @@ namespace HioldMod.src.HttpServer.action
                         extinfo1 = SimpleJson2.SimpleJson2.SerializeObject(_buy),
                         extinfo2 = SimpleJson2.SimpleJson2.SerializeObject(userStorate),
                         extinfo3 = priceAll + "",
+                        extinfo4 = _buy.id,
+                        extinfo5 = _buy.count,
                         desc = string.Format("从系统商店购买{0}个{1}，共消费{2}", _buy.count, item.translate, priceAll)
                     });
                     ResponseUtils.ResponseSuccess(response);

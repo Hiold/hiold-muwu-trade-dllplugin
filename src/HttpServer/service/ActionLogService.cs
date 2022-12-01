@@ -58,11 +58,11 @@ namespace HioldMod.src.HttpServer.service
             DataRow[] dt = null;
             if (startTime == null && endTime == null)
             {
-                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo3) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' ", id, itemid, logtype)).Select();
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo5) cnt from actionlog t where t.atcPlayerEntityId='{0}' and extinfo4='{1}' and t.actType='{2}' ", id, itemid, logtype)).Select();
             }
             else
             {
-                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo3) cnt from actionlog t where t.atcPlayerEntityId='{0}' and t.extinfo1='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", id, itemid, logtype, startTime, endTime)).Select();
+                dt = DataBase.logdb.Ado.GetDataTable(string.Format("select sum(extinfo5) cnt from actionlog t where t.atcPlayerEntityId='{0}' and extinfo4='{1}' and t.actType='{2}' and t.actTime>'{3}' and t.actTime< '{4}' ", id, itemid, logtype, startTime, endTime)).Select();
             }
             //Console.WriteLine(dt);
             foreach (DataRow row in dt)

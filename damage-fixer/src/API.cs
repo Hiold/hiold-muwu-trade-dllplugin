@@ -101,12 +101,12 @@ namespace HioldMod
 
         public static void b03c91d7970040f397b608a7fcc3f2c1_fix(ref DamageResponse _dmResponse)
         {
-            Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
-            Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
+           // Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
+            //Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
             var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
             EntityPlayer _player = (EntityPlayer)(EntityPlayer)GameManager.Instance.World.GetEntity(ownerEntityId);
             int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
-            Log.Out("[HioldDamageFixer] 修正 " + damage);
+            //Log.Out("[HioldDamageFixer] 修正 " + damage);
             if (damage == 65535)
             {
                 damage++;
@@ -119,12 +119,12 @@ namespace HioldMod
         {
             if (_dmResponse.Strength == 65535)
             {
-                Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
-                Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
+                //Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
+                //Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
                 var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
                 EntityPlayer _player = (EntityPlayer)(EntityPlayer)GameManager.Instance.World.GetEntity(ownerEntityId);
                 int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
-                Log.Out("[HioldDamageFixer] 修正 " + damage);
+                //Log.Out("[HioldDamageFixer] 修正 " + damage);
                 if (damage == 65535)
                 {
                     damage++;
@@ -138,12 +138,12 @@ namespace HioldMod
             //修正数据
             if (_dmResponse.Strength == 65535)
             {
-                Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
-                Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
+                //Log.Out("[HioldDamageFixer] 发现溢出的伤害，拦截并修正数据");
+                //Log.Out("[HioldDamageFixer] 伤害值 " + _dmResponse.Strength);
                 var ownerEntityId = Traverse.Create(_dmResponse.Source).Field("ownerEntityId").GetValue<int>();
                 EntityPlayer _player = (EntityPlayer)__instance.world.GetEntity(ownerEntityId);
                 int damage = (int)EffectManager.GetValue(PassiveEffects.EntityDamage, _player.inventory.holdingItemItemValue, 0f, _player, null, default(FastTags), true, true, true, true, 1, true);
-                Log.Out("[HioldDamageFixer] 修正 " + damage);
+                //Log.Out("[HioldDamageFixer] 修正 " + damage);
                 if (damage == 65535)
                 {
                     damage++;
@@ -162,7 +162,7 @@ namespace HioldMod
 
         public static bool ProcessPackage_fix(World _world, GameManager _callbacks, NetPackageDamageEntity __instance)
         {
-            Log.Out("[HioldDamageFixer] 拦截到伤害执行");
+            //Log.Out("[HioldDamageFixer] 拦截到伤害执行");
             //获取重要参数
             var damageTyp = Traverse.Create(__instance).Field("damageTyp").GetValue<EnumDamageTypes>();
             var entityId = Traverse.Create(__instance).Field("entityId").GetValue<int>();
@@ -193,7 +193,7 @@ namespace HioldMod
             var ArmorSlot = Traverse.Create(__instance).Field("ArmorSlot").GetValue<EnumEquipmentSlot>();
             var ArmorSlotGroup = Traverse.Create(__instance).Field("ArmorSlotGroup").GetValue<EnumEquipmentSlotGroup>();
             var ArmorDamage = Traverse.Create(__instance).Field("ArmorDamage").GetValue<int>();
-            Log.Out("[HioldDamageFixer] 伤害值 " + strength);
+            //Log.Out("[HioldDamageFixer] 伤害值 " + strength);
 
 
 
