@@ -459,6 +459,12 @@ namespace HioldMod.src.HttpServer.action
         {
             try
             {
+                if (MainConfig.banSellOut.Equals("True"))
+                {
+                    ResponseUtils.ResponseFail(response, "交易系统已关闭此功能，如有疑问请联系管理员！");
+                    return;
+                }
+
                 //获取参数
                 string postData = ServerUtils.getPostData(request.request);
                 Dictionary<string, string> queryRequest = (Dictionary<string, string>)SimpleJson2.SimpleJson2.DeserializeObject(postData, typeof(Dictionary<string, string>));
@@ -767,6 +773,11 @@ namespace HioldMod.src.HttpServer.action
         {
             try
             {
+                if (MainConfig.banTradeBuy.Equals("True"))
+                {
+                    ResponseUtils.ResponseFail(response, "交易系统已关闭此功能，如有疑问请联系管理员！");
+                    return;
+                }
                 string postData = ServerUtils.getPostData(request.request);
                 buy _buy = new buy();
                 _buy = (buy)SimpleJson2.SimpleJson2.DeserializeObject(postData, _buy.GetType());
@@ -997,6 +1008,11 @@ namespace HioldMod.src.HttpServer.action
                 queryRequest.TryGetValue("id", out string id);
                 UserRequire ur = UserRequireService.selectUserRequireByid(id);
 
+                if (ur.Status!= UserRequireConfig.NORMAL_REQUIRE)
+                {
+                    ResponseUtils.ResponseFail(response, "状态校验异常，无法供货");
+                    return;
+                }
 
                 if (ur == null)
                 {

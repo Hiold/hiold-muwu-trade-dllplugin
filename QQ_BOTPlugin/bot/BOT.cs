@@ -34,6 +34,12 @@ namespace QQ_BOTPlugin.bot
         public static bool isAlive = false;
         //心跳数据
         public static HeartBeat heartBeat;
+        //签到qdCount
+        public static int qdCount = 0;
+        //同步chat
+        public static bool chat = false;
+
+        public static Dictionary<string, string> bindUser = new Dictionary<string, string>();
 
         //是否配置完成
 
@@ -54,6 +60,8 @@ namespace QQ_BOTPlugin.bot
             AttributeAnalysis.AnalysisStart();
             //加载配置文件
             loadConfig();
+            //
+            loadBindSteam();
             //初始化qqbot
             //token = Adaptor.GetToken(key);
             //Adaptor.Bind(token, qq);
@@ -80,6 +88,8 @@ namespace QQ_BOTPlugin.bot
             TradeSysEvents.RegOnSellEvent(Events.OnSell);
             //TradeSysEvents.RegSellOutEvent(Events.SellOut);
             TradeSysEvents.RegLotteryEvent(Events.Lottery);
+            //注册聊天同步方法
+            TradeSysEvents.RegChatEvent(Events.OnChat);
             //运行qq
             CMD.RunQQMCL();
             //初始化websocket
@@ -133,33 +143,124 @@ namespace QQ_BOTPlugin.bot
 
         }
 
-        //    public static void HandleMessage(object obj)
-        //    {
-        //        try
-        //        {
-        //            Message msg = Adaptor.FetchMessage(token, 10);
-        //            //消息体不为空则开始处理
-        //            if (msg.data != null && msg.data.Count > 0)
-        //            {
-        //                foreach (object meessage in msg.data)
-        //                {
-        //                    //处理群消息
-        //                    if (meessage.GetType().IsAssignableFrom(typeof(GroupMessage)))
-        //                    {
-        //                        MessageDispacher.HandleGrouopMessage(meessage);
-        //                    }
-        //                    //处理私聊
-        //                    if (meessage.GetType().IsAssignableFrom(typeof(TempMessage)))
-        //                    {
-        //                        MessageDispacher.HandleTempMessage(meessage);
-        //                    }
 
-        //                }
-        //            }
-        //        }
-        //        catch (Exception)
-        //        {
-        //        }
-        //    }
+        /// <summary>
+        /// 加载配置文件
+        /// </summary>
+        public static void loadBindSteam()
+        {
+            LogUtils.Loger("加载绑定用户");
+            string path = string.Format("{0}/plugins/steam.json", HioldMod.HioldMod.API.AssemblyPath);
+            try
+            {
+                if (!System.IO.File.Exists(path))
+                {
+                    return;
+                }
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] tmp = line.Split("-");
+                        bindUser[tmp[0]] = tmp[1];
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public static void saveBindSteam()
+        {
+            LogUtils.Loger("保存绑定用户");
+            string path = string.Format("{0}/plugins/steam.json", HioldMod.HioldMod.API.AssemblyPath);
+            FileInfo fi = new FileInfo(path);
+            if (fi.Exists)
+            {
+                fi.Delete();
+            }
+            fi.Create();
+
+            // 读取文本文件
+            using (StreamWriter sr = new StreamWriter(path))
+            {
+                foreach (KeyValuePair<string, string> kvp in bindUser)
+                {
+                    sr.WriteLine(kvp.Key + "-" + kvp.Value);
+                }
+
+            }
+        }
+
+
+        public static void loadWYSConfig()
+        {
+            string jsonContent = "";
+            string path = string.Format("{0}/plugins/wys.json", HioldMod.HioldMod.API.AssemblyPath);
+            try
+            {
+                if (!System.IO.File.Exists(path))
+                {
+                    return;
+                }
+                // 读取文本文件
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string line;
+                    // ReadLine()一行一行的循环读取
+                    //当然可以直接ReadToEnd()读到最后
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        jsonContent += line;
+                    }
+                }
+                Dictionary<string, string> jsonMap = new Dictionary<string, string>();
+                jsonMap = SimpleJson2.SimpleJson2.DeserializeObject<Dictionary<string, string>>(jsonContent);
+                jsonMap.TryGetValue("qdCount", out string qdCountStr);
+                jsonMap.TryGetValue("chat", out string chatStr);
+                int.TryParse(qdCountStr, out qdCount);
+                bool.TryParse(chatStr, out chat);
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+
+
+        /// <summary>
+        /// 获取玩家ClientInfo数据
+        /// </summary>
+        /// <param name="_playerId"></param>
+        /// <returns></returns>
+        public static ClientInfo GetClientInfoByEOSorSteamid(string _playerId)
+        {
+            ClientInfoCollection cic = ConnectionManager.Instance.Clients;
+            //Log.Out("[HioldMod]服务器中总玩家数为:" + _persistentPlayerList.Players.Count);
+            foreach (ClientInfo clientInfo in cic.List)
+            {
+                //Log.Out("[HioldMod]Identify=" + pls.Key.CombinedString);
+                if (clientInfo.PlatformId.ReadablePlatformUserIdentifier.Equals(_playerId) || clientInfo.CrossplatformId.ReadablePlatformUserIdentifier.Equals(_playerId))
+                {
+                    return clientInfo;
+                }
+            }
+            return null;
+        }
+
+        public static void sendToPlayer(string steamid, string msg)
+        {
+            ClientInfo _cInfo = GetClientInfoByEOSorSteamid(steamid);
+            if (_cInfo != null)
+            {
+                _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]群聊天消息", false, null));
+            }
+        }
     }
 }

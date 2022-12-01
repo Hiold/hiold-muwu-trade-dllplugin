@@ -14,6 +14,7 @@ namespace QQ_BOTPlugin.bot.websocket
     {
         public static void HandleMessage(string msg)
         {
+            CMD.sbConsole.AppendLine("收到消息：" + msg);
             //心跳数据
             if (msg.Contains("\"meta_event_type\":\"heartbeat\""))
             {
@@ -40,6 +41,14 @@ namespace QQ_BOTPlugin.bot.websocket
                 CMD.sbConsole.AppendLine("来自群" + message.group_id + "的群消息，当前配置" + BOT.qunNumber + "不处理");
                 return;
             }
+
+            //发送聊天数据
+            if (BOT.chat)
+            {
+                UserInfo info = QQ_BOTPlugin.bot.service.UserService.getUserByQQ(message.sender.user_id + "");
+                BOT.sendToPlayer(info.gameentityid, message.sender.nickname + "：" + message);
+            }
+
 
             //校验完成继续处理
             string command = message.message;
@@ -118,6 +127,22 @@ namespace QQ_BOTPlugin.bot.websocket
                 MessagePostUtils.PostGroupMessage(BOT.qunNumber, content);
             }
 
+
+            if (command.StartsWith("签到"))
+            {
+                //
+                string qq = message.sender.user_id + "";
+                if (BOT.bindUser.TryGetValue(qq, out string steamid))
+                {
+
+                }
+                else
+                {
+                    BOT.bindUser[qq] = steamid;
+                    BOT.saveBindSteam();
+                    MessagePostUtils.PostGroupMessage(BOT.qunNumber, "签到失败！你还没有绑定steam账号，请前往交易系统-交易中心-编辑资料 中进行绑定");
+                }
+            }
 
         }
     }

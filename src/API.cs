@@ -21,6 +21,7 @@ using HioldMod.src.HttpServer.router;
 using HioldMod.src.Plugins;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using HioldMod.src;
 
 namespace HioldMod
 {
@@ -75,7 +76,7 @@ namespace HioldMod
 
             public static void KillJavaProcess(string command)
             {
-                Console.WriteLine("请输⼊要执⾏的命令:");
+                //Console.WriteLine("请输⼊要执⾏的命令:");
                 Process p = new Process();
                 //设置要启动的应⽤程序
                 p.StartInfo.FileName = "cmd.exe";
@@ -270,8 +271,9 @@ namespace HioldMod
             /// <param name=""></param>
             private static void OnChatMessage(ClientInfo _cInfo, string _msg, /*uint _timeStamp,*/ EChatType _type)
             {
+                TradeSysEvents.TrigerChatEvent(_msg, _cInfo);
                 //监听[/sa]命令
-                if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
+                if (!string.IsNullOrEmpty(_msg) && _msg.Contains("/shop"))
                 {
                     LogUtils.Loger("正在执行shop");
                     if (_cInfo != null)
@@ -285,7 +287,7 @@ namespace HioldMod
                 }
 
                 //监听[/pmreg]命令
-                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/pmreg"))
+                if (!string.IsNullOrEmpty(_msg) && _msg.Contains("/pmreg"))
                 {
                     string[] command = _msg.Split(' ');
                     //命令参数不正确
@@ -312,6 +314,59 @@ namespace HioldMod
                         Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
                     }
                 }
+
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/rmtest"))
+                {
+                    string[] command = _msg.Split(' ');
+                    //命令参数不正确
+                    if (command.Length < 2)
+                    {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, "[ff0000]注册失败,格式错误,正确格式为/pmreg 密码", "[87CEFA]交易系统", false, null));
+                    }
+                    if (_cInfo != null)
+                    {
+                        string newpw = command[1];
+                        int ta = int.Parse(newpw);
+                        EntityAlive target = (EntityAlive)GameManager.Instance.World.GetEntity(_cInfo.entityId);
+                        NetPackagePlayerStats nps = NetPackageManager.GetPackage<NetPackagePlayerStats>().Setup(target);
+                        Traverse.Create(nps).Field("holdingItemIndex").SetValue((byte)ta);
+                        Traverse.Create(nps).Field("holdingItemStack").SetValue(ItemStack.Empty.Clone());
+                        _cInfo.SendPackage(nps);
+                        BlockValue bv = Block.GetBlockValue("terrStone");
+                        Vector3i pos = new Vector3i(target.position);
+                        GameManager.Instance.World.SetBlockRPC(pos, bv);
+                    }
+                    else
+                    {
+                        Log.Error("ChatHookExample: Argument _cInfo null on message: {0}", _msg);
+                    }
+                }
+
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/setb"))
+                {
+
+                    EntityAlive target = (EntityAlive)GameManager.Instance.World.GetEntity(_cInfo.entityId);
+                    BlockValue bv = Block.GetBlockValue("terrStone");
+                    Vector3i pos = new Vector3i(target.position);
+                    GameManager.Instance.World.SetBlockRPC(pos, bv);
+
+                }
+
+                //监听[/pmreg]命令
+                if (!string.IsNullOrEmpty(_msg) && _msg.StartsWith("/rmb"))
+                {
+
+                    EntityAlive target = (EntityAlive)GameManager.Instance.World.GetEntity(_cInfo.entityId);
+                    BlockValue bv = Block.GetBlockValue("air");
+                    Vector3i pos = new Vector3i(target.position);
+                    GameManager.Instance.World.SetBlockRPC(pos, bv);
+
+                }
+
             }
 
             private static void OnFastRestartPrepared()
