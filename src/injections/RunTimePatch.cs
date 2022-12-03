@@ -85,6 +85,7 @@ namespace ServerTools
                         Log.Out(string.Format("[HioldMod] 注入失败: Injections.SendXmlsToClient_postfix"));
                         return;
                     }
+                    
                     harmony.Patch(original2, new HarmonyMethod(prefix2), null);
                 }
 
