@@ -46,7 +46,7 @@ namespace QQ_BOTPlugin.bot.websocket
             if (BOT.chat)
             {
                 UserInfo info = QQ_BOTPlugin.bot.service.UserService.getUserByQQ(message.sender.user_id + "");
-                BOT.sendToPlayer(info.gameentityid, message.sender.nickname + "：" + message);
+                BOT.BroadCast(message.sender.nickname + "：" + message.message);
             }
 
 

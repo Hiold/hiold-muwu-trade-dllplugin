@@ -62,6 +62,7 @@ namespace QQ_BOTPlugin.bot
             loadConfig();
             //
             loadBindSteam();
+            loadWYSConfig();
             //初始化qqbot
             //token = Adaptor.GetToken(key);
             //Adaptor.Bind(token, qq);
@@ -162,7 +163,7 @@ namespace QQ_BOTPlugin.bot
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        string[] tmp = line.Split("-");
+                        string[] tmp = line.Split('-');
                         bindUser[tmp[0]] = tmp[1];
                     }
                 }
@@ -260,6 +261,35 @@ namespace QQ_BOTPlugin.bot
             if (_cInfo != null)
             {
                 _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]群聊天消息", false, null));
+            }
+        }
+
+
+        public static ClientInfo GetClientInfoFromEntityId(int _EntityId)
+        {
+            ClientInfo _cInfo = ConnectionManager.Instance.Clients.ForEntityId(_EntityId);
+            if (_cInfo != null)
+            {
+                return _cInfo;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 全服广播
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void BroadCast(string msg)
+        {
+            foreach (EntityPlayer ep in GameManager.Instance.World.GetPlayers())
+            {
+                
+                    ClientInfo _cInfo = GetClientInfoFromEntityId(ep.entityId);
+                    if (_cInfo != null)
+                    {
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]群聊天消息", false, null));
+                    }
+                
             }
         }
     }

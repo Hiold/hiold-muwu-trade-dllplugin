@@ -60,7 +60,7 @@ namespace QQ_BOTPlugin.bot.service
 
         public static UserInfo getUserByQQ(string qq)
         {
-            return DataBase.db.Queryable<UserInfo>().Where(string.Format("qq = '{0}' ", qq)).First;
+            return DataBase.db.Queryable<UserInfo>().Where(string.Format("qq = '{0}' ", qq)).First();
         }
 
     }
