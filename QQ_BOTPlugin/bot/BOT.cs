@@ -61,7 +61,7 @@ namespace QQ_BOTPlugin.bot
             //加载配置文件
             loadConfig();
             //
-            loadBindSteam();
+            //loadBindSteam();
             loadWYSConfig();
             //初始化qqbot
             //token = Adaptor.GetToken(key);
@@ -287,7 +287,7 @@ namespace QQ_BOTPlugin.bot
                     ClientInfo _cInfo = GetClientInfoFromEntityId(ep.entityId);
                     if (_cInfo != null)
                     {
-                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]群聊天消息", false, null));
+                        _cInfo.SendPackage(NetPackageManager.GetPackage<NetPackageChat>().Setup(EChatType.Whisper, -1, msg, "[87CEFA]【QQ群】", false, null));
                     }
                 
             }

@@ -79,7 +79,7 @@ namespace QQ_BOTPlugin.bot
         {
             if (BOT.chat)
             {
-                MessagePostUtils.PostGroupMessage(BOT.qunNumber, string.Format("Game [{0}]：{1}", _info.playerName, msg));
+                MessagePostUtils.PostGroupMessage(BOT.qunNumber, string.Format("【游戏】 {0}：{1}", _info.playerName, msg));
             }
         }
     }
