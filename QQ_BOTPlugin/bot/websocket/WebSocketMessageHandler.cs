@@ -14,6 +14,8 @@ namespace QQ_BOTPlugin.bot.websocket
 {
     public class WebSocketMessageHandler
     {
+        public static Dictionary<string, DateTime> check = new Dictionary<string, DateTime>();
+
         public static void HandleMessage(string msg)
         {
             CMD.sbConsole.AppendLine("收到消息：" + msg);
@@ -217,6 +219,39 @@ namespace QQ_BOTPlugin.bot.websocket
                 string id = command.Replace("十连", "").Replace(" ", "");
                 string msg = doLottery(info, id, "10");
                 MessagePostUtils.PostGroupMessage(BOT.qunNumber, msg);
+            }
+
+            //打卡
+            if (command.StartsWith("打卡"))
+            {
+                UserInfo info = QQ_BOTPlugin.bot.service.UserService.getUserByQQ(message.sender.user_id + "");
+                if (info == null)
+                {
+                    //BOT.saveBindSteam();
+                    MessagePostUtils.PostGroupMessage(BOT.qunNumber, "你还没有绑定游戏账号，请前往交易系统-交易中心-编辑资料 中进行绑定");
+                }
+
+                if (check.TryGetValue(message.sender.user_id + "", out DateTime lastcheck))
+                {
+                    if (lastcheck.AddMinutes(30) > DateTime.Now)
+                    {
+                        MessagePostUtils.PostGroupMessage(BOT.qunNumber, "你已打卡！请30分钟后再试");
+                    }
+                    else
+                    {
+                        check[message.sender.user_id + ""] = DateTime.Now;
+                        DataBase.MoneyEditor(info, DataBase.MoneyType.Money, DataBase.EditType.Add, BOT.qdCount);
+                        MessagePostUtils.PostGroupMessage(BOT.qunNumber, "打卡成功！\r\n获得积分：" + BOT.qdCount);
+                    }
+                }
+                else
+                {
+                    check.Add(message.sender.user_id + "", DateTime.Now);
+                    DataBase.MoneyEditor(info, DataBase.MoneyType.Money, DataBase.EditType.Add, BOT.qdCount);
+                    MessagePostUtils.PostGroupMessage(BOT.qunNumber, "打卡成功！\r\n获得积分：" + BOT.qdCount);
+                }
+
+
             }
 
         }
