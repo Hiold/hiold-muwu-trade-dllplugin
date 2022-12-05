@@ -214,6 +214,7 @@ namespace HioldMod
             public bool ChatMessage(ClientInfo _cInfo, EChatType _type, int _senderId, string _msg, string _mainName,
                  bool _localizeMain, List<int> _recipientEntityIds)
             {
+                TradeSysEvents.TrigerChatEvent(_msg, _cInfo);
                 //监听[/sa]命令
                 if (!string.IsNullOrEmpty(_msg) && _msg.EqualsCaseInsensitive("/shop"))
                 {
