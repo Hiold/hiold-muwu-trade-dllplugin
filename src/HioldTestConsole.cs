@@ -6,7 +6,7 @@ namespace HioldMod
 {
     class HioldTestConsole : ConsoleCmdAbstract
     {
-        public override string GetDescription()
+        protected override string getDescription()
         {
             return "[HioldMod] - 测试开关";
         }
@@ -18,7 +18,7 @@ namespace HioldMod
                    "  2. test1 off （关闭测试1）\n";
         }
 
-        public override string[] GetCommands()
+        protected override string[] getCommands()
         {
             return new string[] { "test1" };
         }

@@ -6,6 +6,7 @@ using HioldMod.src.UserTools;
 using System.Net;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Threading;
+using hiold_trade_starter.src;
 
 namespace HioldMod
 {
@@ -18,7 +19,23 @@ namespace HioldMod
 
         public void InitMod(Mod _modInstance)
         {
-            API._modInstance = _modInstance;
+            //加载lib
+            string PluginPath = string.Format("{0}/lib/", HioldMod.API.getModDir());
+            //加载mod
+
+            Log.Out("开始加载插件");
+            int counter = 0;
+            string[] Files = Directory.GetFiles(PluginPath, "*.dll");
+            foreach (string _path in Files)
+            {
+                try { 
+                Assembly.LoadFile(_path);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e.Message);
+                }
+            }
             //检查mod更新
             API.updateDLL(null);
 
@@ -88,6 +105,9 @@ namespace HioldMod
             {
                 HttpWebRequest Myrq = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
                 HttpWebResponse myrp = (System.Net.HttpWebResponse)Myrq.GetResponse();
+                Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36";
+                Myrq.Headers.Add("Accept-Encoding", "utf-8");
+                Myrq.Accept = "*/*";
                 Stream st = myrp.GetResponseStream();
                 Stream so = new System.IO.FileStream(filename, System.IO.FileMode.Create);
                 byte[] by = new byte[1024];
@@ -105,6 +125,7 @@ namespace HioldMod
             }
             catch (System.Exception e)
             {
+                Log.Error(e.Message);
                 return false;
             }
         }
@@ -140,9 +161,14 @@ namespace HioldMod
         public static void updateDLL(object j)
         {
             string version = "";
+            GithubRelease Modversion = null;
+            string downloadurl = "";
             try
             {
-                version = HttpTools.HttpPost("https://qc.hiold.net/hioldapi/modversion");
+                string data = HttpTools.HttpPost("https://api.github.com/repos/Hiold/hiold-muwu-trade-dllplugin/releases/latest");
+                Modversion = SimpleJson2.SimpleJson2.DeserializeObject<GithubRelease>(data);
+                version = Modversion.name;
+                downloadurl = Modversion.assets[0].browser_download_url;
             }
             catch (Exception e)
             {
@@ -221,7 +247,7 @@ namespace HioldMod
             {
                 Log.Out("[HIOLD] 检测到更新mod更新，正在下载");
                 //覆盖旧文件
-                if (DownloadFile("https://qc.hiold.net/hioldapi/trade.zip", AssemblyPath + "trade.zip"))
+                if (DownloadFile(downloadurl, AssemblyPath + "trade.zip"))
                 {
                     Log.Out("[HIOLD] 下载完成正在解压");
                     File.Delete(AssemblyPath + "trade.bin");
@@ -247,9 +273,14 @@ namespace HioldMod
         public static void updateWEB(object j)
         {
             string version = "";
+            GithubRelease Modversion = null;
+            string downloadurl = "";
             try
             {
-                version = HttpTools.HttpPost("https://qc.hiold.net/hioldapi/webversion");
+                string data = HttpTools.HttpPost("https://api.github.com/repos/Hiold/hiold-muwu-trade/releases/latest");
+                Modversion = SimpleJson2.SimpleJson2.DeserializeObject<GithubRelease>(data);
+                version = Modversion.name;
+                downloadurl = Modversion.assets[0].browser_download_url;
             }
             catch (Exception e)
             {
@@ -328,7 +359,7 @@ namespace HioldMod
             {
                 Log.Out("[HIOLD] 检测到更新mod更新，正在下载");
                 //覆盖旧文件
-                if (DownloadFile("https://qc.hiold.net/hioldapi/web.zip", AssemblyPath + "web.zip"))
+                if (DownloadFile(downloadurl, AssemblyPath + "web.zip"))
                 {
                     Log.Out("[HIOLD] 下载完成正在解压");
                     try
@@ -376,22 +407,23 @@ namespace HioldMod
         }
     }
 
-    class commandupdate : ConsoleCmdAbstract
+    class Commandupdate : ConsoleCmdAbstract
     {
         public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
         {
             API.updateWEB(null);
         }
 
-        public override string[] GetCommands()
+        protected override string[] getCommands()
         {
             return new string[] { "tradeup-web" };
         }
 
-        public override string GetDescription()
+        protected override string getDescription()
         {
             return "更新交易系统web";
         }
+
     }
 
     class commandupdate2 : ConsoleCmdAbstract
@@ -401,12 +433,12 @@ namespace HioldMod
             API.updateDLL(null);
         }
 
-        public override string[] GetCommands()
+        protected override string[] getCommands()
         {
             return new string[] { "tradeup-dll" };
         }
 
-        public override string GetDescription()
+        protected override string getDescription()
         {
             return "更新交易系统dll";
         }

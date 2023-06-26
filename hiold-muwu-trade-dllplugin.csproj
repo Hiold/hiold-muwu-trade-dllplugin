@@ -37,9 +37,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin-lib\AstarPathfindingProject.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="mscorlib">
       <HintPath>..\7dtd-binaries\mscorlib.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin-lib\netstandard.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -50,12 +55,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin-lib\SQLite.Designer.dll</HintPath>
     </Reference>
-    <Reference Include="SqlSugar, Version=5.0.3.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\SqlSugar.5.0.3.2\lib\SqlSugar.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <HintPath>..\7dtd-binaries\System.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.4.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
@@ -73,6 +78,19 @@
     <Reference Include="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin-lib\System.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.2\lib\netstandard1.1\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.2\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.XML" />
     <Reference Include="UnityEngine">
@@ -106,6 +124,274 @@
     <Compile Include="src\Commons\Language.cs" />
     <Compile Include="src\Commons\NaiwaziInterface.cs" />
     <Compile Include="src\ConfigTools\LoadMainConfig.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\AdoProvider\AdoAccessory.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\AdoProvider\AdoProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\AopProvider\AopProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\CacheProvider\CacheProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\CodeFirstProvider\CodeFirstProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbBindProvider\DbBindAccessory.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbBindProvider\DbBindProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbBindProvider\IDataReaderEntityBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbBindProvider\IDataRecordExtensions.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbFirstProvider\DbFirstProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbFirstProvider\DbFirstTemplate.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbFirstProvider\DbRazor.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbMaintenanceProvider\Methods.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DbMaintenanceProvider\Properties.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\DeleteProvider\DeleteableProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\EntityMaintenance\EntityMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\ExpressionableProvider\Expressionable.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\FilterProvider\FilterProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\InsertableProvider\InsertableProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\InsertableProvider\SubInserable.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\QueryableProvider\QueryableAccessory.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\QueryableProvider\QueryableProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SaveableProvider\SaveableProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SaveableProvider\Storageable.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SqlBuilderProvider\DeleteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SqlBuilderProvider\InsertBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SqlBuilderProvider\QueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SqlBuilderProvider\SqlBuilderAccessory.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SqlBuilderProvider\SqlBuilderProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SqlBuilderProvider\SqlQueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SqlBuilderProvider\UpdateBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SugarProvider\SqlSugarAccessory.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\SugarProvider\SqlSugarProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Abstract\UpdateProvider\UpdateableProvider.cs" />
+    <Compile Include="src\db\SqlSugar\CacheScheme\CacheKeyBuider.cs" />
+    <Compile Include="src\db\SqlSugar\CacheScheme\CacheSchemeMain.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\AsyncRef.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\CacheKey.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\ConditionalModel.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\ConnectionConfig.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\ConnMoreSettings.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\DbColumnInfo.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\DbResult.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\DbTableInfo.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\DefaultServices.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\DiffLogModel.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\DiffType.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\EntityColumnInfo.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\EntityInfo.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\JoinQueryInfo.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\ManyToManyConfig.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\MapperCache.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\Mapping\IgnoreComumn.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\Mapping\MappingColumn.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\Mapping\MappingTable.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\Mapping\SugarMappingAttribute.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\ModelContext.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\PageModel.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\QueueItem.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SchemaInfo.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SlaveConnectionConfig.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SqlFilter.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SqlWith.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\StackTraceInfo.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SubInsertTree.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SugarDebugger.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SugarList.cs" />
+    <Compile Include="src\db\SqlSugar\Entities\SugarTerant.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\ApplyType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\ConditionalType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\DbObjectType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\DbType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\InitKeyType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\JoinType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\OrderByType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\ProperyType.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\SugarDateTimeFormat.cs" />
+    <Compile Include="src\db\SqlSugar\Enum\WhereType.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\CaseWhen\CaseWhen.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\CaseWhen\CaseWhenResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\BinaryExpressionInfo.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\CommonTempDataType.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\DateType.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ErrorMessage.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ExpResolveAccessory.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ExpressionConst.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ExpressionParameter.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ExpressionResult.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ExpressionResultAcceptType.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ExpressionTool.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\MapperExpression.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\MethodCallExpressionModel.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\ResolveExpressType.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Common\SugarParameter.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\DbMethods\DefaultDbMethod.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\DbMethods\IDbMethods.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\DbMethods\SqlFunc.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\DbMethods\SqlFuncExternal.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ExpressionContext.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\BaseResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\BinaryExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\BlockExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\CoalesceResolveItems.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\ConditionalExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\ConstantExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\LambdaExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\MapperExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\MemberConstExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\MemberExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\MemberInitExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\MemberNewExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\MemberNoExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\MethodCallExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\NewArrayExpessionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\NewExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\TypeParameterExpressionReolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\ResolveItems\UnaryExpressionResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\ISubOperation.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubAnd.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubAndIF.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubAny.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubAvg.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubBegin.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubCount.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubFromTable.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubGroupBy.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubInnerJoin.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubLeftBracket.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubLeftJoin.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubMax.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubMin.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubNotAny.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubOrderBy.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubRightBracket.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubSelect.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubSelectDefault.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubSum.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubTop.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubWhere.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Items\SubWhereIF.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\Subquerable.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\SubResolve.cs" />
+    <Compile Include="src\db\SqlSugar\ExpressionsToSql\Subquery\SubTools.cs" />
+    <Compile Include="src\db\SqlSugar\ExternalServiceInterface\ICacheService.cs" />
+    <Compile Include="src\db\SqlSugar\ExternalServiceInterface\IRazorService.cs" />
+    <Compile Include="src\db\SqlSugar\ExternalServiceInterface\ISerializeService.cs" />
+    <Compile Include="src\db\SqlSugar\Infrastructure\ContextMethods.cs" />
+    <Compile Include="src\db\SqlSugar\Infrastructure\InstanceFactory.cs" />
+    <Compile Include="src\db\SqlSugar\Infrastructure\Mapper.cs" />
+    <Compile Include="src\db\SqlSugar\IntegrationServices\CacheService.cs" />
+    <Compile Include="src\db\SqlSugar\IntegrationServices\SerializeService.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IAdo.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ICodeFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IContextMethods.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IDbBind.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IDbFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IDbMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IDeleteable.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IDMLBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IFilter.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ILambdaExpressions.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\Insertable.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IQueryable.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ISaveable.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ISimpleClient.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ISqlBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ISqlSugarClient.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IStorageable.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ISubInsertable.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\ITenant.cs" />
+    <Compile Include="src\db\SqlSugar\Interface\IUpdateable.cs" />
+    <Compile Include="src\db\SqlSugar\OnlyNet\Compatible.cs" />
+    <Compile Include="src\db\SqlSugar\OnlyNet\DependencyManagement.cs" />
+    <Compile Include="src\db\SqlSugar\OnlyNet\KdbndpInserttable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\CodeFirst\DmCodeFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\DbBind\DmDbBind.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\DbFirst\DmDbFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\DbMaintenance\DmDbMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\DmProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\Insertable\DmInserttable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\Queryable\DmQueryable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\SqlBuilder\DmBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\SqlBuilder\DmDeleteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\SqlBuilder\DmExpressionContext.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\SqlBuilder\DmInsertBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\SqlBuilder\DmQueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Dm\SqlBuilder\DmUpdateBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\CodeFirst\MySqlCodeFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\DbBind\MySqlDbBind.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\DbFirst\MySqlDbFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\DbMaintenance\MySqlDbMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\MySqlProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\Queryable\MySqlQueryable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\SqlBuilder\MySqlBlueCopy.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\SqlBuilder\MySqlBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\SqlBuilder\MySqlDeleteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\SqlBuilder\MySqlExpressionContext.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\SqlBuilder\MySqlInsertBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\SqlBuilder\MySqlQueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\MySql\SqlBuilder\MySqlUpdateBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\CodeFirst\OracleCodeFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\DbBind\OracleDbBind.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\DbFirst\OracleDbFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\DbMaintenance\OracleDbMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\Deleteable\OracleDeleteable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\Insertable\OracleInsertable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\OracleProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\Queryable\OracleQueryable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\SqlBuilder\OracleBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\SqlBuilder\OracleDeleteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\SqlBuilder\OracleExpressionContext.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\SqlBuilder\OracleInsertBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\SqlBuilder\OracleQueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\SqlBuilder\OracleUpdateBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Oracle\Updateable\OracleUpdateable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\CodeFirst\PostgreSQLCodeFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\DbBind\PostgreSQLDbBind.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\DbFirst\PostgreSQLDbFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\DbMaintenance\PostgreSQLDbMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\Insertable\PostgreSQLInserttable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\PostgreSQLProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\Queryable\PostgreSqlQueryable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\SqlBuilder\PostgreSQLBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\SqlBuilder\PostgreSQLDeleteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\SqlBuilder\PostgreSQLExpressionContext.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\SqlBuilder\PostgreSQLInsertBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\SqlBuilder\PostgreSQLQueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\PostgreSQL\SqlBuilder\PostgreSQLUpdateBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\CodeFirst\SqliteCodeFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\DbBind\SqliteDbBind.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\DbFirst\SqliteDbFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\DbMaintenance\SqliteDbMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\Queryable\SqliteQueryable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\SqlBuilder\SqliteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\SqlBuilder\SqliteDeleteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\SqlBuilder\SqliteExpressionContext.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\SqlBuilder\SqliteInsertBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\SqlBuilder\SqliteQueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\SqlBuilder\SqliteUpdateBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\Sqlite\SqliteProvider.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\CodeFirst\SqlServerCodeFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\DbBind\SqlServerDbBind.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\DbFirst\SqlServerDbFirst.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\DbMaintenance\SqlServerDbMaintenance.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\Queryable\SqlServerQueryable.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlBuilder\SqlServerBlueCopy.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlBuilder\SqlServerBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlBuilder\SqlServerDeleteBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlBuilder\SqlServerExpressionContext.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlBuilder\SqlServerInsertBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlBuilder\SqlServerQueryBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlBuilder\SqlServerUpdateBuilder.cs" />
+    <Compile Include="src\db\SqlSugar\Realization\SqlServer\SqlServerProvider.cs" />
+    <Compile Include="src\db\SqlSugar\SimpleClient.cs" />
+    <Compile Include="src\db\SqlSugar\SqlSugarClient.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\CallContext.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\Check.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\DbExtensions.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\ErrorMessage.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\FileHelper.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\ReflectionExtensions.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\UtilConstants.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\UtilConvert.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\UtilExceptions.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\UtilExtensions.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\UtilMethods.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\UtilRandom.cs" />
+    <Compile Include="src\db\SqlSugar\Utilities\ValidateExtensions.cs" />
     <Compile Include="src\HioldTestConsole.cs" />
     <Compile Include="src\HttpServer\action\AuthAction.cs" />
     <Compile Include="src\HttpServer\action\AwardInfoAction.cs" />
@@ -190,6 +476,7 @@
     <Content Include="bin-lib\LiteDB.dll" />
     <Content Include="bin-lib\LogLibrary.dll" />
     <Content Include="bin-lib\NaiwaziBot.dll" />
+    <Content Include="bin-lib\netstandard.dll" />
     <Content Include="bin-lib\Newtonsoft.Json.dll" />
     <Content Include="bin-lib\Noemax.GZip.dll" />
     <Content Include="bin-lib\SQLite.Designer.dll" />
@@ -203,6 +490,13 @@
     <Content Include="bin-lib\UnityEngine.ImageConversionModule.dll" />
     <Content Include="default-xml\window.xml" />
     <Content Include="default-xml\xui.xml" />
+    <Content Include="src\db\SqlSugar\NuGet.exe" />
+    <Content Include="src\db\SqlSugar\References\DmProvider.dll" />
+    <Content Include="src\db\SqlSugar\References\Kdbndp.dll" />
+    <Content Include="src\db\SqlSugar\References\Newtonsoft.Json.dll" />
+    <Content Include="src\db\SqlSugar\References\Npgsql.dll" />
+    <Content Include="src\db\SqlSugar\References\Oracle.ManagedDataAccess.dll" />
+    <Content Include="src\db\SqlSugar\References\System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -213,6 +507,11 @@
     </None>
     <None Include="packages.config" />
     <None Include="db\TradeManageDB.db" />
+    <None Include="src\db\SqlSugar\app.config" />
+    <None Include="src\db\SqlSugar\nuget.bat" />
+    <None Include="src\db\SqlSugar\packages.config" />
+    <None Include="src\db\SqlSugar\SqlSugar.csproj" />
+    <None Include="src\db\SqlSugar\SqlSugar.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="release-bin\" />

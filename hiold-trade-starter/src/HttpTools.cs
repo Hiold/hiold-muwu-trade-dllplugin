@@ -63,6 +63,9 @@ namespace HioldMod.src.UserTools
             httpWebRequest.Method = "GET";
             //设置超时时间
             httpWebRequest.Timeout = 20000;
+            httpWebRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36";
+            httpWebRequest.Headers.Add("Accept-Encoding", "utf-8");
+            httpWebRequest.Accept = "*/*";
             //发送请求
             HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             //读取返回数据
