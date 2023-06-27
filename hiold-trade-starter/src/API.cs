@@ -104,10 +104,10 @@ namespace HioldMod
             try
             {
                 HttpWebRequest Myrq = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
-                HttpWebResponse myrp = (System.Net.HttpWebResponse)Myrq.GetResponse();
                 Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36";
                 Myrq.Headers.Add("Accept-Encoding", "utf-8");
                 Myrq.Accept = "*/*";
+                HttpWebResponse myrp = (System.Net.HttpWebResponse)Myrq.GetResponse();
                 Stream st = myrp.GetResponseStream();
                 Stream so = new System.IO.FileStream(filename, System.IO.FileMode.Create);
                 byte[] by = new byte[1024];
@@ -125,7 +125,7 @@ namespace HioldMod
             }
             catch (System.Exception e)
             {
-                Log.Error(e.Message);
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
