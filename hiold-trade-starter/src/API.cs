@@ -28,8 +28,9 @@ namespace HioldMod
             string[] Files = Directory.GetFiles(PluginPath, "*.dll");
             foreach (string _path in Files)
             {
-                try { 
-                Assembly.LoadFile(_path);
+                try
+                {
+                    Assembly.LoadFile(_path);
                 }
                 catch (Exception e)
                 {
@@ -107,6 +108,43 @@ namespace HioldMod
                 Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36";
                 Myrq.Headers.Add("Accept-Encoding", "utf-8");
                 Myrq.Accept = "*/*";
+                Myrq.Timeout = 5000;
+                HttpWebResponse myrp = (System.Net.HttpWebResponse)Myrq.GetResponse();
+                Stream st = myrp.GetResponseStream();
+                Stream so = new System.IO.FileStream(filename, System.IO.FileMode.Create);
+                byte[] by = new byte[1024];
+                int osize = st.Read(by, 0, (int)by.Length);
+                while (osize > 0)
+                {
+                    so.Write(by, 0, osize);
+                    osize = st.Read(by, 0, (int)by.Length);
+                }
+                so.Close();
+                st.Close();
+                myrp.Close();
+                Myrq.Abort();
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Log.Warning("[HIOLD] github文件下载失败，尝试使用代理进行下载");
+                if (DownloadFileForProxy(URL, filename)) return true;
+                return false;
+            }
+        }
+
+
+        private static bool DownloadFileForProxy(string URL, string filename)
+        {
+            try
+            {
+                URL = "https://ghproxy.com/" + URL;
+                HttpWebRequest Myrq = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
+                Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36";
+                Myrq.Headers.Add("Accept-Encoding", "utf-8");
+                Myrq.Accept = "*/*";
+                Myrq.Timeout = 5000;
                 HttpWebResponse myrp = (System.Net.HttpWebResponse)Myrq.GetResponse();
                 Stream st = myrp.GetResponseStream();
                 Stream so = new System.IO.FileStream(filename, System.IO.FileMode.Create);
