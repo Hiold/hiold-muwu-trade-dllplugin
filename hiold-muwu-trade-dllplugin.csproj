@@ -497,6 +497,7 @@
     <Content Include="src\db\SqlSugar\References\Npgsql.dll" />
     <Content Include="src\db\SqlSugar\References\Oracle.ManagedDataAccess.dll" />
     <Content Include="src\db\SqlSugar\References\System.Data.SQLite.dll" />
+    <Content Include="src\HioldApi.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
