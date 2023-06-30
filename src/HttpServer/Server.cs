@@ -63,8 +63,20 @@ namespace HioldModServer
                                                 sessionId = ck.Value;
                                             }
                                         }
+                                        //尝试从header中获取token
+                                        if (request.Headers != null && request.Headers.AllKeys != null)
+                                        {
+                                            foreach (string k in request.Headers.AllKeys)
+                                            {
+                                                if ("token".Equals(k))
+                                                {
+                                                    sessionId = request.Headers.Get(k);
+                                                }
+                                            }
+                                        }
+
                                         //如果Session为空为用户生成Session
-                                        if (sessionId == null)
+                                        if (sessionId == null || sessionId.Equals(""))
                                         {
                                             Cookie ce = new Cookie();
                                             ce.Name = "SESSION_ID";

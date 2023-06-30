@@ -3,7 +3,7 @@
  */
 //是否为测试环境自动生成url
 var testBaseUrl = "http://e.ytonidc.com:48533/";
-var isDebug = true;
+var isDebug = false;
 
 (function ($) {
     var HioldApi = /** @class */ (function () {
@@ -31,10 +31,36 @@ var isDebug = true;
 
 
     //封装JQuery请求工具
+    function AjaxRequestWithToken(apiPath, dataParam, token, resolve, reject) {
+        $.ajax({
+            type: "POST",
+            url: isDebug ? testBaseUrl + apiPath : "" + apiPath,
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify(dataParam),
+            dataType: "json",
+            headers: {
+                'token': token,
+            },
+            success: function (res) {
+                if (res.respCode && res.respCode == 1) {
+                    resolve(res.data);
+                }
+                else {
+                    reject(res.respMsg);
+                }
+                console.log(res);
+            },
+            error: function (result) {
+                reject(result);
+            }
+        });
+    }
+
+    //封装JQuery请求工具
     function AjaxRequest(apiPath, dataParam, resolve, reject) {
         $.ajax({
             type: "POST",
-            url: isDebug ? testBaseUrl : "" + apiPath,
+            url: isDebug ? testBaseUrl + apiPath : "" + apiPath,
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify(dataParam),
             dataType: "json",
@@ -70,10 +96,10 @@ var isDebug = true;
         * 请求参数示例 {"id":"用户名ID"}
         * @param {*} param
         */
-    function _getUserInfo(param) {
+    function _getUserInfo(param, token) {
         var _that = this;
         return new Promise(function (resolve, reject) {
-            AjaxRequest("api/getUserInfo", param, resolve, reject);
+            AjaxRequestWithToken("api/getUserInfo", param, token, resolve, reject);
         });
     }
 
@@ -84,10 +110,10 @@ var isDebug = true;
         * class2的可用值:Ammo/Weapons,Armor,Tools/Traps,Food/Cooking,Books,Chemicals,Mods,Resources,Science,Medical,Special Items,Decor/Miscellaneous,Tool/Weapon,clothing
         * @param {*} param
         */
-    function _getPlayerStorage(param) {
+    function _getPlayerStorage(param, token) {
         var _that = this;
         return new Promise(function (resolve, reject) {
-            AjaxRequest("api/getPlayerStorage", param, resolve, reject);
+            AjaxRequestWithToken("api/getPlayerStorage", param, token, resolve, reject);
         });
     }
 
@@ -99,10 +125,10 @@ var isDebug = true;
         * sort的可用值:价格高到低,价格低到高
         * @param {*} param
         */
-    function _getPlayerOnSell(param) {
+    function _getPlayerOnSell(param, token) {
         var _that = this;
         return new Promise(function (resolve, reject) {
-            AjaxRequest("api/getPlayerOnSell", param, resolve, reject);
+            AjaxRequestWithToken("api/getPlayerOnSell", param, token, resolve, reject);
         });
     }
     /**
@@ -110,10 +136,10 @@ var isDebug = true;
         * 请求参数示例 {"id":"物品id","count":"提取数量"}
         * @param {*} param
         */
-    function _dispachItemToGame(param) {
+    function _dispachItemToGame(param, token) {
         var _that = this;
         return new Promise(function (resolve, reject) {
-            AjaxRequest("api/dispachItemToGame", param, resolve, reject);
+            AjaxRequestWithToken("api/dispachItemToGame", param, token, resolve, reject);
         });
     }
 
@@ -122,10 +148,10 @@ var isDebug = true;
         * 请求参数示例 {"name":"玩家名称","orderby":"排序方式","page":"页码","limit":"每页数量"}
         * @param {*} param
         */
-    function _getUserShopList(param) {
+    function _getUserShopList(param, token) {
         var _that = this;
         return new Promise(function (resolve, reject) {
-            AjaxRequest("api/getUserShopList", param, resolve, reject);
+            AjaxRequestWithToken("api/getUserShopList", param, token, resolve, reject);
         });
     }
 
@@ -134,10 +160,10 @@ var isDebug = true;
     * 请求参数示例 {"shopname":"店铺名称","qq":"QQ号","avatar":"base64的图片"}
     * @param {*} param
     */
-    function _updateUserInfo(param) {
+    function _updateUserInfo(param, token) {
         var _that = this;
         return new Promise(function (resolve, reject) {
-            AjaxRequest("api/updateUserInfo", param, resolve, reject);
+            AjaxRequestWithToken("api/updateUserInfo", param, token, resolve, reject);
         });
     }
 

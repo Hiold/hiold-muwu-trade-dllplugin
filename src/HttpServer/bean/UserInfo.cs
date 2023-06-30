@@ -93,6 +93,8 @@ namespace HioldMod.src.HttpServer.bean
 
         [SugarColumn(IsNullable = true)]
         public string ncode { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public string token { get; set; }
     }
 
     public static class UserInfoCountType

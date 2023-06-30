@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="HioldApi.js"></script>
+    <title>木屋海鸥交易系统</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        // //测试进行一个成功的登录
+        // HioldApi.login({
+        //     //传入请求参数
+        //     data: { username: "admin", password: "admin" },
+        //     //请求成功执行success
+        //     success: (data) => {
+        //         console.log("登录成功 用户ID:" + data.id)
+        //     },
+        //     //请求失败执行
+        //     faild: (result) => {
+        //         console.log("登录失败 失败原因:" + result)
+        //     }
+        // });
+
+
+        // //测试进行一个失败的登录
+        // HioldApi.login({
+        //     //传入请求参数
+        //     data: { username: "admin", password: "admin1" },
+        //     //请求成功执行success
+        //     success: (data) => {
+        //         console.log("登录成功 用户ID:" + data.id)
+        //     },
+        //     //请求失败执行
+        //     faild: (result) => {
+        //         console.log("登录失败 失败原因:" + result)
+        //     }
+        // });
+
+        //方式1
+        isDebug = true;
+        HioldApi.login({ username: "admin", password: "admin1" })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        //方式2
+        (async () => {
+            try {
+                const data = await HioldApi.login({ username: "admin", password: "admin1" });
+            } catch (e) {
+                console.log(e);
+            }
+        })();
+    </script>
+</body>
+
+</html>

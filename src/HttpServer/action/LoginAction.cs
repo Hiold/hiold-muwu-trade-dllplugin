@@ -44,6 +44,7 @@ namespace HioldMod.src.HttpServer.action
                         return;
                     }
                     ui.password = "[masked]";
+                    ui.token = request.sessionid;
                     if (HioldModServer.Server.userCookies.TryGetValue(request.sessionid, out UserInfo uis))
                     {
                         //HioldModServer.Server.userCookies[request.sessionid] = uis;
